@@ -131,7 +131,7 @@ class StoreControllerTests(unittest.TestCase):
             self.assertEqual(db.execute("PRAGMA foreign_keys").fetchone()[0], 1)
             self.assertEqual(db.execute("PRAGMA journal_mode").fetchone()[0].lower(), "wal")
             self.assertEqual(
-                db.execute("SELECT max(version) FROM schema_migrations").fetchone()[0], 1
+                db.execute("SELECT max(version) FROM schema_migrations").fetchone()[0], 2
             )
 
     def test_migrations_are_idempotent_and_foreign_keys_reject_orphans(self) -> None:
@@ -145,6 +145,37 @@ class StoreControllerTests(unittest.TestCase):
                     "VALUES('missing','CALLING','{}',?)",
                     (utcnow(),),
                 )
+
+    def test_version_one_provider_operations_migrate_without_losing_evidence(self) -> None:
+        legacy_path = Path(self.temp.name) / "legacy-v1.sqlite3"
+        with sqlite3.connect(legacy_path) as db:
+            db.executescript(
+                "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL);"
+                "INSERT INTO schema_migrations VALUES(1,'historical');"
+                "CREATE TABLE provider_operations("
+                "id TEXT PRIMARY KEY,fingerprint TEXT NOT NULL UNIQUE,provider TEXT NOT NULL,"
+                "model TEXT NOT NULL,capability TEXT NOT NULL,state TEXT NOT NULL,"
+                "request_json TEXT NOT NULL,raw_path TEXT,raw_sha256 TEXT,parsed_json TEXT,"
+                "provider_id TEXT,estimated_cost_usd REAL,actual_cost_usd REAL,"
+                "attempts INTEGER NOT NULL DEFAULT 0,created_at TEXT NOT NULL,updated_at TEXT NOT NULL);"
+                "INSERT INTO provider_operations(id,fingerprint,provider,model,capability,state,"
+                "request_json,attempts,created_at,updated_at) VALUES("
+                "'historical-op','historical-fp','google','legacy-model','research',"
+                "'FAILED_TRANSIENT','{}',1,'historical','historical');"
+            )
+        migrated = Store(legacy_path)
+        migrated.initialize()
+        with migrated.connect() as db:
+            columns = {row[1] for row in db.execute("PRAGMA table_info(provider_operations)")}
+            self.assertTrue({"error_path", "error_sha256"}.issubset(columns))
+            self.assertEqual(
+                db.execute("SELECT state FROM provider_operations WHERE id='historical-op'").fetchone()[0],
+                "FAILED_TRANSIENT",
+            )
+            self.assertEqual(
+                [row[0] for row in db.execute("SELECT version FROM schema_migrations ORDER BY version")],
+                [1, 2],
+            )
 
     def test_fencing_rejects_stale_worker(self) -> None:
         with self.controller.store.transaction() as db:

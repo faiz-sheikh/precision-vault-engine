@@ -14,7 +14,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 def utcnow() -> str:
@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS provider_operations(
  id TEXT PRIMARY KEY, fingerprint TEXT NOT NULL UNIQUE, provider TEXT NOT NULL, model TEXT NOT NULL,
  capability TEXT NOT NULL, state TEXT NOT NULL, request_json TEXT NOT NULL,
  raw_path TEXT, raw_sha256 TEXT, parsed_json TEXT, provider_id TEXT,
+ error_path TEXT, error_sha256 TEXT,
  estimated_cost_usd REAL, actual_cost_usd REAL, attempts INTEGER NOT NULL DEFAULT 0,
  created_at TEXT NOT NULL, updated_at TEXT NOT NULL
 );
@@ -50,6 +51,15 @@ CREATE TABLE IF NOT EXISTS budget_reservations(
  id TEXT PRIMARY KEY, operation_id TEXT NOT NULL UNIQUE REFERENCES provider_operations(id),
  requests INTEGER NOT NULL CHECK(requests > 0), estimated_cost_usd REAL,
  status TEXT NOT NULL, created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS provider_attempts(
+ attempt_id TEXT PRIMARY KEY, operation_id TEXT NOT NULL REFERENCES provider_operations(id),
+ attempt_number INTEGER NOT NULL CHECK(attempt_number > 0), state TEXT NOT NULL,
+ reservation_status TEXT NOT NULL, estimated_cost_usd REAL, actual_cost_usd REAL,
+ billing_uncertain INTEGER NOT NULL DEFAULT 0 CHECK(billing_uncertain IN (0,1)),
+ http_status INTEGER, error_path TEXT, error_sha256 TEXT,
+ created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
+ UNIQUE(operation_id, attempt_number)
 );
 CREATE TABLE IF NOT EXISTS jobs(
  id TEXT PRIMARY KEY, run_id TEXT REFERENCES runs(id), phase TEXT NOT NULL, state TEXT NOT NULL,
@@ -123,6 +133,11 @@ class Store:
         os.chmod(self.path.parent, 0o700)
         with self.connect() as db:
             db.executescript(DDL)
+            columns = {row[1] for row in db.execute("PRAGMA table_info(provider_operations)")}
+            if "error_path" not in columns:
+                db.execute("ALTER TABLE provider_operations ADD COLUMN error_path TEXT")
+            if "error_sha256" not in columns:
+                db.execute("ALTER TABLE provider_operations ADD COLUMN error_sha256 TEXT")
             db.execute(
                 "INSERT OR IGNORE INTO schema_migrations VALUES (?, ?)", (SCHEMA_VERSION, utcnow())
             )

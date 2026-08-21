@@ -48,6 +48,21 @@ class ArtifactRepository:
         os.replace(temporary, path)
         return path, hashlib.sha256(raw).hexdigest()
 
+    def checkpoint_error(
+        self, module_id: str, phase: str, artifact_id: str, envelope: dict[str, Any]
+    ) -> tuple[Path, str]:
+        raw = json.dumps(envelope, sort_keys=True, ensure_ascii=False).encode("utf-8")
+        directory = self.confined(module_id, phase, artifact_id, "error")
+        directory.mkdir(parents=True, exist_ok=True)
+        path = directory / "response.json"
+        temporary = directory / f".{uuid.uuid4().hex}.tmp"
+        with temporary.open("xb") as stream:
+            stream.write(raw)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+        return path, hashlib.sha256(raw).hexdigest()
+
     def publish_metadata(
         self, module_id: str, phase: str, artifact_id: str, metadata: dict[str, Any]
     ) -> Path:

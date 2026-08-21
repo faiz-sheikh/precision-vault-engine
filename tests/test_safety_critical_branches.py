@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import io
 import json
 import tempfile
 import unittest
@@ -134,14 +135,18 @@ class SafetyCriticalBranchTests(unittest.TestCase):
             (429, FailureClass.TRANSIENT),
             (503, FailureClass.TRANSIENT),
         ):
-            error = urllib.error.HTTPError("https://invalid", status, "error", {}, None)
+            error = urllib.error.HTTPError("https://invalid", status, "error", {}, io.BytesIO(b""))
             with patch("urllib.request.urlopen", side_effect=error):
                 with self.assertRaises(ProviderFailure) as caught:
-                    _post_json("https://invalid", {}, {})
+                    GoogleAdapter(
+                        lambda request: _post_json("https://invalid", request, {})
+                    ).execute({})
                 self.assertEqual(caught.exception.classification, expected)
         with patch("urllib.request.urlopen", side_effect=urllib.error.URLError("timeout")):
             with self.assertRaises(ProviderFailure) as caught:
-                _post_json("https://invalid", {}, {})
+                GoogleAdapter(lambda request: _post_json("https://invalid", request, {})).execute(
+                    {}
+                )
             self.assertEqual(caught.exception.classification, FailureClass.AMBIGUOUS)
 
     def test_artifact_metadata_atomic_publish(self) -> None:

@@ -45,7 +45,7 @@ class CrashCorruptionSecurityTests(unittest.TestCase):
         adapter = GoogleAdapter(lambda req: (calls.append(1) or ProviderResult(b"paid-response")))
         with (
             patch.object(controller.artifacts, "checkpoint_raw", side_effect=OSError("disk full")),
-            self.assertRaises(OSError),
+            self.assertRaises(AmbiguousOperation),
         ):
             self.execute(controller, adapter)
         with self.assertRaises(AmbiguousOperation):

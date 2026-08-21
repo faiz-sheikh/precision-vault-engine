@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import urllib.error
 import urllib.request
 from collections.abc import Callable
@@ -22,10 +23,36 @@ class FailureClass(StrEnum):
     LOCAL_PROCESSING = "LOCAL_PROCESSING"
 
 
+@dataclass(frozen=True)
+class HTTPErrorEvidence:
+    status: int
+    headers: dict[str, str]
+    body: bytes
+    provider_error_code: str | None = None
+    provider_error_message: str | None = None
+
+
+class _HTTPResponseError(RuntimeError):
+    """Internal unclassified HTTP response carried to the durability boundary."""
+
+    def __init__(self, evidence: HTTPErrorEvidence):
+        super().__init__(f"provider HTTP {evidence.status}")
+        self.evidence = evidence
+
+
 class ProviderFailure(RuntimeError):
-    def __init__(self, message: str, classification: FailureClass):
+    def __init__(
+        self,
+        message: str,
+        classification: FailureClass,
+        *,
+        http_evidence: HTTPErrorEvidence | None = None,
+        request_sent: bool | None = None,
+    ):
         super().__init__(message)
         self.classification = classification
+        self.http_evidence = http_evidence
+        self.request_sent = request_sent
 
 
 @dataclass(frozen=True)
@@ -62,9 +89,30 @@ class Adapter:
         if self.live:
             require_live_provider(self.provider)
 
-    def execute(self, request: dict[str, Any]) -> ProviderResult:
+    def execute(
+        self,
+        request: dict[str, Any],
+        on_http_error: Callable[[HTTPErrorEvidence], None] | None = None,
+    ) -> ProviderResult:
         self.preflight()
-        return self.transport(request)
+        try:
+            return self.transport(request)
+        except _HTTPResponseError as exc:
+            if on_http_error is not None:
+                # The response becomes durable before it is classified or exposed
+                # outside the adapter boundary.
+                on_http_error(exc.evidence)
+            raise ProviderFailure(
+                str(exc),
+                classify_status(exc.evidence.status),
+                http_evidence=exc.evidence,
+                request_sent=True,
+            ) from exc
+        except ProviderFailure as exc:
+            if exc.http_evidence is not None and on_http_error is not None:
+                # Compatibility transports may already supply a classified failure.
+                on_http_error(exc.http_evidence)
+            raise
 
 
 class GoogleAdapter(Adapter):
@@ -98,8 +146,51 @@ class LegacyAnthropicAdapter(Adapter):
 def _credential(name: str) -> str:
     value = os.getenv(name, "")
     if not value:
-        raise ProviderFailure(f"missing credential: {name}", FailureClass.PERMANENT)
+        raise ProviderFailure(
+            f"missing credential: {name}", FailureClass.PERMANENT, request_sent=False
+        )
     return value
+
+
+_SAFE_ERROR_HEADERS = {
+    "content-type",
+    "date",
+    "retry-after",
+    "request-id",
+    "x-request-id",
+    "x-goog-request-id",
+    "x-ratelimit-limit",
+    "x-ratelimit-remaining",
+    "x-ratelimit-reset",
+}
+_SECRET_PATTERNS = (
+    re.compile(rb"AIza[0-9A-Za-z_-]{20,}"),
+    re.compile(rb"nvapi-[0-9A-Za-z_-]{20,}"),
+    re.compile(rb"sk-(?:ant-)?[0-9A-Za-z_-]{20,}"),
+)
+
+
+def _sanitize_error_body(raw: bytes, secrets: tuple[str, ...]) -> bytes:
+    sanitized = raw
+    for secret in secrets:
+        if secret:
+            sanitized = sanitized.replace(secret.encode("utf-8"), b"[REDACTED]")
+    for pattern in _SECRET_PATTERNS:
+        sanitized = pattern.sub(b"[REDACTED]", sanitized)
+    return sanitized
+
+
+def _error_details(raw: bytes) -> tuple[str | None, str | None]:
+    try:
+        envelope = json.loads(raw)
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return None, None
+    if not isinstance(envelope, dict) or not isinstance(envelope.get("error"), dict):
+        return None, None
+    error = envelope["error"]
+    code = error.get("status") or error.get("code") or error.get("type")
+    message = error.get("message")
+    return (str(code) if code is not None else None, str(message) if message is not None else None)
 
 
 def _post_json(
@@ -129,11 +220,35 @@ def _post_json(
                 pass
             return ProviderResult(raw=raw, provider_id=provider_id, usage=usage)
     except urllib.error.HTTPError as exc:
-        raise ProviderFailure(f"provider HTTP {exc.code}", classify_status(exc.code)) from exc
+        raw = exc.read()
+        secret_values = tuple(
+            value.removeprefix("Bearer ")
+            for name, value in headers.items()
+            if name.casefold() in {"authorization", "x-goog-api-key", "api-key"}
+        )
+        sanitized = _sanitize_error_body(raw, secret_values)
+        safe_headers = {
+            name.casefold(): _sanitize_error_body(value.encode("utf-8"), secret_values).decode(
+                "utf-8", errors="replace"
+            )
+            for name, value in (exc.headers or {}).items()
+            if name.casefold() in _SAFE_ERROR_HEADERS
+        }
+        code, message = _error_details(sanitized)
+        evidence = HTTPErrorEvidence(
+            status=exc.code,
+            headers=safe_headers,
+            body=sanitized,
+            provider_error_code=code,
+            provider_error_message=message,
+        )
+        raise _HTTPResponseError(evidence) from exc
     except (TimeoutError, urllib.error.URLError) as exc:
         # No provider acceptance evidence is available for these synchronous transports.
         raise ProviderFailure(
-            "provider transport outcome is ambiguous", FailureClass.AMBIGUOUS
+            "provider transport outcome is ambiguous",
+            FailureClass.AMBIGUOUS,
+            request_sent=True,
         ) from exc
 
 
