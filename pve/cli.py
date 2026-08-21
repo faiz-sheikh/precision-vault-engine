@@ -51,6 +51,20 @@ def main(argv: list[str] | None = None) -> int:
         payload = snapshot(controller.store); args.destination.parent.mkdir(parents=True, exist_ok=True)
         args.destination.write_text(json.dumps(payload, sort_keys=True, indent=2), encoding="utf-8")
         print(json.dumps({"exported": str(args.destination), "provider_calls": 0})); return 0
+    query_map={"jobs":"SELECT id,phase,state,lease_owner,fencing_token FROM jobs ORDER BY created_at DESC",
+               "failures":"SELECT id,scope_type,scope_id,classification,detail,created_at FROM failures ORDER BY created_at DESC",
+               "sources":"SELECT source_id,content_hash,source_type,origin,status FROM sources ORDER BY created_at DESC",
+               "artifacts":"SELECT id,module_id,phase,content_hash,status FROM artifacts ORDER BY created_at DESC",
+               "manifest":"SELECT id,checksum,status,created_at FROM manifest_candidates ORDER BY created_at DESC"}
+    if args.command in query_map:
+        with controller.store.connect() as db: rows=[dict(row) for row in db.execute(query_map[args.command])]
+        print(json.dumps({"items":rows,"provider_calls":0},sort_keys=True)); return 0
+    if args.command == "cost":
+        with controller.store.connect() as db:
+            row=db.execute("SELECT count(*),COALESCE(SUM(estimated_cost_usd),0),COALESCE(SUM(actual_cost_usd),0) FROM provider_operations").fetchone()
+        print(json.dumps({"operations":row[0],"estimated_cost_usd":row[1],"actual_cost_usd":row[2],"provider_calls":0})); return 0
+    if args.command == "settings":
+        print(json.dumps({"config_hash":settings.config_hash,"routes":{k:v.__dict__ for k,v in settings.routes.items()},"secrets":"not_exposed","provider_calls":0},sort_keys=True)); return 0
     # Mutating execution commands are scaffolded behind controller state and do not invoke providers.
     print(json.dumps({"command": args.command, "status": "NO_ELIGIBLE_WORK", "provider_calls": 0})); return 0
 

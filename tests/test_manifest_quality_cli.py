@@ -31,6 +31,13 @@ class GovernanceQualityCliTests(unittest.TestCase):
         self.assertTrue(candidate.startswith("cand_")); self.assertEqual(errors, [])
         with self.assertRaises(PromotionApprovalRequired): ManifestGovernance(self.controller.store).promote(candidate)
 
+    def test_promotion_approval_is_bound_to_candidate_checksum(self):
+        gov=ManifestGovernance(self.controller.store); candidate,errors=gov.create_candidate(self.envelope())
+        with self.controller.store.connect() as db: checksum=db.execute("SELECT checksum FROM manifest_candidates WHERE id=?",(candidate,)).fetchone()[0]
+        approval=gov.record_approval(action="MANIFEST_PROMOTION",actor="test-operator",reason="verified test candidate",evidence={},input_hashes=[checksum])
+        destination=self.root/"published.json"; self.assertEqual(gov.promote(candidate,destination,approval_id=approval),checksum)
+        self.assertTrue(destination.exists())
+
     def test_semantic_duplicate_is_rejected(self):
         value = self.envelope(); value["modules"].append({"module_id":"mod_b","title":"Sensors and Actuators","domain":"04_Electronics","grade_or_sem":"Sem 1"})
         self.assertTrue(any("semantic duplicate" in e for e in validate_envelope(value)))
@@ -67,3 +74,9 @@ class GovernanceQualityCliTests(unittest.TestCase):
             output = io.StringIO()
             with redirect_stdout(output): code = main(argv)
             self.assertEqual(code, 0); self.assertTrue(json.loads(output.getvalue()))
+
+    def test_cli_query_commands_are_read_only(self):
+        for command in ("jobs","failures","sources","artifacts","manifest","cost","settings"):
+            output=io.StringIO()
+            with redirect_stdout(output): self.assertEqual(main(["--root",str(self.root),command]),0)
+            self.assertEqual(json.loads(output.getvalue())["provider_calls"],0)

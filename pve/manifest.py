@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import uuid
 from pathlib import Path
 from typing import Any
@@ -62,8 +63,32 @@ class ManifestGovernance:
                         json.dumps({"errors": errors}), "VALID" if not errors else "INVALID", utcnow()))
         return candidate_id, errors
 
-    def promote(self, *args, **kwargs):
-        raise PromotionApprovalRequired("manifest promotion requires fresh user approval")
+    def record_approval(self, *, action: str, actor: str, reason: str,
+                        evidence: dict[str, Any], input_hashes: list[str]) -> str:
+        if not actor.strip() or not reason.strip(): raise ValueError("actor and reason are required")
+        approval_id="approval_"+uuid.uuid4().hex
+        with self.store.transaction() as db:
+            db.execute("INSERT INTO approvals VALUES(?,?,?,?,?,?,?)",(approval_id,action,actor,reason,
+                json.dumps(evidence,sort_keys=True),json.dumps(sorted(input_hashes)),utcnow()))
+        return approval_id
+
+    def promote(self, candidate_id: str, destination: Path | None = None, *, approval_id: str | None = None) -> str:
+        if not approval_id: raise PromotionApprovalRequired("manifest promotion requires fresh user approval")
+        if destination is None: raise ValueError("promotion destination is required")
+        with self.store.transaction() as db:
+            candidate=db.execute("SELECT envelope_json,checksum,status FROM manifest_candidates WHERE id=?",(candidate_id,)).fetchone()
+            approval=db.execute("SELECT action,input_hashes_json FROM approvals WHERE id=?",(approval_id,)).fetchone()
+            if not candidate or candidate[2] != "VALID": raise ManifestInvalid("candidate is absent or invalid")
+            if not approval or approval[0] != "MANIFEST_PROMOTION" or candidate[1] not in json.loads(approval[1]):
+                raise PromotionApprovalRequired("approval is absent, stale, or bound to different inputs")
+            body=candidate[0]
+        destination=destination.resolve(); destination.parent.mkdir(parents=True,exist_ok=True)
+        temporary=destination.with_suffix(destination.suffix+".candidate.tmp")
+        temporary.write_text(json.dumps(json.loads(body),indent=2,sort_keys=True),encoding="utf-8")
+        os.replace(temporary,destination)
+        with self.store.transaction() as db:
+            db.execute("UPDATE manifest_candidates SET status='PROMOTED' WHERE id=?",(candidate_id,))
+        return candidate[1]
 
 
 def migrate_legacy_candidate(path: Path, source_set_id: str) -> dict[str, Any]:
