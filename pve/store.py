@@ -85,6 +85,23 @@ CREATE TABLE IF NOT EXISTS failures(
  id TEXT PRIMARY KEY, scope_type TEXT NOT NULL, scope_id TEXT NOT NULL,
  classification TEXT NOT NULL, detail TEXT NOT NULL, created_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS phase_state(
+ run_id TEXT NOT NULL REFERENCES runs(id), module_id TEXT NOT NULL, phase TEXT NOT NULL,
+ state TEXT NOT NULL, dependency_fingerprint TEXT NOT NULL, updated_at TEXT NOT NULL,
+ PRIMARY KEY(run_id,module_id,phase)
+);
+CREATE TABLE IF NOT EXISTS outbox(
+ sequence INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, payload_json TEXT NOT NULL,
+ status TEXT NOT NULL, created_at TEXT NOT NULL, completed_at TEXT
+);
+CREATE TABLE IF NOT EXISTS provider_identifiers(
+ operation_id TEXT NOT NULL REFERENCES provider_operations(id), provider_id TEXT NOT NULL,
+ observed_at TEXT NOT NULL, PRIMARY KEY(operation_id,provider_id)
+);
+CREATE TABLE IF NOT EXISTS provider_reconciliations(
+ id TEXT PRIMARY KEY, operation_id TEXT NOT NULL REFERENCES provider_operations(id),
+ actor TEXT NOT NULL, decision TEXT NOT NULL, evidence_json TEXT NOT NULL, created_at TEXT NOT NULL
+);
 """
 
 
@@ -167,8 +184,8 @@ class Store:
     def acquire_job(self, job_id: str, owner: str, expires_at: str) -> int | None:
         now = utcnow()
         with self.transaction() as db:
-            row = db.execute("SELECT lease_owner,lease_expires_at,fencing_token FROM jobs WHERE id=?", (job_id,)).fetchone()
-            if row is None or (row[0] and row[1] and row[1] > now and row[0] != owner):
+            row = db.execute("SELECT lease_owner,lease_expires_at,fencing_token,state FROM jobs WHERE id=?", (job_id,)).fetchone()
+            if row is None or row[3] in ("SUCCEEDED", "CANCELLED") or (row[0] and row[1] and row[1] > now and row[0] != owner):
                 return None
             token = int(row[2]) + 1
             db.execute("UPDATE jobs SET lease_owner=?,lease_expires_at=?,fencing_token=?,updated_at=? WHERE id=?",
@@ -183,3 +200,12 @@ class Store:
             ).rowcount
             if changed != 1:
                 raise FenceRejected(f"stale worker commit rejected for {job_id}")
+
+    def reconcile_startup(self) -> dict[str, int]:
+        """Report interrupted boundaries; never guesses or resubmits provider work."""
+        with self.connect() as db:
+            ambiguous = db.execute("SELECT count(*) FROM provider_operations WHERE state IN ('CALLING','SUBMITTED','RUNNING','AMBIGUOUS')").fetchone()[0]
+            pending_outbox = db.execute("SELECT count(*) FROM outbox WHERE status='PENDING'").fetchone()[0]
+            staged_artifacts = db.execute("SELECT count(*) FROM artifacts WHERE status='STAGED'").fetchone()[0]
+        return {"provider_reconciliation_required": ambiguous, "pending_outbox": pending_outbox,
+                "staged_artifacts": staged_artifacts}

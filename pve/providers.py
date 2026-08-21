@@ -5,6 +5,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any, Callable
+import json
+import os
+import urllib.error
+import urllib.request
 
 from .safety import Provider, require_live_provider
 
@@ -69,3 +73,41 @@ class OpenAIAdapter(Adapter):
 class LegacyAnthropicAdapter(Adapter):
     def __init__(self, transport: Callable[[dict[str, Any]], ProviderResult], *, live: bool = False):
         super().__init__(Provider.ANTHROPIC, transport, live=live)
+
+
+def _credential(name: str) -> str:
+    value = os.getenv(name, "")
+    if not value: raise ProviderFailure(f"missing credential: {name}", FailureClass.PERMANENT)
+    return value
+
+
+def _post_json(url: str, payload: dict[str, Any], headers: dict[str, str], timeout: float = 60) -> ProviderResult:
+    request = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"),
+                                     headers={"Content-Type":"application/json", **headers}, method="POST")
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            raw = response.read()
+            provider_id = response.headers.get("x-request-id")
+            return ProviderResult(raw=raw, provider_id=provider_id)
+    except urllib.error.HTTPError as exc:
+        raise ProviderFailure(f"provider HTTP {exc.code}", classify_status(exc.code)) from exc
+    except (TimeoutError, urllib.error.URLError) as exc:
+        # No provider acceptance evidence is available for these synchronous transports.
+        raise ProviderFailure("provider transport outcome is ambiguous", FailureClass.AMBIGUOUS) from exc
+
+
+def google_live_adapter(endpoint: str = "https://generativelanguage.googleapis.com/v1beta") -> GoogleAdapter:
+    def transport(request: dict[str, Any]) -> ProviderResult:
+        key = _credential("GEMINI_API_KEY"); payload = dict(request); model = payload.pop("model")
+        return _post_json(f"{endpoint}/models/{model}:generateContent", payload, {"x-goog-api-key":key})
+    return GoogleAdapter(transport, live=True)
+
+
+def openai_compatible_live_adapter(provider: Provider, endpoint: str) -> Adapter:
+    if provider not in (Provider.NVIDIA, Provider.OPENAI): raise ValueError("unsupported OpenAI-compatible provider")
+    credential_name = "NVIDIA_API_KEY" if provider is Provider.NVIDIA else "OPENAI_API_KEY"
+    def transport(request: dict[str, Any]) -> ProviderResult:
+        key = _credential(credential_name)
+        return _post_json(endpoint.rstrip("/") + "/chat/completions", request, {"Authorization":f"Bearer {key}"})
+    cls = NvidiaAdapter if provider is Provider.NVIDIA else OpenAIAdapter
+    return cls(transport, live=True)

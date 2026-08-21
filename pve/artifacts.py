@@ -9,6 +9,9 @@ import uuid
 from pathlib import Path
 from typing import Any
 
+from .identity import sha256_identity
+from .store import Store, utcnow
+
 
 class UnsafeArtifactPath(ValueError): pass
 
@@ -48,3 +51,28 @@ class ArtifactRepository:
         temporary.write_text(json.dumps(metadata, sort_keys=True, indent=2), encoding="utf-8")
         os.replace(temporary, path)
         return path
+
+
+class ArtifactRegistry:
+    def __init__(self, store: Store): self.store = store
+
+    def dependency_fingerprint(self, upstream_hashes: list[str], config: dict[str, Any]) -> str:
+        return sha256_identity("pve-artifact-dependency-v1", {"upstream": sorted(upstream_hashes), "config": config})
+
+    def register(self, *, module_id: str, phase: str, generation_id: str,
+                 dependency_fingerprint: str, content_hash: str, status: str = "SUCCEEDED",
+                 metadata_path: str | None = None) -> tuple[str, bool]:
+        artifact_id = "art_" + sha256_identity("pve-artifact-id-v1", {
+            "module_id":module_id,"phase":phase,"generation_id":generation_id}).split(":",1)[1]
+        with self.store.transaction() as db:
+            row = db.execute("SELECT id FROM artifacts WHERE module_id=? AND phase=? AND dependency_fingerprint=?",
+                             (module_id,phase,dependency_fingerprint)).fetchone()
+            if row: return row[0], True
+            db.execute("INSERT INTO artifacts VALUES(?,?,?,?,?,?,?,?,?)",
+                       (artifact_id,module_id,phase,generation_id,content_hash,dependency_fingerprint,status,metadata_path,utcnow()))
+        return artifact_id, False
+
+    def stale_for_upstream(self, upstream_hash: str) -> list[str]:
+        with self.store.connect() as db:
+            return [row[0] for row in db.execute(
+                "SELECT artifact_id FROM artifact_dependencies WHERE upstream_hash<>?", (upstream_hash,))]

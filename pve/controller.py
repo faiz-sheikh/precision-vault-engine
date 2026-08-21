@@ -45,6 +45,22 @@ class Controller:
         if preview.get("config_hash") != self.settings.config_hash:
             raise StalePreview("configuration changed since preview")
 
+    def submit_command(self, *, idempotency_key: str, command: str, payload: dict[str, Any],
+                       preview: dict[str, Any] | None = None) -> tuple[str, bool]:
+        if preview is not None: self.verify_preview(preview)
+        command_id = "cmd_" + sha256_identity("pve-command-v1", idempotency_key).split(":", 1)[1]
+        with self.store.transaction() as db:
+            row = db.execute("SELECT id,command,payload_json,preview_id FROM commands WHERE idempotency_key=?", (idempotency_key,)).fetchone()
+            serialized = json.dumps(payload, sort_keys=True)
+            preview_id = preview.get("preview_id") if preview else None
+            if row:
+                if (row["command"], row["payload_json"], row["preview_id"]) != (command, serialized, preview_id):
+                    raise OperationBlocked("idempotency key reused with different command semantics")
+                return row["id"], True
+            db.execute("INSERT INTO commands(id,idempotency_key,command,payload_json,preview_id,created_at) VALUES(?,?,?,?,?,?)",
+                       (command_id, idempotency_key, command, serialized, preview_id, utcnow()))
+        return command_id, False
+
     def execute_provider(
         self, *, capability: str, request: dict[str, Any], prompt_hash: str,
         parameters: dict[str, Any], schema: dict[str, Any], upstream_hashes: list[str],

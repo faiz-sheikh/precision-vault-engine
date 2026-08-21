@@ -19,7 +19,8 @@ def build_parser() -> argparse.ArgumentParser:
     backup = sub.add_parser("backup"); backup.add_argument("destination", type=Path)
     restore = sub.add_parser("restore-check"); restore.add_argument("backup", type=Path)
     candidate = sub.add_parser("manifest-candidate"); candidate.add_argument("legacy", type=Path); candidate.add_argument("--source-set-id", required=True)
-    for name in ("run", "resume", "rerun-failed", "rerun-stale", "jobs", "failures", "cost", "sources", "artifacts"):
+    export = sub.add_parser("export"); export.add_argument("destination", type=Path)
+    for name in ("run", "resume", "rerun-failed", "rerun-stale", "jobs", "failures", "cost", "sources", "artifacts", "manifest", "settings"):
         sub.add_parser(name)
     return parser
 
@@ -45,6 +46,11 @@ def main(argv: list[str] | None = None) -> int:
         envelope = migrate_legacy_candidate(args.legacy, args.source_set_id)
         cid, errors = ManifestGovernance(controller.store).create_candidate(envelope)
         print(json.dumps({"candidate_id": cid, "errors": errors})); return 0 if not errors else 2
+    if args.command == "export":
+        from .dashboard import snapshot
+        payload = snapshot(controller.store); args.destination.parent.mkdir(parents=True, exist_ok=True)
+        args.destination.write_text(json.dumps(payload, sort_keys=True, indent=2), encoding="utf-8")
+        print(json.dumps({"exported": str(args.destination), "provider_calls": 0})); return 0
     # Mutating execution commands are scaffolded behind controller state and do not invoke providers.
     print(json.dumps({"command": args.command, "status": "NO_ELIGIBLE_WORK", "provider_calls": 0})); return 0
 
