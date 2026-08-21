@@ -6,9 +6,17 @@ import os
 import tempfile
 import unittest
 from contextlib import redirect_stdout
+from datetime import UTC, datetime, timedelta
 from unittest.mock import patch
 
-from pve.canary import APPROVAL_TOKEN, CANARY_INPUTS, canonical_request, main
+from pve.canary import (
+    APPROVAL_TOKEN,
+    CANARY_INPUTS,
+    MANUAL_RETRY_APPROVAL_TOKEN,
+    canonical_request,
+    main,
+)
+from pve.providers import FailureClass, GoogleAdapter, ProviderFailure, ProviderResult
 from pve.safety import PaidExecutionBlocked
 
 
@@ -89,3 +97,72 @@ class CanaryOfflineTests(unittest.TestCase):
                 self.assertEqual(main(["verify", "--capability", "FRONTIER_ESCALATION"]), 0)
                 network.assert_not_called()
             self.assertFalse(json.loads(output.getvalue())["found"])
+
+    def test_canary_manual_retry_keeps_fingerprint_and_reuses_success_offline(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            env = {
+                "PVE_STATE_DIR": directory + "/state",
+                "PVE_ARTIFACT_DIR": directory + "/artifacts",
+                "PVE_CANARY_APPROVAL": APPROVAL_TOKEN,
+                "PVE_MANUAL_RETRY_APPROVAL": MANUAL_RETRY_APPROVAL_TOKEN,
+            }
+            calls: list[str] = []
+
+            def fail(request):
+                calls.append("failed")
+                raise ProviderFailure("mock 429", FailureClass.TRANSIENT, request_sent=True)
+
+            execute = [
+                "execute",
+                "--capability",
+                "WEB_GROUNDED_RESEARCH",
+                "--approval-token",
+                APPROVAL_TOKEN,
+            ]
+            with (
+                patch.dict(os.environ, env, clear=True),
+                patch("pve.canary.adapter_for", return_value=GoogleAdapter(fail)),
+            ):
+                with self.assertRaises(ProviderFailure):
+                    main(execute)
+
+                approval_id = "canary-manual-retry-1"
+                approval_output = io.StringIO()
+                with redirect_stdout(approval_output):
+                    self.assertEqual(
+                        main(
+                            [
+                                "approve-retry",
+                                "--capability",
+                                "WEB_GROUNDED_RESEARCH",
+                                "--approval-token",
+                                MANUAL_RETRY_APPROVAL_TOKEN,
+                                "--manual-retry-approval-id",
+                                approval_id,
+                                "--actor",
+                                "test-operator",
+                                "--reason",
+                                "explicit offline retry",
+                                "--expires-at",
+                                (datetime.now(UTC) + timedelta(minutes=10)).isoformat(),
+                            ]
+                        ),
+                        0,
+                    )
+                fingerprint = json.loads(approval_output.getvalue())["fingerprint"]
+
+                def succeed(request):
+                    calls.append("succeeded")
+                    return ProviderResult(b'{"result":"ok"}', usage={"tokens": 2})
+
+                retry_output = io.StringIO()
+                with (
+                    patch("pve.canary.adapter_for", return_value=GoogleAdapter(succeed)),
+                    redirect_stdout(retry_output),
+                ):
+                    self.assertEqual(main([*execute, "--manual-retry-approval-id", approval_id]), 0)
+                    self.assertEqual(main(execute), 0)
+            self.assertEqual(calls, ["failed", "succeeded"])
+            self.assertEqual(
+                json.loads(retry_output.getvalue().splitlines()[0])["fingerprint"], fingerprint
+            )

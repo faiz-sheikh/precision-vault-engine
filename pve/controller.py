@@ -5,9 +5,11 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
+import sqlite3
 import uuid
 from collections.abc import Callable
 from dataclasses import asdict
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -105,6 +107,96 @@ class Controller:
             )
         return command_id, False
 
+    def approve_manual_provider_retry(
+        self,
+        *,
+        approval_id: str,
+        operation_id: str,
+        fingerprint: str,
+        actor: str,
+        reason: str,
+        expires_at: str,
+        additional_attempts: int,
+        max_additional_requests: int,
+        max_additional_cost_usd: float | None,
+    ) -> None:
+        if not approval_id or not actor.strip() or not reason.strip():
+            raise OperationBlocked("manual retry approval identity, actor, and reason are required")
+        if additional_attempts != 1 or max_additional_requests != 1:
+            raise OperationBlocked("manual retry approvals are one-shot and authorize one request")
+        if max_additional_cost_usd is not None and max_additional_cost_usd < 0:
+            raise OperationBlocked("manual retry budget cannot be negative")
+        try:
+            expiry = datetime.fromisoformat(expires_at)
+        except ValueError as exc:
+            raise OperationBlocked("manual retry expiry must be ISO-8601") from exc
+        if expiry.tzinfo is None or expiry <= datetime.now(UTC):
+            raise OperationBlocked("manual retry approval is expired or lacks a timezone")
+        now = utcnow()
+        with self.store.transaction() as db:
+            operation = db.execute(
+                "SELECT * FROM provider_operations WHERE id=?", (operation_id,)
+            ).fetchone()
+            if operation is None or operation["fingerprint"] != fingerprint:
+                raise OperationBlocked(
+                    "manual retry approval does not match the operation fingerprint"
+                )
+            if operation["state"] != "FAILED_TRANSIENT":
+                raise OperationBlocked(
+                    "only a known transient failure can receive manual retry approval"
+                )
+            if int(operation["attempts"]) < self.settings.max_provider_attempts:
+                raise OperationBlocked("automatic retry allowance is not exhausted")
+            route = self.settings.routes.get(operation["capability"])
+            if (
+                route is None
+                or route.provider != operation["provider"]
+                or route.model != operation["model"]
+            ):
+                raise OperationBlocked("current provider route differs from the failed operation")
+            try:
+                db.execute(
+                    "INSERT INTO provider_retry_approvals("
+                    "approval_id,operation_id,fingerprint,approval_type,actor,reason,created_at,"
+                    "expires_at,additional_attempts,provider,model,capability,"
+                    "max_additional_requests,max_additional_cost_usd,config_hash) "
+                    "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    (
+                        approval_id,
+                        operation_id,
+                        fingerprint,
+                        "MANUAL_PROVIDER_RETRY",
+                        actor.strip(),
+                        reason.strip(),
+                        now,
+                        expiry.isoformat(),
+                        additional_attempts,
+                        operation["provider"],
+                        operation["model"],
+                        operation["capability"],
+                        max_additional_requests,
+                        max_additional_cost_usd,
+                        self.settings.config_hash,
+                    ),
+                )
+            except sqlite3.IntegrityError as exc:
+                raise OperationBlocked("manual retry approval ID already exists") from exc
+            self.store.event(
+                db,
+                operation_id,
+                "MANUAL_RETRY_APPROVED",
+                {
+                    "approval_id": approval_id,
+                    "actor": actor.strip(),
+                    "reason": reason.strip(),
+                    "expires_at": expiry.isoformat(),
+                    "additional_attempts": additional_attempts,
+                    "max_additional_requests": max_additional_requests,
+                    "max_additional_cost_usd": max_additional_cost_usd,
+                    "config_hash": self.settings.config_hash,
+                },
+            )
+
     def execute_provider(
         self,
         *,
@@ -119,6 +211,7 @@ class Controller:
         adapter: Adapter,
         parse: Callable[[bytes], Any],
         estimated_cost_usd: float | None = None,
+        manual_retry_approval_id: str | None = None,
     ) -> tuple[Any, bool]:
         route = self.settings.routes[capability]
         if adapter.provider.value != route.provider:
@@ -142,6 +235,10 @@ class Controller:
             ).fetchone()
             if existing:
                 if existing["state"] == "SUCCEEDED":
+                    if manual_retry_approval_id is not None:
+                        raise OperationBlocked(
+                            "a succeeded operation cannot consume retry approval"
+                        )
                     raw = Path(existing["raw_path"]).read_bytes()
                     if hashlib.sha256(raw).hexdigest() != existing["raw_sha256"]:
                         raise OperationBlocked("raw checkpoint checksum mismatch")
@@ -150,11 +247,16 @@ class Controller:
                     raise AmbiguousOperation(f"operation {operation_id} requires reconciliation")
                 if existing["state"] == "FAILED_PERMANENT":
                     raise OperationBlocked("unchanged permanently failed operation cannot retry")
-                if (
-                    existing["state"] == "FAILED_TRANSIENT"
-                    and existing["attempts"] >= self.settings.max_provider_attempts
-                ):
-                    raise OperationBlocked("bounded transient retry limit reached")
+                if existing["state"] == "FAILED_TRANSIENT":
+                    automatic_exhausted = (
+                        int(existing["attempts"]) >= self.settings.max_provider_attempts
+                    )
+                    if manual_retry_approval_id is None and automatic_exhausted:
+                        raise OperationBlocked("bounded transient retry limit reached")
+                    if manual_retry_approval_id is not None and not automatic_exhausted:
+                        raise OperationBlocked(
+                            "manual retry approval cannot replace remaining automatic allowance"
+                        )
             # A completed operation is reusable with all live switches off. Any path that
             # could create a new external attempt must pass preflight before new evidence.
             adapter.preflight()
@@ -175,10 +277,54 @@ class Controller:
                     ),
                 )
                 self.store.event(db, operation_id, "INTENT_CREATED", {"fingerprint": fingerprint})
+            approval = None
+            if manual_retry_approval_id is not None:
+                if existing is None or existing["state"] != "FAILED_TRANSIENT":
+                    raise OperationBlocked("manual retry requires an existing transient failure")
+                approval = db.execute(
+                    "SELECT * FROM provider_retry_approvals WHERE approval_id=?",
+                    (manual_retry_approval_id,),
+                ).fetchone()
+                if approval is None:
+                    raise OperationBlocked("manual retry approval not found")
+                if db.execute(
+                    "SELECT 1 FROM provider_retry_approval_consumptions WHERE approval_id=?",
+                    (manual_retry_approval_id,),
+                ).fetchone():
+                    raise OperationBlocked("manual retry approval already consumed")
+                expected = (
+                    operation_id,
+                    fingerprint,
+                    route.provider,
+                    route.model,
+                    capability,
+                    self.settings.config_hash,
+                )
+                actual = (
+                    approval["operation_id"],
+                    approval["fingerprint"],
+                    approval["provider"],
+                    approval["model"],
+                    approval["capability"],
+                    approval["config_hash"],
+                )
+                if actual != expected:
+                    raise OperationBlocked("manual retry approval binding mismatch")
+                if approval["approval_type"] != "MANUAL_PROVIDER_RETRY":
+                    raise OperationBlocked("invalid manual retry approval type")
+                if datetime.fromisoformat(approval["expires_at"]) <= datetime.now(UTC):
+                    raise OperationBlocked("manual retry approval expired")
+                if approval["additional_attempts"] != 1 or approval["max_additional_requests"] != 1:
+                    raise OperationBlocked("manual retry approval is not one-shot")
+                if approval["max_additional_cost_usd"] is not None and (
+                    estimated_cost_usd is None
+                    or estimated_cost_usd > approval["max_additional_cost_usd"]
+                ):
+                    raise BudgetExceeded("manual retry estimate exceeds approved additional budget")
             attempt_count = db.execute(
                 "SELECT COALESCE(SUM(attempts),0) FROM provider_operations"
             ).fetchone()[0]
-            if attempt_count >= self.settings.max_requests_per_run:
+            if attempt_count >= self.settings.max_requests_per_run and approval is None:
                 raise BudgetExceeded("request budget exhausted")
             if self.settings.max_cost_usd is not None:
                 if estimated_cost_usd is None:
@@ -187,17 +333,24 @@ class Controller:
                     "SELECT COALESCE(SUM(estimated_cost_usd),0) FROM provider_attempts "
                     "WHERE reservation_status IN "
                     "('RESERVED','CONSUMED','CONSUMED_BILLING_UNKNOWN',"
-                    "'CLOSED_BILLING_UNKNOWN','HELD_AMBIGUOUS')"
+                    "'CLOSED_BILLING_UNKNOWN','HELD_AMBIGUOUS',"
+                    "'HISTORICAL_RESERVED_UNRECONCILED')"
                 ).fetchone()[0]
                 if used + estimated_cost_usd > self.settings.max_cost_usd:
                     raise BudgetExceeded("cost budget exhausted")
             attempt_number = int(existing["attempts"]) + 1 if existing else 1
             attempt_id = f"att_{operation_id.removeprefix('op_')}_{attempt_number}"
+            previous_attempt_id = (
+                f"att_{operation_id.removeprefix('op_')}_{attempt_number - 1}"
+                if attempt_number > 1
+                else None
+            )
             reservation_id = "res_" + uuid.uuid4().hex
             db.execute(
                 "INSERT INTO provider_attempts("
                 "attempt_id,operation_id,attempt_number,state,reservation_status,"
-                "estimated_cost_usd,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?)",
+                "estimated_cost_usd,approval_id,previous_attempt_id,reservation_id,created_at,updated_at) "
+                "VALUES(?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     attempt_id,
                     operation_id,
@@ -205,17 +358,56 @@ class Controller:
                     "CALLING",
                     "RESERVED",
                     estimated_cost_usd,
+                    manual_retry_approval_id,
+                    previous_attempt_id,
+                    reservation_id,
                     now,
                     now,
                 ),
             )
             db.execute(
-                "INSERT INTO budget_reservations(id,operation_id,requests,estimated_cost_usd,status,created_at) "
-                "VALUES(?,?,?,?,?,?) ON CONFLICT(operation_id) DO UPDATE SET "
-                "requests=excluded.requests,estimated_cost_usd=excluded.estimated_cost_usd,"
-                "status=excluded.status,created_at=excluded.created_at",
-                (reservation_id, operation_id, 1, estimated_cost_usd, "RESERVED", now),
+                "INSERT INTO provider_attempt_reservations("
+                "reservation_id,attempt_id,operation_id,requests,estimated_cost_usd,status,"
+                "created_at,updated_at) VALUES(?,?,?,?,?,?,?,?)",
+                (
+                    reservation_id,
+                    attempt_id,
+                    operation_id,
+                    1,
+                    estimated_cost_usd,
+                    "RESERVED",
+                    now,
+                    now,
+                ),
             )
+            if manual_retry_approval_id is not None:
+                try:
+                    db.execute(
+                        "INSERT INTO provider_retry_approval_consumptions VALUES(?,?,?)",
+                        (manual_retry_approval_id, attempt_id, now),
+                    )
+                except sqlite3.IntegrityError as exc:
+                    raise OperationBlocked(
+                        "manual retry approval was concurrently consumed"
+                    ) from exc
+                self.store.event(
+                    db,
+                    operation_id,
+                    "MANUAL_RETRY_APPROVAL_CONSUMED",
+                    {
+                        "approval_id": manual_retry_approval_id,
+                        "attempt_id": attempt_id,
+                        "previous_attempt_id": previous_attempt_id,
+                    },
+                )
+            if manual_retry_approval_id is None:
+                db.execute(
+                    "INSERT INTO budget_reservations(id,operation_id,requests,estimated_cost_usd,status,created_at) "
+                    "VALUES(?,?,?,?,?,?) ON CONFLICT(operation_id) DO UPDATE SET "
+                    "requests=excluded.requests,estimated_cost_usd=excluded.estimated_cost_usd,"
+                    "status=excluded.status,created_at=excluded.created_at",
+                    (reservation_id, operation_id, 1, estimated_cost_usd, "RESERVED", now),
+                )
             db.execute(
                 "UPDATE provider_operations SET state='CALLING',attempts=attempts+1,updated_at=? WHERE id=?",
                 (now, operation_id),
@@ -224,9 +416,18 @@ class Controller:
                 db,
                 operation_id,
                 "RESERVED",
-                {"attempt_id": attempt_id, "estimated_cost_usd": estimated_cost_usd},
+                {
+                    "attempt_id": attempt_id,
+                    "approval_id": manual_retry_approval_id,
+                    "estimated_cost_usd": estimated_cost_usd,
+                },
             )
-            self.store.event(db, operation_id, "CALLING", {"attempt_id": attempt_id})
+            self.store.event(
+                db,
+                operation_id,
+                "CALLING",
+                {"attempt_id": attempt_id, "approval_id": manual_retry_approval_id},
+            )
 
         error_checkpoint: tuple[Path, str] | None = None
 
@@ -287,9 +488,20 @@ class Controller:
                     ),
                 )
                 db.execute(
-                    "UPDATE budget_reservations SET status=? WHERE operation_id=?",
-                    (reservation_status, operation_id),
+                    "UPDATE provider_attempt_reservations SET status=?,billing_uncertain=?,"
+                    "updated_at=? WHERE reservation_id=?",
+                    (
+                        reservation_status,
+                        int(reservation_status in ("CLOSED_BILLING_UNKNOWN", "HELD_AMBIGUOUS")),
+                        utcnow(),
+                        reservation_id,
+                    ),
                 )
+                if manual_retry_approval_id is None:
+                    db.execute(
+                        "UPDATE budget_reservations SET status=? WHERE operation_id=?",
+                        (reservation_status, operation_id),
+                    )
                 self.store.event(
                     db,
                     operation_id,
@@ -324,9 +536,15 @@ class Controller:
                     (utcnow(), attempt_id),
                 )
                 db.execute(
-                    "UPDATE budget_reservations SET status='HELD_AMBIGUOUS' WHERE operation_id=?",
-                    (operation_id,),
+                    "UPDATE provider_attempt_reservations SET status='HELD_AMBIGUOUS',"
+                    "billing_uncertain=1,updated_at=? WHERE reservation_id=?",
+                    (utcnow(), reservation_id),
                 )
+                if manual_retry_approval_id is None:
+                    db.execute(
+                        "UPDATE budget_reservations SET status='HELD_AMBIGUOUS' WHERE operation_id=?",
+                        (operation_id,),
+                    )
                 self.store.event(
                     db,
                     operation_id,
@@ -357,9 +575,15 @@ class Controller:
                     (utcnow(), attempt_id),
                 )
                 db.execute(
-                    "UPDATE budget_reservations SET status='HELD_AMBIGUOUS' WHERE operation_id=?",
-                    (operation_id,),
+                    "UPDATE provider_attempt_reservations SET status='HELD_AMBIGUOUS',"
+                    "billing_uncertain=1,updated_at=? WHERE reservation_id=?",
+                    (utcnow(), reservation_id),
                 )
+                if manual_retry_approval_id is None:
+                    db.execute(
+                        "UPDATE budget_reservations SET status='HELD_AMBIGUOUS' WHERE operation_id=?",
+                        (operation_id,),
+                    )
                 self.store.event(
                     db,
                     operation_id,
@@ -384,9 +608,15 @@ class Controller:
             )
             billing_status = "CONSUMED" if result.usage is not None else "CONSUMED_BILLING_UNKNOWN"
             db.execute(
-                "UPDATE budget_reservations SET status=? WHERE operation_id=?",
-                (billing_status, operation_id),
+                "UPDATE provider_attempt_reservations SET status=?,billing_uncertain=?,"
+                "updated_at=? WHERE reservation_id=?",
+                (billing_status, int(result.usage is None), utcnow(), reservation_id),
             )
+            if manual_retry_approval_id is None:
+                db.execute(
+                    "UPDATE budget_reservations SET status=? WHERE operation_id=?",
+                    (billing_status, operation_id),
+                )
             db.execute(
                 "UPDATE provider_attempts SET state='SUCCEEDED',reservation_status=?,"
                 "billing_uncertain=?,updated_at=? WHERE attempt_id=?",

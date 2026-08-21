@@ -131,7 +131,7 @@ class StoreControllerTests(unittest.TestCase):
             self.assertEqual(db.execute("PRAGMA foreign_keys").fetchone()[0], 1)
             self.assertEqual(db.execute("PRAGMA journal_mode").fetchone()[0].lower(), "wal")
             self.assertEqual(
-                db.execute("SELECT max(version) FROM schema_migrations").fetchone()[0], 2
+                db.execute("SELECT max(version) FROM schema_migrations").fetchone()[0], 3
             )
 
     def test_migrations_are_idempotent_and_foreign_keys_reject_orphans(self) -> None:
@@ -158,10 +158,15 @@ class StoreControllerTests(unittest.TestCase):
                 "request_json TEXT NOT NULL,raw_path TEXT,raw_sha256 TEXT,parsed_json TEXT,"
                 "provider_id TEXT,estimated_cost_usd REAL,actual_cost_usd REAL,"
                 "attempts INTEGER NOT NULL DEFAULT 0,created_at TEXT NOT NULL,updated_at TEXT NOT NULL);"
+                "CREATE TABLE budget_reservations("
+                "id TEXT PRIMARY KEY,operation_id TEXT NOT NULL UNIQUE REFERENCES provider_operations(id),"
+                "requests INTEGER NOT NULL,estimated_cost_usd REAL,status TEXT NOT NULL,created_at TEXT NOT NULL);"
                 "INSERT INTO provider_operations(id,fingerprint,provider,model,capability,state,"
                 "request_json,attempts,created_at,updated_at) VALUES("
                 "'historical-op','historical-fp','google','legacy-model','research',"
                 "'FAILED_TRANSIENT','{}',1,'historical','historical');"
+                "INSERT INTO budget_reservations VALUES("
+                "'historical-res','historical-op',1,0.01,'RESERVED','historical');"
             )
         migrated = Store(legacy_path)
         migrated.initialize()
@@ -169,12 +174,24 @@ class StoreControllerTests(unittest.TestCase):
             columns = {row[1] for row in db.execute("PRAGMA table_info(provider_operations)")}
             self.assertTrue({"error_path", "error_sha256"}.issubset(columns))
             self.assertEqual(
-                db.execute("SELECT state FROM provider_operations WHERE id='historical-op'").fetchone()[0],
+                db.execute(
+                    "SELECT state FROM provider_operations WHERE id='historical-op'"
+                ).fetchone()[0],
                 "FAILED_TRANSIENT",
             )
             self.assertEqual(
-                [row[0] for row in db.execute("SELECT version FROM schema_migrations ORDER BY version")],
-                [1, 2],
+                [
+                    row[0]
+                    for row in db.execute("SELECT version FROM schema_migrations ORDER BY version")
+                ],
+                [1, 3],
+            )
+            attempt = db.execute("SELECT * FROM provider_attempts").fetchone()
+            self.assertEqual(attempt["attempt_number"], 1)
+            self.assertEqual(attempt["state"], "FAILED_TRANSIENT")
+            self.assertEqual(attempt["reservation_status"], "HISTORICAL_RESERVED_UNRECONCILED")
+            self.assertEqual(
+                db.execute("SELECT status FROM budget_reservations").fetchone()[0], "RESERVED"
             )
 
     def test_fencing_rejects_stale_worker(self) -> None:

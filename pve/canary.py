@@ -21,6 +21,7 @@ from .settings import Settings
 from .store import Store
 
 APPROVAL_TOKEN = "PVE_LIVE_CANARY_APPROVED"
+MANUAL_RETRY_APPROVAL_TOKEN = "PVE_MANUAL_RETRY_APPROVED"
 CANARY_MODULE = "mod_canary"
 
 CANARY_INPUTS = {
@@ -78,12 +79,17 @@ def adapter_for(capability: str, settings: Settings) -> Adapter:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="python -m pve.canary")
-    parser.add_argument("mode", choices=("preview", "execute", "verify"))
+    parser.add_argument("mode", choices=("preview", "execute", "verify", "approve-retry"))
     parser.add_argument("--capability", choices=tuple(CANARY_INPUTS), required=True)
     parser.add_argument("--max-output-tokens", type=int, default=128)
     parser.add_argument("--budget-usd", type=float, default=0.05)
     parser.add_argument("--estimated-cost-usd", type=float, default=0.01)
     parser.add_argument("--approval-token", default="")
+    parser.add_argument("--manual-retry-approval-id", default="")
+    parser.add_argument("--actor", default="")
+    parser.add_argument("--reason", default="")
+    parser.add_argument("--expires-at", default="")
+    parser.add_argument("--manual-retry-budget-usd", type=float, default=0.01)
     return parser
 
 
@@ -133,6 +139,46 @@ def main(argv: list[str] | None = None) -> int:
     if args.mode == "preview":
         print(json.dumps(result, sort_keys=True))
         return 0
+    if args.mode == "approve-retry":
+        if (
+            args.approval_token != MANUAL_RETRY_APPROVAL_TOKEN
+            or os.getenv("PVE_MANUAL_RETRY_APPROVAL") != MANUAL_RETRY_APPROVAL_TOKEN
+        ):
+            raise SystemExit("manual retry approval requires the exact separate approval token")
+        if (
+            not args.manual_retry_approval_id
+            or not args.actor
+            or not args.reason
+            or not args.expires_at
+        ):
+            raise SystemExit("manual retry approval ID, actor, reason, and expiry are required")
+        controller = Controller(settings)
+        controller.approve_manual_provider_retry(
+            approval_id=args.manual_retry_approval_id,
+            operation_id=operation_id,
+            fingerprint=fingerprint,
+            actor=args.actor,
+            reason=args.reason,
+            expires_at=args.expires_at,
+            additional_attempts=1,
+            max_additional_requests=1,
+            max_additional_cost_usd=args.manual_retry_budget_usd,
+        )
+        print(
+            json.dumps(
+                {
+                    **result,
+                    "mode": "approve-retry",
+                    "approval_id": args.manual_retry_approval_id,
+                    "additional_attempts": 1,
+                    "max_additional_requests": 1,
+                    "max_additional_cost_usd": args.manual_retry_budget_usd,
+                    "expires_at": args.expires_at,
+                },
+                sort_keys=True,
+            )
+        )
+        return 0
     if args.mode == "verify":
         store = Store(settings.database_path)
         store.initialize()
@@ -146,6 +192,20 @@ def main(argv: list[str] | None = None) -> int:
                 "SELECT count(*) FROM provider_events WHERE operation_id=?", (operation_id,)
             ).fetchone()[0]
             total_operations = db.execute("SELECT count(*) FROM provider_operations").fetchone()[0]
+            attempts = [
+                dict(row)
+                for row in db.execute(
+                    "SELECT attempt_id,attempt_number,state,reservation_status,approval_id,"
+                    "previous_attempt_id FROM provider_attempts WHERE operation_id=? "
+                    "ORDER BY attempt_number",
+                    (operation_id,),
+                )
+            ]
+            approval_consumptions = db.execute(
+                "SELECT count(*) FROM provider_retry_approval_consumptions WHERE attempt_id IN "
+                "(SELECT attempt_id FROM provider_attempts WHERE operation_id=?)",
+                (operation_id,),
+            ).fetchone()[0]
         verification = {
             **result,
             "mode": "verify",
@@ -158,6 +218,8 @@ def main(argv: list[str] | None = None) -> int:
             "raw_exists": bool(operation and operation[3] and os.path.isfile(operation[3])),
             "event_count": event_count,
             "total_operations": total_operations,
+            "attempt_history": attempts,
+            "manual_retry_consumptions": approval_consumptions,
         }
         print(json.dumps(verification, sort_keys=True))
         return 0
@@ -176,6 +238,7 @@ def main(argv: list[str] | None = None) -> int:
         adapter=adapter_for(args.capability, settings),
         parse=lambda raw: json.loads(raw),
         estimated_cost_usd=args.estimated_cost_usd,
+        manual_retry_approval_id=args.manual_retry_approval_id or None,
     )
     parsed_directory = settings.artifact_dir / CANARY_MODULE / phase / operation_id / "parsed"
     parsed_directory.mkdir(parents=True, exist_ok=True)

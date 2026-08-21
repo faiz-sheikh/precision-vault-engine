@@ -77,3 +77,19 @@ env PVE_STATE_DIR=/home/faiz-sheikh/precision_vault_engine/.pve/canary/CAPABILIT
 Expected first-call ledger transitions are exactly `INTENT_CREATED → RESERVED → CALLING → SUCCEEDED`; `attempts=1`, `event_count=4`, `raw_exists=true`, and `total_operations=1`. The unchanged rerun must leave those values unchanged.
 
 If state is `AMBIGUOUS`, `CALLING`, `SUBMITTED`, or `RUNNING`, keep all switches OFF, preserve SQLite and raw artifacts, and do not rerun. Reconcile provider state manually using the recorded fingerprint/provider ID. If parsing fails after `SUCCEEDED`, repair parsing and rerun with switches OFF so the durable raw response is reused. Never delete the canary database as a retry mechanism.
+
+## Approval-bound manual retry after a known transient failure
+
+Automatic retry exhaustion must not be bypassed by changing configuration, state paths, or the request fingerprint. After fresh authorization for the exact failed operation, create one immutable approval while every provider switch remains off. Replace `EXPIRY` with a timezone-aware ISO-8601 timestamp and `ACTOR` with the accountable operator identity; do not place credentials in either field.
+
+```bash
+env PVE_STATE_DIR=/home/faiz-sheikh/precision_vault_engine/.pve/canary/WEB_GROUNDED_RESEARCH PVE_ARTIFACT_DIR=/home/faiz-sheikh/precision_vault_engine/artifacts/canary/WEB_GROUNDED_RESEARCH PVE_MANUAL_RETRY_APPROVAL=PVE_MANUAL_RETRY_APPROVED PVE_ALLOW_LIVE_PROVIDERS=0 PVE_ALLOW_GOOGLE_LIVE=0 PVE_ALLOW_NVIDIA_LIVE=0 PVE_ALLOW_OPENAI_LIVE=0 PVE_ALLOW_ANTHROPIC_LIVE=0 .venv/bin/python -m pve.canary approve-retry --capability WEB_GROUNDED_RESEARCH --manual-retry-approval-id gemini-canary-manual-retry-1 --actor ACTOR --reason "Freshly approved single Gemini retry after known HTTP 429" --expires-at EXPIRY --manual-retry-budget-usd 0.01 --approval-token PVE_MANUAL_RETRY_APPROVED
+```
+
+Inspect the approval and operation locally before enabling Gemini. The retry consumes the approval and creates Attempt 2 plus its own reservation atomically. Attempt 1 and its historical reservation remain unchanged.
+
+```bash
+env PVE_STATE_DIR=/home/faiz-sheikh/precision_vault_engine/.pve/canary/WEB_GROUNDED_RESEARCH PVE_ARTIFACT_DIR=/home/faiz-sheikh/precision_vault_engine/artifacts/canary/WEB_GROUNDED_RESEARCH PVE_CANARY_APPROVAL=PVE_LIVE_CANARY_APPROVED PVE_ALLOW_LIVE_PROVIDERS=1 PVE_ALLOW_GOOGLE_LIVE=1 PVE_ALLOW_NVIDIA_LIVE=0 PVE_ALLOW_OPENAI_LIVE=0 PVE_ALLOW_ANTHROPIC_LIVE=0 .venv/bin/python -m pve.canary execute --capability WEB_GROUNDED_RESEARCH --manual-retry-approval-id gemini-canary-manual-retry-1 --max-output-tokens 128 --budget-usd 0.05 --estimated-cost-usd 0.01 --approval-token PVE_LIVE_CANARY_APPROVED
+```
+
+Immediately switch all live controls off and run `verify`. A successful manual retry has the original fingerprint, two distinct attempt IDs, Attempt 2 linked to Attempt 1 and the approval, one approval consumption, and a terminal Attempt 2 reservation. The ordinary unchanged `execute` command without `--manual-retry-approval-id` must then return `"reused": true` with no provider access.

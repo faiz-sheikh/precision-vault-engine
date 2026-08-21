@@ -14,7 +14,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 
 def utcnow() -> str:
@@ -58,9 +58,45 @@ CREATE TABLE IF NOT EXISTS provider_attempts(
  reservation_status TEXT NOT NULL, estimated_cost_usd REAL, actual_cost_usd REAL,
  billing_uncertain INTEGER NOT NULL DEFAULT 0 CHECK(billing_uncertain IN (0,1)),
  http_status INTEGER, error_path TEXT, error_sha256 TEXT,
+ approval_id TEXT REFERENCES provider_retry_approvals(approval_id),
+ previous_attempt_id TEXT REFERENCES provider_attempts(attempt_id),
+ reservation_id TEXT UNIQUE,
  created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
  UNIQUE(operation_id, attempt_number)
 );
+CREATE TABLE IF NOT EXISTS provider_retry_approvals(
+ approval_id TEXT PRIMARY KEY, operation_id TEXT NOT NULL REFERENCES provider_operations(id),
+ fingerprint TEXT NOT NULL, approval_type TEXT NOT NULL CHECK(approval_type='MANUAL_PROVIDER_RETRY'),
+ actor TEXT NOT NULL, reason TEXT NOT NULL, created_at TEXT NOT NULL, expires_at TEXT NOT NULL,
+ additional_attempts INTEGER NOT NULL CHECK(additional_attempts > 0),
+ provider TEXT NOT NULL, model TEXT NOT NULL, capability TEXT NOT NULL,
+ max_additional_requests INTEGER NOT NULL CHECK(max_additional_requests > 0),
+ max_additional_cost_usd REAL, config_hash TEXT NOT NULL
+);
+CREATE TRIGGER IF NOT EXISTS provider_retry_approvals_no_update
+ BEFORE UPDATE ON provider_retry_approvals BEGIN
+ SELECT RAISE(ABORT, 'provider retry approvals are immutable'); END;
+CREATE TRIGGER IF NOT EXISTS provider_retry_approvals_no_delete
+ BEFORE DELETE ON provider_retry_approvals BEGIN
+ SELECT RAISE(ABORT, 'provider retry approvals are immutable'); END;
+CREATE TABLE IF NOT EXISTS provider_retry_approval_consumptions(
+ approval_id TEXT PRIMARY KEY REFERENCES provider_retry_approvals(approval_id),
+ attempt_id TEXT NOT NULL UNIQUE REFERENCES provider_attempts(attempt_id),
+ consumed_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS provider_attempt_reservations(
+ reservation_id TEXT PRIMARY KEY, attempt_id TEXT NOT NULL UNIQUE REFERENCES provider_attempts(attempt_id),
+ operation_id TEXT NOT NULL REFERENCES provider_operations(id), requests INTEGER NOT NULL CHECK(requests > 0),
+ estimated_cost_usd REAL, actual_cost_usd REAL, status TEXT NOT NULL,
+ billing_uncertain INTEGER NOT NULL DEFAULT 0 CHECK(billing_uncertain IN (0,1)),
+ created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+);
+CREATE TRIGGER IF NOT EXISTS provider_retry_consumptions_no_update
+ BEFORE UPDATE ON provider_retry_approval_consumptions BEGIN
+ SELECT RAISE(ABORT, 'provider retry consumptions are append-only'); END;
+CREATE TRIGGER IF NOT EXISTS provider_retry_consumptions_no_delete
+ BEFORE DELETE ON provider_retry_approval_consumptions BEGIN
+ SELECT RAISE(ABORT, 'provider retry consumptions are append-only'); END;
 CREATE TABLE IF NOT EXISTS jobs(
  id TEXT PRIMARY KEY, run_id TEXT REFERENCES runs(id), phase TEXT NOT NULL, state TEXT NOT NULL,
  payload_json TEXT NOT NULL, lease_owner TEXT, lease_expires_at TEXT, fencing_token INTEGER NOT NULL DEFAULT 0,
@@ -138,11 +174,59 @@ class Store:
                 db.execute("ALTER TABLE provider_operations ADD COLUMN error_path TEXT")
             if "error_sha256" not in columns:
                 db.execute("ALTER TABLE provider_operations ADD COLUMN error_sha256 TEXT")
+            attempt_columns = {row[1] for row in db.execute("PRAGMA table_info(provider_attempts)")}
+            if "approval_id" not in attempt_columns:
+                db.execute(
+                    "ALTER TABLE provider_attempts ADD COLUMN approval_id TEXT "
+                    "REFERENCES provider_retry_approvals(approval_id)"
+                )
+            if "previous_attempt_id" not in attempt_columns:
+                db.execute(
+                    "ALTER TABLE provider_attempts ADD COLUMN previous_attempt_id TEXT "
+                    "REFERENCES provider_attempts(attempt_id)"
+                )
+            if "reservation_id" not in attempt_columns:
+                db.execute("ALTER TABLE provider_attempts ADD COLUMN reservation_id TEXT")
+            self._backfill_historical_attempts(db)
             db.execute(
                 "INSERT OR IGNORE INTO schema_migrations VALUES (?, ?)", (SCHEMA_VERSION, utcnow())
             )
         os.chmod(self.path, 0o600)
         self.integrity_check()
+
+    def _backfill_historical_attempts(self, db: sqlite3.Connection) -> None:
+        """Project pre-v2 attempt counts without mutating their historical rows."""
+        operations = db.execute(
+            "SELECT id,state,attempts,estimated_cost_usd,created_at,updated_at "
+            "FROM provider_operations WHERE attempts > 0"
+        ).fetchall()
+        for operation in operations:
+            existing = db.execute(
+                "SELECT count(*) FROM provider_attempts WHERE operation_id=?", (operation["id"],)
+            ).fetchone()[0]
+            operation_hash = str(operation["id"]).removeprefix("op_")
+            for number in range(int(existing) + 1, int(operation["attempts"]) + 1):
+                attempt_id = f"att_{operation_hash}_{number}"
+                is_last = number == int(operation["attempts"])
+                state = operation["state"] if is_last else "HISTORICAL_UNKNOWN"
+                db.execute(
+                    "INSERT OR IGNORE INTO provider_attempts("
+                    "attempt_id,operation_id,attempt_number,state,reservation_status,"
+                    "estimated_cost_usd,billing_uncertain,previous_attempt_id,created_at,updated_at) "
+                    "VALUES(?,?,?,?,?,?,?,?,?,?)",
+                    (
+                        attempt_id,
+                        operation["id"],
+                        number,
+                        state,
+                        "HISTORICAL_RESERVED_UNRECONCILED",
+                        operation["estimated_cost_usd"],
+                        1,
+                        f"att_{operation_hash}_{number - 1}" if number > 1 else None,
+                        operation["created_at"],
+                        operation["updated_at"],
+                    ),
+                )
 
     @contextmanager
     def connect(self) -> Iterator[sqlite3.Connection]:
