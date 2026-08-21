@@ -16,12 +16,14 @@ from typing import Optional
 try:
     from dotenv import load_dotenv
 except ImportError:
-    sys.exit("pip install python-dotenv")
+    def load_dotenv(*args, **kwargs): return False
 try:
     from rich.console import Console
     from rich.logging import RichHandler
 except ImportError:
-    sys.exit("pip install rich")
+    class Console:
+        def print(self, *values, **kwargs): print(*values)
+    RichHandler = None
 
 _SELF_DIR = Path(__file__).parent.resolve()
 for _env in [_SELF_DIR/"config"/".env", _SELF_DIR/".env", Path(".env")]:
@@ -29,8 +31,9 @@ for _env in [_SELF_DIR/"config"/".env", _SELF_DIR/".env", Path(".env")]:
         load_dotenv(_env)
         break
 
-logging.basicConfig(level=logging.INFO, format="%(message)s", datefmt="[%X]",
-    handlers=[RichHandler(rich_tracebacks=True, markup=True, show_path=False)])
+_handlers = ([RichHandler(rich_tracebacks=True, markup=True, show_path=False)]
+             if RichHandler is not None else None)
+logging.basicConfig(level=logging.INFO, format="%(message)s", datefmt="[%X]", handlers=_handlers)
 log     = logging.getLogger("vault_engine")
 console = Console()
 

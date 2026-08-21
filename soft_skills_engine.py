@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """
 soft_skills_engine.py — Soft Skills & Communication Content Generation
 Standalone, runs once. No manifest dependency.
@@ -9,8 +11,12 @@ import argparse
 from pathlib import Path
 from typing import Optional
 
-from google import genai as google_genai
-from google.genai import types as gt
+try:
+    from google import genai as google_genai
+    from google.genai import types as gt
+except ImportError:
+    google_genai = None
+    gt = None
 
 from config import (
     log, console, get_env, safe_gemini_text, robust_json_parse,

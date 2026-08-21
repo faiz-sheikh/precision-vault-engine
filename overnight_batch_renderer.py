@@ -17,11 +17,8 @@ FINAL_OUT = VIDEO_DIR / "final"
 _BATCH_STATE_FILE = VAULT_STATE.parent / "render_state.json"
 
 def _load_render_state() -> dict:
-    if not _BATCH_STATE_FILE.exists(): return {"rendered_ids":[]}
-    try:
-        s = json.loads(_BATCH_STATE_FILE.read_text(encoding="utf-8"))
-        return s if isinstance(s,dict) else {"rendered_ids":[]}
-    except Exception: return {"rendered_ids":[]}
+    from pve.state import load_json_state
+    return load_json_state(_BATCH_STATE_FILE, default_when_missing={"rendered_ids":[]})
 
 def _save_render_state(state: dict) -> None:
     tmp = _BATCH_STATE_FILE.with_suffix(".tmp")

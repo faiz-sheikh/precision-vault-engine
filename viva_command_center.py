@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """
 viva_command_center.py — Phase 8 — Viva Q&A Bank + Interactive Mode
 
@@ -14,7 +16,7 @@ from typing import Optional
 try:
     import anthropic as ant
 except ImportError:
-    import sys; sys.exit("pip install anthropic")
+    ant = None
 try:
     from google import genai as google_genai
     from google.genai import types as gt

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """
 synthesis_gate.py — Phase 2 — Multi-tier Synthesis Engine (v2: chapter-aware)
 
@@ -33,11 +35,12 @@ try:
     from google import genai as google_genai
     from google.genai import types as gt
 except ImportError:
-    import sys; sys.exit("pip install google-genai")
+    google_genai = None
+    gt = None
 try:
     import anthropic as ant
 except ImportError:
-    import sys; sys.exit("pip install anthropic")
+    ant = None
 
 from config import (
     log, console, get_env, safe_slug, safe_gemini_text,
@@ -140,11 +143,8 @@ def _build_prompt(mod: dict, subtopic_subset: Optional[list[str]] = None,
             f"## Source Material\n{'─'*50}\n{src}{pyq_blk}{ref_blk}")
 
 def _load_state() -> dict:
-    if not VAULT_STATE.exists(): return {"synthesised_ids":[],"batch_ids":{}}
-    try:
-        s = json.loads(VAULT_STATE.read_text(encoding="utf-8"))
-        return s if isinstance(s,dict) else {"synthesised_ids":[],"batch_ids":{}}
-    except Exception: return {"synthesised_ids":[],"batch_ids":{}}
+    from pve.state import load_json_state
+    return load_json_state(VAULT_STATE, default_when_missing={"synthesised_ids":[],"batch_ids":{}})
 
 def _save_state(state: dict) -> None:
     tmp = VAULT_STATE.with_suffix(".tmp")
@@ -158,8 +158,10 @@ def _save_state(state: dict) -> None:
 def _write_vault(mod: dict, text: str) -> Optional[Path]:
     tier  = mod.get("tier","Junior")
     subj  = safe_slug(mod.get("subject","unknown"))
-    title = safe_slug(mod.get("title", mod.get("id","module")))
-    path  = VAULT_DIR / tier / subj / f"{title}.md"
+    module_id = safe_slug(mod.get("id", ""))
+    if not module_id:
+        log.error("[red]Vault write blocked: module has no stable ID[/red]"); return None
+    path  = VAULT_DIR / tier / subj / f"{module_id}.md"
     tmp   = path.with_suffix(".tmp")
     try:
         path.parent.mkdir(parents=True, exist_ok=True)

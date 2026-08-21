@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """
 ingestion_researcher.py — Phase 1
 
@@ -37,7 +39,8 @@ try:
     from google import genai as google_genai
     from google.genai import types as gt
 except ImportError:
-    import sys; sys.exit("pip install google-genai")
+    google_genai = None
+    gt = None
 
 try:
     import requests

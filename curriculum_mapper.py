@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """
 curriculum_mapper.py — Phase 0 — FINAL CONSOLIDATED BUILD
 
@@ -65,7 +67,8 @@ try:
     from google import genai as google_genai
     from google.genai import types as gt
 except ImportError:
-    import sys; sys.exit("pip install google-genai")
+    google_genai = None
+    gt = None
 
 from config import (
     log, console, get_env, safe_slug, robust_json_parse,
@@ -439,6 +442,8 @@ def _gemini_map(raw_text: str, filename: str, client: google_genai.Client) -> li
     if not raw_text.strip():
         return []
 
+    if gt is None:
+        raise RuntimeError("google-genai is required only for live legacy mapping")
     config = gt.GenerateContentConfig(
         system_instruction=_SYSTEM,
         response_mime_type="application/json",

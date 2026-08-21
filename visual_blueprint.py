@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """
 visual_blueprint.py — Phase 3 — Mermaid Diagram Injection
 
@@ -14,8 +16,12 @@ import argparse
 from pathlib import Path
 from typing import Optional
 
-from google import genai as google_genai
-from google.genai import types as gt
+try:
+    from google import genai as google_genai
+    from google.genai import types as gt
+except ImportError:
+    google_genai = None
+    gt = None
 
 from config import (
     log, console, get_env, safe_slug, safe_gemini_text,

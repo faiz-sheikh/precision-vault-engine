@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """
 dedup_engine.py — Precision Vault Engine v2  |  Phase -1
 FIX (8th audit):
@@ -24,20 +26,27 @@ from pathlib import Path
 from datetime import datetime
 from typing import Optional
 import random
-from google import genai
-from google.genai import types
-from google.genai.errors import APIError
+try:
+    from google import genai
+    from google.genai import types
+    from google.genai.errors import APIError
+except ImportError:
+    genai = None
+    types = None
+    class APIError(Exception): pass
 try:
     from PIL import Image
     import numpy as np
 except ImportError:
-    sys.exit("Pillow + numpy required: pip install Pillow numpy")
+    Image = None
+    np = None
 
 try:
     from google import genai as google_genai
     from google.genai import types as google_genai_types
 except ImportError:
-    sys.exit("google-genai required: pip install google-genai")
+    google_genai = None
+    google_genai_types = None
 
 from config import (
     log, console, get_env, safe_slug, classify_file, infer_tier,

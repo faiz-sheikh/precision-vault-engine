@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """
 audio_pipeline.py — Phase 4 — Dialogue Script + edge-tts Audio
 """
@@ -11,8 +13,12 @@ import argparse
 from pathlib import Path
 from typing import Optional
 
-from google import genai as google_genai
-from google.genai import types as gt
+try:
+    from google import genai as google_genai
+    from google.genai import types as gt
+except ImportError:
+    google_genai = None
+    gt = None
 
 from config import (
     log, console, get_env, safe_slug, safe_gemini_text,
