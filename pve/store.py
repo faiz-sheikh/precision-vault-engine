@@ -8,10 +8,11 @@ import os
 import shutil
 import sqlite3
 import tempfile
+from collections.abc import Iterator
 from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 
 SCHEMA_VERSION = 1
 
@@ -105,8 +106,12 @@ CREATE TABLE IF NOT EXISTS provider_reconciliations(
 """
 
 
-class StoreCorrupt(RuntimeError): pass
-class FenceRejected(RuntimeError): pass
+class StoreCorrupt(RuntimeError):
+    pass
+
+
+class FenceRejected(RuntimeError):
+    pass
 
 
 class Store:
@@ -118,7 +123,9 @@ class Store:
         os.chmod(self.path.parent, 0o700)
         with self.connect() as db:
             db.executescript(DDL)
-            db.execute("INSERT OR IGNORE INTO schema_migrations VALUES (?, ?)", (SCHEMA_VERSION, utcnow()))
+            db.execute(
+                "INSERT OR IGNORE INTO schema_migrations VALUES (?, ?)", (SCHEMA_VERSION, utcnow())
+            )
         os.chmod(self.path, 0o600)
         self.integrity_check()
 
@@ -163,8 +170,13 @@ class Store:
         os.replace(tmp, destination)
         digest = hashlib.sha256(destination.read_bytes()).hexdigest()
         restored = Store.restore_check(destination)
-        return {"path": str(destination), "sha256": digest, "schema_version": SCHEMA_VERSION,
-                "created_at": utcnow(), "restore_test_result": "PASS" if restored else "FAIL"}
+        return {
+            "path": str(destination),
+            "sha256": digest,
+            "schema_version": SCHEMA_VERSION,
+            "created_at": utcnow(),
+            "restore_test_result": "PASS" if restored else "FAIL",
+        }
 
     @staticmethod
     def restore_check(backup: Path) -> bool:
@@ -177,19 +189,36 @@ class Store:
             except StoreCorrupt:
                 return False
 
-    def event(self, db: sqlite3.Connection, operation_id: str, kind: str, payload: dict[str, Any] | None = None) -> None:
-        db.execute("INSERT INTO provider_events(operation_id,event_type,payload_json,created_at) VALUES(?,?,?,?)",
-                   (operation_id, kind, json.dumps(payload or {}, sort_keys=True), utcnow()))
+    def event(
+        self,
+        db: sqlite3.Connection,
+        operation_id: str,
+        kind: str,
+        payload: dict[str, Any] | None = None,
+    ) -> None:
+        db.execute(
+            "INSERT INTO provider_events(operation_id,event_type,payload_json,created_at) VALUES(?,?,?,?)",
+            (operation_id, kind, json.dumps(payload or {}, sort_keys=True), utcnow()),
+        )
 
     def acquire_job(self, job_id: str, owner: str, expires_at: str) -> int | None:
         now = utcnow()
         with self.transaction() as db:
-            row = db.execute("SELECT lease_owner,lease_expires_at,fencing_token,state FROM jobs WHERE id=?", (job_id,)).fetchone()
-            if row is None or row[3] in ("SUCCEEDED", "CANCELLED") or (row[0] and row[1] and row[1] > now and row[0] != owner):
+            row = db.execute(
+                "SELECT lease_owner,lease_expires_at,fencing_token,state FROM jobs WHERE id=?",
+                (job_id,),
+            ).fetchone()
+            if (
+                row is None
+                or row[3] in ("SUCCEEDED", "CANCELLED")
+                or (row[0] and row[1] and row[1] > now and row[0] != owner)
+            ):
                 return None
             token = int(row[2]) + 1
-            db.execute("UPDATE jobs SET lease_owner=?,lease_expires_at=?,fencing_token=?,updated_at=? WHERE id=?",
-                       (owner, expires_at, token, now, job_id))
+            db.execute(
+                "UPDATE jobs SET lease_owner=?,lease_expires_at=?,fencing_token=?,updated_at=? WHERE id=?",
+                (owner, expires_at, token, now, job_id),
+            )
             return token
 
     def fenced_job_update(self, job_id: str, owner: str, token: int, state: str) -> None:
@@ -204,8 +233,17 @@ class Store:
     def reconcile_startup(self) -> dict[str, int]:
         """Report interrupted boundaries; never guesses or resubmits provider work."""
         with self.connect() as db:
-            ambiguous = db.execute("SELECT count(*) FROM provider_operations WHERE state IN ('CALLING','SUBMITTED','RUNNING','AMBIGUOUS')").fetchone()[0]
-            pending_outbox = db.execute("SELECT count(*) FROM outbox WHERE status='PENDING'").fetchone()[0]
-            staged_artifacts = db.execute("SELECT count(*) FROM artifacts WHERE status='STAGED'").fetchone()[0]
-        return {"provider_reconciliation_required": ambiguous, "pending_outbox": pending_outbox,
-                "staged_artifacts": staged_artifacts}
+            ambiguous = db.execute(
+                "SELECT count(*) FROM provider_operations WHERE state IN ('CALLING','SUBMITTED','RUNNING','AMBIGUOUS')"
+            ).fetchone()[0]
+            pending_outbox = db.execute(
+                "SELECT count(*) FROM outbox WHERE status='PENDING'"
+            ).fetchone()[0]
+            staged_artifacts = db.execute(
+                "SELECT count(*) FROM artifacts WHERE status='STAGED'"
+            ).fetchone()[0]
+        return {
+            "provider_reconciliation_required": ambiguous,
+            "pending_outbox": pending_outbox,
+            "staged_artifacts": staged_artifacts,
+        }

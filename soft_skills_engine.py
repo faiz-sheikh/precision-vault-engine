@@ -8,7 +8,6 @@ Standalone, runs once. No manifest dependency.
 import json
 import time
 import argparse
-from pathlib import Path
 from typing import Optional
 
 try:

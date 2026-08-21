@@ -22,7 +22,12 @@ COMMANDS:
   python3 ingestion_researcher.py --source local       # Enrich manifest with web research
   python3 ingestion_researcher.py --source all         # Both steps in sequence
 """
-import os, re, io, json, time, urllib.request, urllib.parse, argparse
+import re
+import json
+import time
+import urllib.request
+import urllib.parse
+import argparse
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Optional
@@ -58,10 +63,9 @@ except ImportError:
     _YT_OK = False
 
 from config import (
-    log, console, get_env, safe_slug, classify_file, infer_tier,
-    robust_json_parse, safe_gemini_text, get_google_credentials,
-    MASTER_MANIFEST, STAGING_DIR, CLASSROOM_DL_DIR, VAULT_ROOT,
-    GOOGLE_MIME_EXPORT_MAP, DIRECT_DOWNLOAD_MIMES, SKIP_MIMES, classify_mime,
+    log, console, get_env, safe_slug, robust_json_parse, safe_gemini_text, get_google_credentials,
+    MASTER_MANIFEST, CLASSROOM_DL_DIR, VAULT_ROOT,
+    GOOGLE_MIME_EXPORT_MAP, classify_mime,
     GEMINI_FLASH_MODEL, MAX_RETRIES, calc_backoff, GOOGLE_SCOPES,
     ARXIV_API_URL, ARXIV_CATEGORIES, USER_AGENTS, HTML_BOILERPLATE_TAGS,
     WEB_SCRAPE_TIMEOUT_SEC, WEB_SCRAPE_MAX_RETRIES, MAX_TRANSCRIPT_CHARS,
@@ -257,7 +261,7 @@ class YouTubeTranscriptFetcher:
         handles = [c["handle"] for c in PRIORITY_YOUTUBE_CHANNELS if c["domain"] in (domain,"all")]
         ch      = " ".join(handles[:3])
         prompt  = (
-            f"Find YouTube videos for:\n" + "\n".join(f"- {q}" for q in queries[:3])
+            "Find YouTube videos for:\n" + "\n".join(f"- {q}" for q in queries[:3])
             + f"\nPrefer channels: {ch}\nReturn JSON: [{{'url':'...','title':'...'}}] (max {n})"
         )
         urls: list[str] = []
@@ -770,7 +774,7 @@ class IngestionResearcher:
         ok = err = 0
         log.info(f"[bold]Phase 1: Enrichment[/bold] — {len(target)} modules")
 
-        for n, mod in enumerate(target):
+        for mod in target:
             if not isinstance(mod,dict) or not mod.get("id"): err += 1; continue
             try:
                 updated = self.enrich_module(mod, force=force)

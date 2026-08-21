@@ -27,7 +27,11 @@ pipeline:
                           of suggested_chapters, since there is no token-ceiling
                           risk there.
 """
-import re, json, time, math, argparse
+import re
+import json
+import time
+import math
+import argparse
 from pathlib import Path
 from typing import Optional
 
@@ -43,7 +47,7 @@ except ImportError:
     ant = None
 
 from config import (
-    log, console, get_env, safe_slug, safe_gemini_text,
+    log, get_env, safe_slug, safe_gemini_text,
     MASTER_MANIFEST, VAULT_DIR, VAULT_STATE,
     GEMINI_FLASH_MODEL, TIER_MODEL_MAP, MAX_RETRIES, calc_backoff,
 )

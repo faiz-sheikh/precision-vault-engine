@@ -12,9 +12,7 @@ FIX (8th audit):
     falls back to hash-only mode (steps 1 + 2 still run; step 3 skipped).
     This is the correct degraded behavior — the pipeline continues.
 """
-import gc
 import re
-import sys
 import json
 import time
 import base64
@@ -320,7 +318,7 @@ def extract_handwriting_if_present(
                 out = HANDWRITING_DIR / f"{image_path.stem}_annotations.txt"
                 out.write_text(raw, encoding="utf-8")
                 return raw
-            except Exception as exc:
+            except Exception:
                 if attempt == MAX_RETRIES - 1:
                     return None
                 time.sleep(calc_backoff(attempt))

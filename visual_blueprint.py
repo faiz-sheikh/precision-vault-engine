@@ -60,7 +60,7 @@ def _extract_mermaid(raw: str) -> Optional[str]:
     for kw in ("flowchart","graph","sequenceDiagram","classDiagram","stateDiagram","pie"):
         if kw in raw:
             lines = raw.strip().splitlines()
-            start = next((i for i,l in enumerate(lines) if kw in l), None)
+            start = next((i for i, line in enumerate(lines) if kw in line), None)
             if start is not None: return "\n".join(lines[start:]).strip()
     return None
 

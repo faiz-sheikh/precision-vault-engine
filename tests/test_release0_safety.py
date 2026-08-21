@@ -6,11 +6,11 @@ from pve.safety import (
     LEGACY_PAID_OPT_IN_ENV,
     LEGACY_PAID_OPT_IN_VALUE,
     PaidExecutionBlocked,
-    legacy_paid_execution_allowed,
-    require_legacy_paid_execution,
-    live_provider_allowed,
-    require_live_provider,
     Provider,
+    legacy_paid_execution_allowed,
+    live_provider_allowed,
+    require_legacy_paid_execution,
+    require_live_provider,
 )
 
 
@@ -23,7 +23,9 @@ class LegacySafeModeTests(unittest.TestCase):
         self.assertFalse(legacy_paid_execution_allowed({LEGACY_PAID_OPT_IN_ENV: "true"}))
 
     def test_exact_rollback_opt_in_is_recognized(self) -> None:
-        self.assertTrue(legacy_paid_execution_allowed({LEGACY_PAID_OPT_IN_ENV: LEGACY_PAID_OPT_IN_VALUE}))
+        self.assertTrue(
+            legacy_paid_execution_allowed({LEGACY_PAID_OPT_IN_ENV: LEGACY_PAID_OPT_IN_VALUE})
+        )
 
     def test_live_provider_requires_both_switches(self) -> None:
         for provider in Provider:

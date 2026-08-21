@@ -7,11 +7,17 @@ from pathlib import Path
 from typing import Any
 
 
-class StateMissing(RuntimeError): pass
-class StateCorrupt(RuntimeError): pass
+class StateMissing(RuntimeError):
+    pass
 
 
-def load_json_state(path: Path, *, default_when_missing: dict[str, Any] | None = None) -> dict[str, Any]:
+class StateCorrupt(RuntimeError):
+    pass
+
+
+def load_json_state(
+    path: Path, *, default_when_missing: dict[str, Any] | None = None
+) -> dict[str, Any]:
     if not path.exists():
         if default_when_missing is not None:
             return default_when_missing.copy()

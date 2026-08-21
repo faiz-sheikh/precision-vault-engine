@@ -16,7 +16,6 @@ Run once:
 """
 import re
 import json
-import hashlib
 import argparse
 import shutil
 from pathlib import Path

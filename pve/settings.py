@@ -21,14 +21,24 @@ class Settings:
     state_dir: Path = Path(".pve")
     artifact_dir: Path = Path("artifacts")
     database_name: str = "operations.sqlite3"
-    routes: dict[str, ProviderRoute] = field(default_factory=lambda: {
-        "WEB_GROUNDED_RESEARCH": ProviderRoute("google", "gemini-3.7-flash"),
-        "ROUTINE_GENERATION": ProviderRoute("nvidia", "nvidia/nemotron-3-super-120b-a12b", "https://integrate.api.nvidia.com/v1"),
-        "QUALITY_REVIEW": ProviderRoute("nvidia", "nvidia/nemotron-3-super-120b-a12b", "https://integrate.api.nvidia.com/v1"),
-        "ENGINEERING_REASONING": ProviderRoute("nvidia", "nvidia/nemotron-3-ultra-550b-a55b", "https://integrate.api.nvidia.com/v1"),
-        "ENGINEERING_REVIEW": ProviderRoute("nvidia", "nvidia/nemotron-3-ultra-550b-a55b", "https://integrate.api.nvidia.com/v1"),
-        "FRONTIER_ESCALATION": ProviderRoute("openai", "gpt-5.6-sol"),
-    })
+    routes: dict[str, ProviderRoute] = field(
+        default_factory=lambda: {
+            "WEB_GROUNDED_RESEARCH": ProviderRoute("google", "gemini-3.7-flash"),
+            "ROUTINE_GENERATION": ProviderRoute(
+                "nvidia", "nvidia/nemotron-3-super-120b-a12b", "https://integrate.api.nvidia.com/v1"
+            ),
+            "QUALITY_REVIEW": ProviderRoute(
+                "nvidia", "nvidia/nemotron-3-super-120b-a12b", "https://integrate.api.nvidia.com/v1"
+            ),
+            "ENGINEERING_REASONING": ProviderRoute(
+                "nvidia", "nvidia/nemotron-3-ultra-550b-a55b", "https://integrate.api.nvidia.com/v1"
+            ),
+            "ENGINEERING_REVIEW": ProviderRoute(
+                "nvidia", "nvidia/nemotron-3-ultra-550b-a55b", "https://integrate.api.nvidia.com/v1"
+            ),
+            "FRONTIER_ESCALATION": ProviderRoute("openai", "gpt-5.6-sol"),
+        }
+    )
     max_provider_attempts: int = 3
     max_regeneration_attempts: int = 1
     max_requests_per_run: int = 100
@@ -46,7 +56,7 @@ class Settings:
         return sha256_identity("pve-run-config-v1", payload)
 
     @classmethod
-    def from_env(cls, root: Path | None = None) -> "Settings":
+    def from_env(cls, root: Path | None = None) -> Settings:
         base = (root or Path.cwd()).resolve()
         return cls(
             state_dir=Path(os.getenv("PVE_STATE_DIR", str(base / ".pve"))).resolve(),

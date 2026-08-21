@@ -13,7 +13,8 @@ from .identity import sha256_identity
 from .store import Store, utcnow
 
 
-class UnsafeArtifactPath(ValueError): pass
+class UnsafeArtifactPath(ValueError):
+    pass
 
 
 class ArtifactRepository:
@@ -33,17 +34,23 @@ class ArtifactRepository:
                 raise UnsafeArtifactPath("symlink ancestor rejected")
         return candidate
 
-    def checkpoint_raw(self, module_id: str, phase: str, artifact_id: str, raw: bytes) -> tuple[Path, str]:
+    def checkpoint_raw(
+        self, module_id: str, phase: str, artifact_id: str, raw: bytes
+    ) -> tuple[Path, str]:
         directory = self.confined(module_id, phase, artifact_id, "raw")
         directory.mkdir(parents=True, exist_ok=True)
         path = directory / "response.bin"
         temporary = directory / f".{uuid.uuid4().hex}.tmp"
         with temporary.open("xb") as stream:
-            stream.write(raw); stream.flush(); os.fsync(stream.fileno())
+            stream.write(raw)
+            stream.flush()
+            os.fsync(stream.fileno())
         os.replace(temporary, path)
         return path, hashlib.sha256(raw).hexdigest()
 
-    def publish_metadata(self, module_id: str, phase: str, artifact_id: str, metadata: dict[str, Any]) -> Path:
+    def publish_metadata(
+        self, module_id: str, phase: str, artifact_id: str, metadata: dict[str, Any]
+    ) -> Path:
         directory = self.confined(module_id, phase, artifact_id, "published")
         directory.mkdir(parents=True, exist_ok=True)
         path = directory / "metadata.json"
@@ -54,25 +61,61 @@ class ArtifactRepository:
 
 
 class ArtifactRegistry:
-    def __init__(self, store: Store): self.store = store
+    def __init__(self, store: Store):
+        self.store = store
 
     def dependency_fingerprint(self, upstream_hashes: list[str], config: dict[str, Any]) -> str:
-        return sha256_identity("pve-artifact-dependency-v1", {"upstream": sorted(upstream_hashes), "config": config})
+        return sha256_identity(
+            "pve-artifact-dependency-v1", {"upstream": sorted(upstream_hashes), "config": config}
+        )
 
-    def register(self, *, module_id: str, phase: str, generation_id: str,
-                 dependency_fingerprint: str, content_hash: str, status: str = "SUCCEEDED",
-                 metadata_path: str | None = None) -> tuple[str, bool]:
-        artifact_id = "art_" + sha256_identity("pve-artifact-id-v1", {
-            "module_id":module_id,"phase":phase,"generation_id":generation_id}).split(":",1)[1]
+    def register(
+        self,
+        *,
+        module_id: str,
+        phase: str,
+        generation_id: str,
+        dependency_fingerprint: str,
+        content_hash: str,
+        status: str = "SUCCEEDED",
+        metadata_path: str | None = None,
+    ) -> tuple[str, bool]:
+        artifact_id = (
+            "art_"
+            + sha256_identity(
+                "pve-artifact-id-v1",
+                {"module_id": module_id, "phase": phase, "generation_id": generation_id},
+            ).split(":", 1)[1]
+        )
         with self.store.transaction() as db:
-            row = db.execute("SELECT id FROM artifacts WHERE module_id=? AND phase=? AND dependency_fingerprint=?",
-                             (module_id,phase,dependency_fingerprint)).fetchone()
-            if row: return row[0], True
-            db.execute("INSERT INTO artifacts VALUES(?,?,?,?,?,?,?,?,?)",
-                       (artifact_id,module_id,phase,generation_id,content_hash,dependency_fingerprint,status,metadata_path,utcnow()))
+            row = db.execute(
+                "SELECT id FROM artifacts WHERE module_id=? AND phase=? AND dependency_fingerprint=?",
+                (module_id, phase, dependency_fingerprint),
+            ).fetchone()
+            if row:
+                return row[0], True
+            db.execute(
+                "INSERT INTO artifacts VALUES(?,?,?,?,?,?,?,?,?)",
+                (
+                    artifact_id,
+                    module_id,
+                    phase,
+                    generation_id,
+                    content_hash,
+                    dependency_fingerprint,
+                    status,
+                    metadata_path,
+                    utcnow(),
+                ),
+            )
         return artifact_id, False
 
     def stale_for_upstream(self, upstream_hash: str) -> list[str]:
         with self.store.connect() as db:
-            return [row[0] for row in db.execute(
-                "SELECT artifact_id FROM artifact_dependencies WHERE upstream_hash<>?", (upstream_hash,))]
+            return [
+                row[0]
+                for row in db.execute(
+                    "SELECT artifact_id FROM artifact_dependencies WHERE upstream_hash<>?",
+                    (upstream_hash,),
+                )
+            ]

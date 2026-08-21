@@ -40,9 +40,8 @@ from datetime import datetime
 from typing import Optional
 
 from config import (
-    log, console, safe_slug,
-    MASTER_MANIFEST, BATCH_JSONL_DIR, VAULT_STATE,
-    TIER_MODEL_MAP, CLAUDE_HAIKU, CLAUDE_SONNET,
+    log, console, MASTER_MANIFEST, BATCH_JSONL_DIR, VAULT_STATE,
+    TIER_MODEL_MAP, CLAUDE_HAIKU,
 )
 
 _SYS = {

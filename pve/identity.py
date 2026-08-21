@@ -34,16 +34,26 @@ def permanent_module_id() -> str:
 
 
 def provider_fingerprint(
-    *, provider: str, model: str, request: Any, prompt_hash: str,
-    parameters: Any, schema: Any, run_config_hash: str, upstream_hashes: list[str]
+    *,
+    provider: str,
+    model: str,
+    request: Any,
+    prompt_hash: str,
+    parameters: Any,
+    schema: Any,
+    run_config_hash: str,
+    upstream_hashes: list[str],
 ) -> str:
-    return sha256_identity("pve-provider-operation-v1", {
-        "provider": provider,
-        "model": model,
-        "request": request,
-        "prompt_hash": prompt_hash,
-        "parameters": parameters,
-        "schema": schema,
-        "run_config_hash": run_config_hash,
-        "upstream_hashes": sorted(upstream_hashes),
-    })
+    return sha256_identity(
+        "pve-provider-operation-v1",
+        {
+            "provider": provider,
+            "model": model,
+            "request": request,
+            "prompt_hash": prompt_hash,
+            "parameters": parameters,
+            "schema": schema,
+            "run_config_hash": run_config_hash,
+            "upstream_hashes": sorted(upstream_hashes),
+        },
+    )

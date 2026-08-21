@@ -72,8 +72,7 @@ except ImportError:
 
 from config import (
     log, console, get_env, safe_slug, robust_json_parse,
-    MASTER_MANIFEST, STAGING_DIR, CURRICULUM_DIR, DOMAIN_KEYWORDS,
-    GEMINI_FLASH_MODEL, MAX_RETRIES, calc_backoff, safe_gemini_text,
+    MASTER_MANIFEST, STAGING_DIR, CURRICULUM_DIR, GEMINI_FLASH_MODEL, MAX_RETRIES, calc_backoff, safe_gemini_text,
 )
 
 # ── Valid domains ───────────────────────────────────────────────────────────────
@@ -357,8 +356,8 @@ WEB_QUERIES: 2 specific strings for NPTEL/MIT OCW lecture notes"""
 def _extract_docx(path: Path) -> str:
     try:
         import docx
-    except ImportError:
-        raise ImportError("pip install python-docx")
+    except ImportError as exc:
+        raise ImportError("pip install python-docx") from exc
     # CONSISTENCY FIX (found via testing): docx.Document() on a missing or
     # corrupted file raised an uncaught PackageNotFoundError. map()'s outer
     # try/except already catches this in the real pipeline (files come from
@@ -539,7 +538,7 @@ def _build_entry(raw: dict, src: Path, existing: dict) -> Optional[dict]:
     if complexity not in ("Basic","Intermediate","Advanced","Mixed"): complexity = "Mixed"
 
     try:    priority = max(1, min(5, int(raw.get("priority",3))))
-    except: priority = 3
+    except (TypeError, ValueError): priority = 3
 
     cst            = raw.get("core_subtopics",[])
     core_subtopics = [str(s).strip() for s in cst if str(s).strip()][:10] if isinstance(cst,list) else []
@@ -581,7 +580,7 @@ def _build_entry(raw: dict, src: Path, existing: dict) -> Optional[dict]:
     matched = existing.get(entry_id)
     if matched is None:
         norm = normalize_title(title)
-        for eid, p in existing.items():
+        for p in existing.values():
             if (normalize_title(p.get("title","")) == norm
                     and p.get("domain","") == domain
                     and str(p.get("grade_or_sem","") or "") == grade_or_sem):
@@ -615,7 +614,7 @@ def _compute_prerequisites(final: list[dict]) -> None:
     by_subject: dict[str, list[dict]] = {}
     for m in final:
         by_subject.setdefault(m["subject"], []).append(m)
-    for subject, entries in by_subject.items():
+    for entries in by_subject.values():
         ranked = sorted(entries, key=lambda m: (_TIER_RANK[m["tier"]], _grade_rank(m["tier"], m["grade_or_sem"])))
         for i, m in enumerate(ranked):
             rank = (_TIER_RANK[m["tier"]], _grade_rank(m["tier"], m["grade_or_sem"]))
