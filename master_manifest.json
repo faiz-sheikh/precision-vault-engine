@@ -1,0 +1,4658 @@
+[
+  {
+    "id": "01_Math_class6-8_Number_Systems_and_Algebra_e97488f7",
+    "title": "Number Systems and Algebra",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Junior",
+    "grade_or_sem": "Class 6-8",
+    "complexity": "Basic",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Fractions, decimals, integers, rational numbers",
+      "Exponents and square/cube roots",
+      "Algebraic expressions and linear equations in one variable",
+      "Factorization principles"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Number Systems and Algebra rational numbers",
+      "MIT OCW Number Systems and Algebra Factorization principles"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics",
+    "prerequisite_context": []
+  },
+  {
+    "id": "01_Math_class9-10_Number_Systems_and_Algebra_559dc075",
+    "title": "Number Systems and Algebra",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Junior",
+    "grade_or_sem": "Class 9-10",
+    "complexity": "Basic",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Real numbers, Euclid's division lemma, irrationality proofs",
+      "Polynomials: zeros and coefficients",
+      "Linear equations in two variables, quadratic equations",
+      "Arithmetic progressions"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Number Systems and Algebra Euclid's division lemma",
+      "MIT OCW Number Systems and Algebra Arithmetic progressions"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics",
+    "prerequisite_context": [
+      "Number Systems and Algebra (Junior, Class 6-8)",
+      "Geometry and Mensuration (Junior, Class 6-8)",
+      "Statistics and Probability (Junior, Class 6-8)"
+    ]
+  },
+  {
+    "id": "01_Math_class11-12_Calculus_Core__Differentia_0a16399e",
+    "title": "Calculus Core (Differential and Integral)",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Limits, continuity, Rolle's and Lagrange's Mean Value Theorems",
+      "Application of derivatives: tangents, maxima/minima",
+      "Integration techniques: substitution, partial fractions, definite integrals",
+      "Differential equations: variable separable, homogeneous"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Calculus Core Rolle's and Lagrange's Mean Value Theorems",
+      "MIT OCW Calculus Core variable separable"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics (JEE Mains & Advanced)",
+    "prerequisite_context": [
+      "Statistics and Probability (Junior, Class 6-8)",
+      "Number Systems and Algebra (Junior, Class 9-10)",
+      "Geometry, Mensuration, and Trigonometry (Junior, Class 9-10)",
+      "Statistics and Probability (Junior, Class 9-10)"
+    ]
+  },
+  {
+    "id": "02_Physics_class11-12_Classical_Mechanics_and_9719e80e",
+    "title": "Classical Mechanics and Rigid Body Dynamics",
+    "subject": "Physics",
+    "subject_code": "",
+    "domain": "02_Physics",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Kinematics, projectile motion, relative velocity, Newton's Laws",
+      "Systems of particles: center of mass, collisions",
+      "Rotational motion: moment of inertia, torque, angular momentum"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Classical Mechanics Rigid Kinematics",
+      "MIT OCW Classical Mechanics Rigid moment of inertia"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Physics (JEE & NEET)",
+    "prerequisite_context": [
+      "Physics Fundamentals (Junior, Class 9)",
+      "Physics Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "01_Math_class11-12_Complex_Numbers_and_Quadra_dd22872c",
+    "title": "Complex Numbers and Quadratic Equations",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Modulus, argument, algebraic properties of complex numbers",
+      "Triangle inequality, cube roots of unity",
+      "Coefficient-root relationships in quadratic equations"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Complex Numbers and Quadratic Equations algebraic properties of complex numbers",
+      "MIT OCW Complex Numbers and Quadratic Equations Coefficient-root relationships in quadratic equations"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics (JEE Mains & Advanced)",
+    "prerequisite_context": [
+      "Statistics and Probability (Junior, Class 6-8)",
+      "Number Systems and Algebra (Junior, Class 9-10)",
+      "Geometry, Mensuration, and Trigonometry (Junior, Class 9-10)",
+      "Statistics and Probability (Junior, Class 9-10)"
+    ]
+  },
+  {
+    "id": "01_Math_class11-12_Matrices_and_Determinants_0a521605",
+    "title": "Matrices and Determinants",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Types of matrices and matrix operations",
+      "Determinant properties, adjoint, inverse",
+      "Cramer's Rule and matrix inversion for linear systems"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Matrices and Determinants Types of matrices and matrix operations",
+      "MIT OCW Matrices and Determinants Cramer's Rule and matrix inversion for linear systems"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics (JEE Mains & Advanced)",
+    "prerequisite_context": [
+      "Statistics and Probability (Junior, Class 6-8)",
+      "Number Systems and Algebra (Junior, Class 9-10)",
+      "Geometry, Mensuration, and Trigonometry (Junior, Class 9-10)",
+      "Statistics and Probability (Junior, Class 9-10)"
+    ]
+  },
+  {
+    "id": "01_Math_class11-12_Sets__Relations__and_Funct_e57e7e3a",
+    "title": "Sets, Relations, and Functions",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Types of relations: reflexive, symmetric, transitive, equivalence",
+      "Inverse and composite functions",
+      "Domain/range of logarithmic, exponential, trigonometric functions"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Sets Relations and Functions transitive",
+      "MIT OCW Sets Relations and Functions Domain/range of logarithmic"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics (JEE Mains & Advanced)",
+    "prerequisite_context": [
+      "Statistics and Probability (Junior, Class 6-8)",
+      "Number Systems and Algebra (Junior, Class 9-10)",
+      "Geometry, Mensuration, and Trigonometry (Junior, Class 9-10)",
+      "Statistics and Probability (Junior, Class 9-10)"
+    ]
+  },
+  {
+    "id": "01_Math_sem1_Differential_Calculus_and_Basics_62fcac3c",
+    "title": "Differential Calculus and Basics of Statistics",
+    "subject": "Mathematics",
+    "subject_code": "25HS03TP0107",
+    "domain": "01_Math",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 1",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "First order ODEs (exact, linear, Bernoulli, Clairaut)",
+      "Higher order ODEs with constant/variable coefficients",
+      "Curve fitting by least squares, correlation & regression",
+      "Taylor/Maclaurin series, partial derivatives, Jacobians, Lagrange multipliers",
+      "Partial differential equations: heat, wave, potential equations"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Differential Calculus Statistics First order ODEs (exact)",
+      "MIT OCW Differential Calculus Statistics potential equations"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Sequences and Series (Senior, Class 11-12)",
+      "Trigonometric Functions and Equations (Senior, Class 11-12)",
+      "Vectors and 3D Geometry (Senior, Class 11-12)",
+      "Statistics and Mathematical Reasoning (Senior, Class 11-12)"
+    ]
+  },
+  {
+    "id": "06_AI_ML_sem2_Introduction_to_Artificial_Inte_eae74921",
+    "title": "Introduction to Artificial Intelligence",
+    "subject": "Artificial Intelligence",
+    "subject_code": "25ES03TH0201",
+    "domain": "06_AI_ML",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 2",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "remotion",
+    "core_subtopics": [
+      "History of AI, rational intelligent agents, agent environments",
+      "Search: uninformed, informed, heuristics, adversarial search, Alpha-Beta pruning",
+      "CSPs, backtracking, propositional and first-order logic, resolution",
+      "Classical planning, hierarchical planning, knowledge representation"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Introduction to Artificial Intelligence History of AI",
+      "MIT OCW Introduction to Artificial Intelligence hierarchical planning"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "01_Math_sem2_Linear_Algebra_and_Integral_Calc_57602f7f",
+    "title": "Linear Algebra and Integral Calculus",
+    "subject": "Mathematics",
+    "subject_code": "25HS03TH0217",
+    "domain": "01_Math",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 2",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Rank-nullity theorem, eigenvalues, eigenvectors, diagonalization, SVD",
+      "Definite/improper integrals, Beta and Gamma functions",
+      "Multiple integrals: double, triple, change of variables",
+      "Vector calculus differentiation: gradient, divergence, curl",
+      "Vector calculus integration: Green's, Stokes', Gauss Divergence theorems"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Linear Algebra and Integral Calculus Rank-nullity theorem",
+      "MIT OCW Linear Algebra and Integral Calculus Gauss Divergence theorems"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Trigonometric Functions and Equations (Senior, Class 11-12)",
+      "Vectors and 3D Geometry (Senior, Class 11-12)",
+      "Statistics and Mathematical Reasoning (Senior, Class 11-12)",
+      "Differential Calculus and Basics of Statistics (Engineering, Sem 1)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem3_Design_of_Manipulator_and_En_12fea722",
+    "title": "Design of Manipulator and End effector",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03TP0302",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Structural design: arm loading, link design, deflection analysis",
+      "Material selection: composites, lightweight alloys, additive manufacturing",
+      "Kinematics of power transmission: gears, belts, screws, 4-bar mechanisms",
+      "End effector design: force transmission, parallel jaw/vacuum grippers"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Design Manipulator End arm loading",
+      "MIT OCW Design Manipulator End parallel jaw/vacuum grippers"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "05_Robotics_sem3_Fundamentals_of_Robotics_954a2760",
+    "title": "Fundamentals of Robotics",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03TH0301",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Robot anatomy, coordinate systems, work envelope",
+      "End effectors: grippers (mechanical, vacuum, magnetic, adhesive)",
+      "Drive systems, sensors, robotic vision: actuators, tactile/proximity sensors",
+      "Robot programming: lead-through, textual, motion interpolation"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Fundamentals of Robotics Robot anatomy",
+      "MIT OCW Fundamentals of Robotics motion interpolation"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "07_Control_sem4_Control_Systems_for_Robotics_e2c7219a",
+    "title": "Control Systems for Robotics",
+    "subject": "Control Systems",
+    "subject_code": "25ES03TP0402",
+    "domain": "07_Control",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 4",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Modeling: transfer functions, block diagrams, DC motor modeling",
+      "Time-domain analysis: transient response, Routh-Hurwitz criterion",
+      "Root locus and PID tuning (Ziegler-Nichols, Cohen-Coon)",
+      "Frequency response: Bode plots, gain/phase margins, Nyquist criterion",
+      "State-space and modern control: observability, Kalman filters, MIMO"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Control Systems for Robotics DC motor modeling",
+      "MIT OCW Control Systems for Robotics MIMO"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "05_Robotics_sem4_Kinematics_and_Dynamics_of_R_531825f6",
+    "title": "Kinematics and Dynamics of Robot",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03TP0401",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 4",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Rotation matrices, Euler angles, homogeneous transformations",
+      "D-H parameters, forward/inverse kinematics, Jacobians, singularities",
+      "Parallel mechanisms, constraint equations, Gough-Stewart platforms",
+      "Robot programming languages, joint/Cartesian motion planning"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Kinematics and Dynamics of Robot homogeneous transformations",
+      "MIT OCW Kinematics and Dynamics of Robot joint/Cartesian motion planning"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Design of Manipulator and End effector (Engineering, Sem 3)",
+      "Fundamentals of Robotics (Engineering, Sem 3)",
+      "Field and Service Robot (Engineering, Sem 3)",
+      "Introduction to Robotics (Minor Track) (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "06_AI_ML_sem4_Machine_Learning_2ca604e3",
+    "title": "Machine Learning",
+    "subject": "Artificial Intelligence",
+    "subject_code": "25ES03TP0403",
+    "domain": "06_AI_ML",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 4",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Preprocessing: missing values, encoding, scaling, cross-validation",
+      "Regression: linear, polynomial, ridge, lasso",
+      "Classification: logistic regression, k-NN, decision trees, SVM",
+      "Unsupervised learning: K-means, hierarchical, DBSCAN, PCA",
+      "Ensemble methods: bagging, boosting (AdaBoost, XGBoost)",
+      "Neural networks: perceptrons, backpropagation, TensorFlow/Keras"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Machine Learning missing values",
+      "MIT OCW Machine Learning perceptrons"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Introduction to Artificial Intelligence (Engineering, Sem 2)",
+      "AI Programming with Python (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "06_AI_ML_sem5_Deep_Learning_141efdf8",
+    "title": "Deep Learning",
+    "subject": "Artificial Intelligence",
+    "subject_code": "25ES03TP0501",
+    "domain": "06_AI_ML",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Feedforward networks and backpropagation derivation",
+      "Convolutional Neural Networks (CNN) architectures",
+      "Recurrent Neural Networks (RNN), LSTM, GRU",
+      "Transformer architecture and attention mechanisms",
+      "Training optimization: Adam, dropout, batch normalization"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Deep Learning Feedforward networks and backpropagation derivation",
+      "MIT OCW Deep Learning batch normalization"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Introduction to Artificial Intelligence (Engineering, Sem 2)",
+      "AI Programming with Python (Engineering, Sem 3)",
+      "Machine Learning (Engineering, Sem 4)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem5_Robot_Operating_System__ROS_f87f3075",
+    "title": "Robot Operating System (ROS)",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03TP0505",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "remotion",
+    "core_subtopics": [
+      "ROS architecture: nodes, topics, services, actions",
+      "Robot modeling with URDF and TF transforms",
+      "Navigation stack and SLAM integration",
+      "Gazebo simulation and RViz visualization"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL ROS nodes",
+      "MIT OCW ROS Gazebo simulation and RViz visualization"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Field and Service Robot (Engineering, Sem 3)",
+      "Introduction to Robotics (Minor Track) (Engineering, Sem 3)",
+      "Kinematics and Dynamics of Robot (Engineering, Sem 4)",
+      "Advanced sensors and Actuators (Engineering, Sem 4)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem6_Mobile_Robotics_79e4a6f4",
+    "title": "Mobile Robotics",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03TP0603",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 6",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Mobile robot kinematics: differential drive, Ackermann steering",
+      "Path planning algorithms: A*, RRT, potential fields",
+      "Localization: odometry, particle filters, EKF",
+      "SLAM techniques for mobile platforms"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Mobile Robotics differential drive",
+      "MIT OCW Mobile Robotics SLAM techniques for mobile platforms"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Robot Operating System (ROS) (Engineering, Sem 5)",
+      "Mobile and Micro Robotics (Engineering, Sem 5)",
+      "Robot Drives and Actuators (Engineering, Sem 5)",
+      "Modelling and Simulation of Robotic Systems (Engineering, Sem 5)"
+    ]
+  },
+  {
+    "id": "06_AI_ML_sem6_Reinforcement_Learning_7edc65dc",
+    "title": "Reinforcement Learning",
+    "subject": "Artificial Intelligence",
+    "subject_code": "25ES03TP0602",
+    "domain": "06_AI_ML",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 6",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "manim",
+    "core_subtopics": [
+      "Markov Decision Processes and Bellman equations",
+      "Q-learning and value iteration",
+      "Policy gradient methods",
+      "Deep RL: DQN, Actor-Critic methods"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Reinforcement Learning Markov Decision Processes and Bellman equations",
+      "MIT OCW Reinforcement Learning Actor-Critic methods"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "AI Programming with Python (Engineering, Sem 3)",
+      "Machine Learning (Engineering, Sem 4)",
+      "Deep Learning (Engineering, Sem 5)",
+      "Data Mining and Predictive Modelling (Engineering, Sem 5)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem6_Robotic_Vision_System_92dccbe3",
+    "title": "Robotic Vision System",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03TP0601",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 6",
+    "complexity": "Advanced",
+    "priority": 5,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Image processing fundamentals: filtering, segmentation, edge detection",
+      "Feature extraction and object recognition",
+      "Stereo vision and depth estimation",
+      "Vision-guided robotic manipulation"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Robotic Vision System segmentation",
+      "MIT OCW Robotic Vision System Vision-guided robotic manipulation"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Robot Operating System (ROS) (Engineering, Sem 5)",
+      "Mobile and Micro Robotics (Engineering, Sem 5)",
+      "Robot Drives and Actuators (Engineering, Sem 5)",
+      "Modelling and Simulation of Robotic Systems (Engineering, Sem 5)"
+    ]
+  },
+  {
+    "id": "01_Math_class6-8_Geometry_and_Mensuration_c96affd0",
+    "title": "Geometry and Mensuration",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Junior",
+    "grade_or_sem": "Class 6-8",
+    "complexity": "Basic",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Lines, angles, triangle properties and congruence",
+      "Quadrilaterals and solid shape visualization",
+      "Perimeter and area of planar figures",
+      "Surface area and volume of cubes, cuboids, cylinders"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Geometry and Mensuration triangle properties and congruence",
+      "MIT OCW Geometry and Mensuration Surface area and volume of cubes"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics",
+    "prerequisite_context": []
+  },
+  {
+    "id": "12_NaturalSciences_class9_Biology_Fundamental_3502d79c",
+    "title": "Biology Fundamentals",
+    "subject": "Biology",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Junior",
+    "grade_or_sem": "Class 9",
+    "complexity": "Basic",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Cell structure: prokaryotic/eukaryotic cells, organelles, mitosis and meiosis overview",
+      "Plant tissues (meristematic, permanent) and animal tissues (epithelial, connective, muscular, nervous)"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Biology Fundamentals prokaryotic/eukaryotic cells",
+      "MIT OCW Biology Fundamentals Plant tissues and animal tissues (meristematic)"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Biology",
+    "prerequisite_context": []
+  },
+  {
+    "id": "12_NaturalSciences_class9_Chemistry_Fundament_4c094687",
+    "title": "Chemistry Fundamentals",
+    "subject": "Chemistry",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Junior",
+    "grade_or_sem": "Class 9",
+    "complexity": "Basic",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "States and nature of matter, separation techniques, atoms and molecules",
+      "Chemical laws: conservation of mass, constant proportions, Dalton's atomic theory, isotopes/isobars",
+      "Periodic classification: Dobereiner, Newlands, Mendeleev historical models"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Chemistry Fundamentals States and nature of matter",
+      "MIT OCW Chemistry Fundamentals Mendeleev historical models"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Chemistry",
+    "prerequisite_context": []
+  },
+  {
+    "id": "01_Math_class9-10_Geometry__Mensuration__and_1f872190",
+    "title": "Geometry, Mensuration, and Trigonometry",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Junior",
+    "grade_or_sem": "Class 9-10",
+    "complexity": "Basic",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Triangle similarity theorems, circle tangent properties",
+      "Coordinate geometry and Euclidean postulates",
+      "Surface areas/volumes of combined solids (spheres, cones, frustums)",
+      "Trigonometric ratios, complementary angle identities, heights and distances"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Geometry Mensuration and Trigonometry Triangle similarity theorems",
+      "MIT OCW Geometry Mensuration and Trigonometry complementary angle identities"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics",
+    "prerequisite_context": [
+      "Number Systems and Algebra (Junior, Class 6-8)",
+      "Geometry and Mensuration (Junior, Class 6-8)",
+      "Statistics and Probability (Junior, Class 6-8)"
+    ]
+  },
+  {
+    "id": "02_Physics_class9_Physics_Fundamentals_51b7ed9d",
+    "title": "Physics Fundamentals",
+    "subject": "Physics",
+    "subject_code": "",
+    "domain": "02_Physics",
+    "tier": "Junior",
+    "grade_or_sem": "Class 9",
+    "complexity": "Basic",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Motion and mechanics: distance, velocity, equations of motion, Newton's Laws, momentum",
+      "Gravitation and fluid mechanics: universal law of gravitation, Archimedes' Principle, buoyancy",
+      "Work, energy, and power: kinetic/potential energy, conservation of energy"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Physics Fundamentals equations of motion",
+      "MIT OCW Physics Fundamentals kinetic/potential energy"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Physics",
+    "prerequisite_context": []
+  },
+  {
+    "id": "12_NaturalSciences_class10_Biology_Fundamenta_2a2e2d50",
+    "title": "Biology Fundamentals",
+    "subject": "Biology",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Junior",
+    "grade_or_sem": "Class 10",
+    "complexity": "Basic",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Life processes: nutrition, respiration, transport/circulation, excretion in plants and animals",
+      "Control and coordination: nervous system, reflex arc, hormones, plant tropic movements",
+      "Reproduction and genetics: sexual/asexual reproduction, human reproductive system, Mendel's laws, sex determination"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Biology Fundamentals excretion in plants and animals",
+      "MIT OCW Biology Fundamentals sexual/asexual reproduction"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Biology",
+    "prerequisite_context": [
+      "Biology Fundamentals (Junior, Class 9)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class10_Chemistry_Fundamen_ea2fed49",
+    "title": "Chemistry Fundamentals",
+    "subject": "Chemistry",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Junior",
+    "grade_or_sem": "Class 10",
+    "complexity": "Basic",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Chemical equations and reaction types: combination, decomposition, displacement, redox",
+      "Acids, bases, and salts: pH scale, NaOH, bleaching powder, baking soda, washing soda, Plaster of Paris",
+      "Carbon chemistry: covalent bonding, homologous series, functional groups, ethanol, ethanoic acid",
+      "Modern Periodic Law"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Chemistry Fundamentals combination",
+      "MIT OCW Chemistry Fundamentals Modern Periodic Law"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Chemistry",
+    "prerequisite_context": [
+      "Chemistry Fundamentals (Junior, Class 9)"
+    ]
+  },
+  {
+    "id": "02_Physics_class10_Physics_Fundamentals_8c66545c",
+    "title": "Physics Fundamentals",
+    "subject": "Physics",
+    "subject_code": "",
+    "domain": "02_Physics",
+    "tier": "Junior",
+    "grade_or_sem": "Class 10",
+    "complexity": "Basic",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Optics: reflection, refraction, spherical mirrors, lens formulas, human eye, vision defects",
+      "Electricity: Ohm's Law, resistance, series/parallel combinations, heating effects",
+      "Magnetism: field lines, Oersted's experiment, electromagnetic induction, motors and generators"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Physics Fundamentals reflection",
+      "MIT OCW Physics Fundamentals Oersted's experiment"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Physics",
+    "prerequisite_context": [
+      "Physics Fundamentals (Junior, Class 9)"
+    ]
+  },
+  {
+    "id": "01_Math_class11-12_Binomial_Theorem_and_Mathe_14c753a8",
+    "title": "Binomial Theorem and Mathematical Induction",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Binomial theorem for positive integral index, general/middle terms",
+      "Properties of binomial coefficients",
+      "Principle of mathematical induction and applications"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Binomial Theorem and Mathematical Induction Binomial theorem for positive integral index",
+      "MIT OCW Binomial Theorem and Mathematical Induction Principle of mathematical induction and applications"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics",
+    "prerequisite_context": [
+      "Statistics and Probability (Junior, Class 6-8)",
+      "Number Systems and Algebra (Junior, Class 9-10)",
+      "Geometry, Mensuration, and Trigonometry (Junior, Class 9-10)",
+      "Statistics and Probability (Junior, Class 9-10)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class11-12_Cell_Biology_an_b1693911",
+    "title": "Cell Biology and Plant Physiology",
+    "subject": "Biology",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Cell theory, biomolecules, cell cycle control",
+      "Photosynthesis: light/dark reactions, C3/C4 pathways",
+      "Respiration: glycolysis, TCA cycle, electron transport"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Cell Biology and Plant Physiology Cell theory",
+      "MIT OCW Cell Biology and Plant Physiology TCA cycle"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Biology (NEET)",
+    "prerequisite_context": [
+      "Biology Fundamentals (Junior, Class 9)",
+      "Biology Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "01_Math_class11-12_Coordinate_Geometry_and_Co_bd3c2c0a",
+    "title": "Coordinate Geometry and Conic Sections",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Straight lines: forms, angle between lines, distance formulas",
+      "Circles: standard/general forms, tangent equations",
+      "Conics: parabola, ellipse, hyperbola, eccentricity, latus rectum"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Coordinate Geometry and Conic Sections angle between lines",
+      "MIT OCW Coordinate Geometry and Conic Sections eccentricity"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics (JEE Mains & Advanced)",
+    "prerequisite_context": [
+      "Statistics and Probability (Junior, Class 6-8)",
+      "Number Systems and Algebra (Junior, Class 9-10)",
+      "Geometry, Mensuration, and Trigonometry (Junior, Class 9-10)",
+      "Statistics and Probability (Junior, Class 9-10)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class11-12_Diversity_and_S_8827ec12",
+    "title": "Diversity and Structural Organization in Biology",
+    "subject": "Biology",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Five-kingdom classification and plant group features",
+      "Animal phyla: non-chordates to chordates",
+      "Plant and animal morphology/anatomy"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Diversity Structural Organization Five-kingdom classification and plant group features",
+      "MIT OCW Diversity Structural Organization Plant and animal morphology/anatomy"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Biology (NEET)",
+    "prerequisite_context": [
+      "Biology Fundamentals (Junior, Class 9)",
+      "Biology Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class11-12_Genetics__Evolu_8a259f9d",
+    "title": "Genetics, Evolution, and Biotechnology",
+    "subject": "Biology",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Mendelian inheritance, linkage, chromosomal aberrations",
+      "Molecular basis: DNA replication, transcription, Lac Operon",
+      "Evolutionary theories and human evolution",
+      "Biotechnology: recombinant DNA, PCR, Bt Cotton"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Genetics Evolution and Biotechnology Mendelian inheritance",
+      "MIT OCW Genetics Evolution and Biotechnology recombinant DNA"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Biology (NEET)",
+    "prerequisite_context": [
+      "Biology Fundamentals (Junior, Class 9)",
+      "Biology Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "02_Physics_class11-12_Gravitation__Matter__an_1ff70b16",
+    "title": "Gravitation, Matter, and Thermodynamics",
+    "subject": "Physics",
+    "subject_code": "",
+    "domain": "02_Physics",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Kepler's Laws, gravitational potential energy, escape velocity",
+      "Elasticity, Bernoulli's theorem, viscosity, surface tension",
+      "Thermodynamics: First/Second Law, Carnot engine, Kinetic Theory of Gases"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Gravitation Matter and Thermodynamics gravitational potential energy",
+      "MIT OCW Gravitation Matter and Thermodynamics Kinetic Theory of Gases"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Physics (JEE & NEET)",
+    "prerequisite_context": [
+      "Physics Fundamentals (Junior, Class 9)",
+      "Physics Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class11-12_Human_Physiolog_12d04b20",
+    "title": "Human Physiology",
+    "subject": "Biology",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Digestion, breathing, circulation systems",
+      "Excretory products and osmoregulation",
+      "Locomotion, neural control, chemical coordination"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Human Physiology circulation systems",
+      "MIT OCW Human Physiology chemical coordination"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Biology (NEET)",
+    "prerequisite_context": [
+      "Biology Fundamentals (Junior, Class 9)",
+      "Biology Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "02_Physics_class11-12_Magnetism__EMI__and_Alt_c82c087c",
+    "title": "Magnetism, EMI, and Alternating Currents",
+    "subject": "Physics",
+    "subject_code": "",
+    "domain": "02_Physics",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Biot-Savart Law, Ampere's Law, Lorentz force",
+      "Faraday's Law, Lenz's Law, mutual inductance",
+      "LCR circuits, resonance, quality factor, transformers"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Magnetism EMI and Alternating Currents Biot-Savart Law",
+      "MIT OCW Magnetism EMI and Alternating Currents LCR circuits"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Physics (JEE & NEET)",
+    "prerequisite_context": [
+      "Physics Fundamentals (Junior, Class 9)",
+      "Physics Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_Modern_Indian_History_and_bf1fc6e3",
+    "title": "Modern Indian History and the Freedom Struggle",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Colonial consolidation: East India Company wars",
+      "Revolt of 1857, socio-religious reform movements",
+      "National movement: Gandhi, mass mobilization, partition"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Modern Indian History East India Company wars",
+      "MIT OCW Modern Indian History mass mobilization"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "History (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "02_Physics_class11-12_Optics_and_Modern_Physi_7239b906",
+    "title": "Optics and Modern Physics",
+    "subject": "Physics",
+    "subject_code": "",
+    "domain": "02_Physics",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Wave optics: YDSE, interference, diffraction, polarization",
+      "Dual nature of matter: photoelectric effect, de Broglie wavelength",
+      "Atomic/nuclear physics: Bohr model, binding energy, fission/fusion",
+      "Semiconductor electronics: p-n junction, rectifiers, logic gates"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Optics and Modern Physics YDSE",
+      "MIT OCW Optics and Modern Physics p-n junction"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Physics (JEE & NEET)",
+    "prerequisite_context": [
+      "Physics Fundamentals (Junior, Class 9)",
+      "Physics Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "02_Physics_class11-12_Oscillations__Waves__an_832bb895",
+    "title": "Oscillations, Waves, and Electrodynamics",
+    "subject": "Physics",
+    "subject_code": "",
+    "domain": "02_Physics",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "SHM: differential equation, damped/forced oscillations, resonance",
+      "Electrostatics: Coulomb's Law, Gauss's Law, capacitors",
+      "Current electricity: Kirchhoff's Laws, Wheatstone bridge"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Oscillations Waves and Electrodynamics differential equation",
+      "MIT OCW Oscillations Waves and Electrodynamics Kirchhoff's Laws"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Physics (JEE & NEET)",
+    "prerequisite_context": [
+      "Physics Fundamentals (Junior, Class 9)",
+      "Physics Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "01_Math_class11-12_Permutations__Combinations_711c8cab",
+    "title": "Permutations, Combinations, and Probability",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Fundamental counting principles, linear/circular permutations",
+      "Conditional probability, Bayes' Theorem",
+      "Bernoulli trials and binomial distributions"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Permutations Combinations and Probability Fundamental counting principles",
+      "MIT OCW Permutations Combinations and Probability Bernoulli trials and binomial distributions"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics (JEE Mains & Advanced)",
+    "prerequisite_context": [
+      "Statistics and Probability (Junior, Class 6-8)",
+      "Number Systems and Algebra (Junior, Class 9-10)",
+      "Geometry, Mensuration, and Trigonometry (Junior, Class 9-10)",
+      "Statistics and Probability (Junior, Class 9-10)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class11-12_Physical_Chemis_6a4c0cf3",
+    "title": "Physical Chemistry",
+    "subject": "Chemistry",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Mole concept, quantum mechanical model, Aufbau principle",
+      "Chemical thermodynamics: enthalpy, entropy, Gibbs free energy",
+      "Equilibrium: Le Chatelier's, pH, buffer solutions, Ksp",
+      "Chemical kinetics: rate laws, Arrhenius equation, electrochemistry"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Physical Chemistry quantum mechanical model",
+      "MIT OCW Physical Chemistry Arrhenius equation"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Chemistry (JEE & NEET)",
+    "prerequisite_context": [
+      "Chemistry Fundamentals (Junior, Class 9)",
+      "Chemistry Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class11-12_Reproduction_in_788f3dc1",
+    "title": "Reproduction in Organisms and Reproductive Health",
+    "subject": "Biology",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Modes of reproduction: asexual and sexual",
+      "Sexual reproduction in flowering plants: pollination, fertilization",
+      "Human reproduction: gametogenesis, menstrual cycle, fertilization, embryonic development",
+      "Reproductive health: contraception, STIs, infertility (ART)"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Reproduction Organisms Reproductive asexual and sexual",
+      "MIT OCW Reproduction Organisms Reproductive contraception (ART)"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Biology",
+    "prerequisite_context": [
+      "Biology Fundamentals (Junior, Class 9)",
+      "Biology Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "01_Math_class11-12_Sequences_and_Series_5bb559a8",
+    "title": "Sequences and Series",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Arithmetic and geometric progressions, special series sums",
+      "AM-GM inequality",
+      "Sum to n terms of special sequences"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Sequences and Series Arithmetic and geometric progressions",
+      "MIT OCW Sequences and Series Sum to n terms of special sequences"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics",
+    "prerequisite_context": [
+      "Statistics and Probability (Junior, Class 6-8)",
+      "Number Systems and Algebra (Junior, Class 9-10)",
+      "Geometry, Mensuration, and Trigonometry (Junior, Class 9-10)",
+      "Statistics and Probability (Junior, Class 9-10)"
+    ]
+  },
+  {
+    "id": "01_Math_class11-12_Trigonometric_Functions_an_8e6b74ed",
+    "title": "Trigonometric Functions and Equations",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Trigonometric functions, identities, and compound angle formulas",
+      "Trigonometric equations and general solutions",
+      "Inverse trigonometric functions: domain, range, properties"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Trigonometric Functions and Equations Trigonometric functions",
+      "MIT OCW Trigonometric Functions and Equations properties"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics",
+    "prerequisite_context": [
+      "Statistics and Probability (Junior, Class 6-8)",
+      "Number Systems and Algebra (Junior, Class 9-10)",
+      "Geometry, Mensuration, and Trigonometry (Junior, Class 9-10)",
+      "Statistics and Probability (Junior, Class 9-10)"
+    ]
+  },
+  {
+    "id": "01_Math_class11-12_Vectors_and_3D_Geometry_6f8e38e9",
+    "title": "Vectors and 3D Geometry",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Scalar and vector products, triple products",
+      "Direction cosines and ratios",
+      "Equations of lines and planes in 3D, shortest distance"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Vectors and 3D Geometry Scalar and vector products",
+      "MIT OCW Vectors and 3D Geometry Equations of lines and planes in 3D"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics (JEE Mains & Advanced)",
+    "prerequisite_context": [
+      "Statistics and Probability (Junior, Class 6-8)",
+      "Number Systems and Algebra (Junior, Class 9-10)",
+      "Geometry, Mensuration, and Trigonometry (Junior, Class 9-10)",
+      "Statistics and Probability (Junior, Class 9-10)"
+    ]
+  },
+  {
+    "id": "03_Programming_sem1_Programming_for_Problem_S_caa54e5f",
+    "title": "Programming for Problem Solving",
+    "subject": "Computer Science",
+    "subject_code": "25ES03TP0103",
+    "domain": "03_Programming",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 1",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Algorithms via flowcharts and pseudo-code",
+      "C programming: data types, operators, control flow",
+      "Arrays, strings, searching, sorting algorithms",
+      "Functions and recursion (Factorial, Fibonacci, Quick/Merge sort)",
+      "Pointers, structures, linked lists, file handling"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Programming for Problem Solving Algorithms via flowcharts and pseudo-code",
+      "MIT OCW Programming for Problem Solving structures"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "02_Physics_sem2_Applied_Physics_0f54a24b",
+    "title": "Applied Physics",
+    "subject": "Physics",
+    "subject_code": "25HS05TP0203",
+    "domain": "02_Physics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 2",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Laser physics: spontaneous/stimulated emission, population inversion, He-Ne/Ruby laser",
+      "Ultrasonics: production, detection, piezoelectric effect, NDT applications",
+      "Electromagnetism: Lorentz force, Biot-Savart, Faraday's and Maxwell's equations",
+      "Aeronautics physics: fluid mechanics, buoyancy, boundary layer, drag and lift",
+      "Sensors and actuators: strain, pressure, ultrasonic, piezoelectric, thermal sensors"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Applied Physics He-Ne/Ruby laser",
+      "MIT OCW Applied Physics ultrasonic"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Optics and Modern Physics (Senior, Class 11-12)",
+      "Oscillations, Waves, and Electrodynamics (Senior, Class 11-12)",
+      "Units, Measurements, and Experimental Physics (Senior, Class 11-12)",
+      "Engineering Mechanics (Engineering, Sem 1)"
+    ]
+  },
+  {
+    "id": "03_Programming_sem2_Data_Structure_and_OOPS_f08a95c5",
+    "title": "Data Structure and OOPS",
+    "subject": "Computer Science",
+    "subject_code": "25ES03TP0204",
+    "domain": "03_Programming",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 2",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "ADTs, algorithmic complexity, asymptotic notations",
+      "Sorting (insertion, quick, merge, heap), searching, hashing",
+      "Stacks, queues, expression evaluation",
+      "Singly/doubly/circular linked lists",
+      "Trees and graphs: BST, AVL, DFS/BFS, Dijkstra, Prim, Kruskal"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Data Structure and OOPS algorithmic complexity",
+      "MIT OCW Data Structure and OOPS BST"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Programming for Problem Solving (Engineering, Sem 1)"
+    ]
+  },
+  {
+    "id": "06_AI_ML_sem3_AI_Programming_with_Python_cbda3d01",
+    "title": "AI Programming with Python",
+    "subject": "Artificial Intelligence",
+    "subject_code": "24CS01MT0301",
+    "domain": "06_AI_ML",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "AI fundamentals, types, applications, hardware/software tools",
+      "Python data structures, dictionaries, list processing",
+      "Classes, objects, constructors, decorators, exception handling",
+      "Data wrangling, NumPy, Pandas, Matplotlib, Seaborn visualization",
+      "Text classification: TF-IDF, Bag of Words, classical classification models"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL AI Programming with Python AI fundamentals",
+      "MIT OCW AI Programming with Python classical classification models"
+    ],
+    "source_files": [],
+    "source_docx": "cse mdm.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "CSE Minor — AI Programming with Python",
+    "prerequisite_context": [
+      "Introduction to Artificial Intelligence (Engineering, Sem 2)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem3_Field_and_Service_Robot_289a28ef",
+    "title": "Field and Service Robot",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03HT0301",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Field robot design for unstructured environments",
+      "Service robot applications: agriculture, inspection, delivery"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Field and Service Robot Field robot design for unstructured environments",
+      "MIT OCW Field and Service Robot agriculture"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Track I: Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "04_Electronics_sem3_Microcontrollers_and_Inte_24721dd5",
+    "title": "Microcontrollers and Interfacing",
+    "subject": "Electronics Engineering",
+    "subject_code": "25ES03TP0303",
+    "domain": "04_Electronics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "8086 microprocessor architecture and addressing modes",
+      "8086 assembly language and interrupt handling",
+      "Interfacing: LED, ADC/DAC, LCD, motor control",
+      "ARM Cortex-M architecture and Embedded C",
+      "Python on Raspberry Pi: GPIO, serial/I2C communication"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Microcontrollers and Interfacing 8086 microprocessor architecture and addressing modes",
+      "MIT OCW Microcontrollers and Interfacing serial/I2C communication"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Basics of Electrical Engineering (Engineering, Sem 1)",
+      "Digital Logic Design (Engineering, Sem 2)"
+    ]
+  },
+  {
+    "id": "01_Math_sem3_Probability_and_Statistics_c2407867",
+    "title": "Probability and Statistics",
+    "subject": "Mathematics",
+    "subject_code": "25HS03TH0303",
+    "domain": "01_Math",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Central tendency, probability distributions (Binomial, Poisson, Normal)",
+      "Joint probability, stochastic processes, Markov chains",
+      "Sampling distributions, hypothesis testing (Z-test, t-test)",
+      "Chi-square test, Maximum Likelihood Estimation"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Probability and Statistics probability distributions (Binomial)",
+      "MIT OCW Probability and Statistics Maximum Likelihood Estimation"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Vectors and 3D Geometry (Senior, Class 11-12)",
+      "Statistics and Mathematical Reasoning (Senior, Class 11-12)",
+      "Differential Calculus and Basics of Statistics (Engineering, Sem 1)",
+      "Linear Algebra and Integral Calculus (Engineering, Sem 2)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem4_Advanced_sensors_and_Actuato_b766fefb",
+    "title": "Advanced sensors and Actuators",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03HT0401",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 4",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Advanced sensor fusion techniques",
+      "Smart actuator technologies",
+      "Sensor calibration and noise filtering"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Advanced sensors and Actuators Advanced sensor fusion techniques",
+      "MIT OCW Advanced sensors and Actuators Sensor calibration and noise filtering"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Track I: Robotics & AI",
+    "prerequisite_context": [
+      "Design of Manipulator and End effector (Engineering, Sem 3)",
+      "Fundamentals of Robotics (Engineering, Sem 3)",
+      "Field and Service Robot (Engineering, Sem 3)",
+      "Introduction to Robotics (Minor Track) (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "03_Programming_sem5_Backend_Technologies_3a2e2837",
+    "title": "Backend Technologies",
+    "subject": "Computer Science",
+    "subject_code": "24CS01TH0507",
+    "domain": "03_Programming",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Client-server architecture, HTTP/HTTPS protocols",
+      "Server-side programming: Node.js, Django, Spring Boot",
+      "Database integration: SQL vs NoSQL, CRUD operations",
+      "Authentication and security: JWT, hashing, CORS, OWASP",
+      "Deployment: cloud platforms, microservices, serverless"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Backend Technologies HTTP/HTTPS protocols",
+      "MIT OCW Backend Technologies cloud platforms"
+    ],
+    "source_files": [],
+    "source_docx": "cse mdm.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "MDM — Web Development Track",
+    "prerequisite_context": [
+      "Introduction to Python (Engineering, Sem 3)",
+      "Introduction to Web Development (Engineering, Sem 3)",
+      "Front End Development (Engineering, Sem 4)",
+      "Indexing and Searching Techniques in Databases (Engineering, Sem 4)"
+    ]
+  },
+  {
+    "id": "04_Electronics_sem5_Industrial_Internet_of_Th_d7ec521a",
+    "title": "Industrial Internet of Things (IoT)",
+    "subject": "Electronics Engineering",
+    "subject_code": "25ES03TP0503",
+    "domain": "04_Electronics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "IoT architecture: sensors, gateways, cloud integration",
+      "Industrial communication protocols: MQTT, Modbus, OPC-UA",
+      "Predictive maintenance and digital twins",
+      "Industry 4.0 integration patterns"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Industrial Internet of Things cloud integration",
+      "MIT OCW Industrial Internet of Things Industry 4.0 integration patterns"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Basics of Electrical Engineering (Engineering, Sem 1)",
+      "Digital Logic Design (Engineering, Sem 2)",
+      "Microcontrollers and Interfacing (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem5_Mobile_and_Micro_Robotics_a089bd9e",
+    "title": "Mobile and Micro Robotics",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03HT0501",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Micro-robot actuation principles",
+      "Swarm-scale mobile robot coordination"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Mobile and Micro Robotics Micro-robot actuation principles",
+      "MIT OCW Mobile and Micro Robotics Swarm-scale mobile robot coordination"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Track I: Robotics & AI",
+    "prerequisite_context": [
+      "Field and Service Robot (Engineering, Sem 3)",
+      "Introduction to Robotics (Minor Track) (Engineering, Sem 3)",
+      "Kinematics and Dynamics of Robot (Engineering, Sem 4)",
+      "Advanced sensors and Actuators (Engineering, Sem 4)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem6_Multi-Robot_Systems_and_Swar_e06bc266",
+    "title": "Multi-Robot Systems and Swarm Intelligence",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03HT0601",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 6",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Swarm intelligence algorithms (ACO, PSO)",
+      "Multi-robot task allocation and coordination",
+      "Distributed control architectures"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Multi-Robot Systems and Swarm Intelligence Swarm intelligence algorithms (ACO)",
+      "MIT OCW Multi-Robot Systems and Swarm Intelligence Distributed control architectures"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Track I: Robotics & AI",
+    "prerequisite_context": [
+      "Robot Operating System (ROS) (Engineering, Sem 5)",
+      "Mobile and Micro Robotics (Engineering, Sem 5)",
+      "Robot Drives and Actuators (Engineering, Sem 5)",
+      "Modelling and Simulation of Robotic Systems (Engineering, Sem 5)"
+    ]
+  },
+  {
+    "id": "06_AI_ML_sem7_Advanced_Artificial_Intelligenc_e4cc5563",
+    "title": "Advanced Artificial Intelligence",
+    "subject": "Artificial Intelligence",
+    "subject_code": "",
+    "domain": "06_AI_ML",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Bayesian networks and Markov networks",
+      "Variable elimination, exact and approximate inference",
+      "Parameter estimation and MAP sampling",
+      "Decision and utility theory equations"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Advanced Artificial Intelligence Bayesian networks and Markov networks",
+      "MIT OCW Advanced Artificial Intelligence Decision and utility theory equations"
+    ],
+    "source_files": [],
+    "source_docx": "13. B. Tech. RAI Scheme Sem 1-8 and Syllabus.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Core — Robotics & AI",
+    "prerequisite_context": [
+      "Data Mining and Predictive Modelling (Engineering, Sem 5)",
+      "Reinforcement Learning (Engineering, Sem 6)",
+      "Introduction to Natural Language Processing (Engineering, Sem 6)",
+      "Topics in Social Network Analysis (Engineering, Sem 6)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem7_Advanced_Drones_Technology_0b78e056",
+    "title": "Advanced Drones Technology",
+    "subject": "Robotics Engineering",
+    "subject_code": "",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Dynamics formulation of fixed-wing and multirotor drones",
+      "Navigational state estimation via Kalman filters",
+      "Flight control loops: LQR, predictive control",
+      "Collision-free spatial inspection path routing"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Advanced Drones Technology Dynamics formulation of fixed-wing and multirotor drones",
+      "MIT OCW Advanced Drones Technology Collision-free spatial inspection path routing"
+    ],
+    "source_files": [],
+    "source_docx": "13. B. Tech. RAI Scheme Sem 1-8 and Syllabus.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Core — Robotics & AI",
+    "prerequisite_context": [
+      "Modelling and Simulation of Robotic Systems (Engineering, Sem 5)",
+      "Mobile Robotics (Engineering, Sem 6)",
+      "Robotic Vision System (Engineering, Sem 6)",
+      "Multi-Robot Systems and Swarm Intelligence (Engineering, Sem 6)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem7_Advanced_Robotics_and_Analys_49098c3a",
+    "title": "Advanced Robotics and Analysis (Cognitive Robotics)",
+    "subject": "Robotics Engineering",
+    "subject_code": "",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "manim",
+    "core_subtopics": [
+      "Serial/parallel manipulators and DH convention limits",
+      "Redundant and hyper-redundant manipulators (Tractrix method)",
+      "Recursive inverse dynamics: Newton-Euler, articulated body algorithms",
+      "Flexible and cable-driven robots"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Advanced Robotics and Analysis Serial/parallel manipulators and DH convention limits",
+      "MIT OCW Advanced Robotics and Analysis Flexible and cable-driven robots"
+    ],
+    "source_files": [],
+    "source_docx": "13. B. Tech. RAI Scheme Sem 1-8 and Syllabus.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Core — Robotics & AI",
+    "prerequisite_context": [
+      "Modelling and Simulation of Robotic Systems (Engineering, Sem 5)",
+      "Mobile Robotics (Engineering, Sem 6)",
+      "Robotic Vision System (Engineering, Sem 6)",
+      "Multi-Robot Systems and Swarm Intelligence (Engineering, Sem 6)"
+    ]
+  },
+  {
+    "id": "06_AI_ML_sem7_AI_in_Natural_Language_Processi_dcc889cd",
+    "title": "AI in Natural Language Processing",
+    "subject": "Artificial Intelligence",
+    "subject_code": "",
+    "domain": "06_AI_ML",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 4,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Computational linguistics syntax/semantics parsing",
+      "Word vectorization: TF-IDF, Word2Vec, GloVe",
+      "Sequence-to-sequence encoder-decoder networks",
+      "BERT transformers and attention weights"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL AI in Natural Language Processing Computational linguistics syntax/semantics parsing",
+      "MIT OCW AI in Natural Language Processing BERT transformers and attention weights"
+    ],
+    "source_files": [],
+    "source_docx": "13. B. Tech. RAI Scheme Sem 1-8 and Syllabus.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Core — Robotics & AI",
+    "prerequisite_context": [
+      "Data Mining and Predictive Modelling (Engineering, Sem 5)",
+      "Reinforcement Learning (Engineering, Sem 6)",
+      "Introduction to Natural Language Processing (Engineering, Sem 6)",
+      "Topics in Social Network Analysis (Engineering, Sem 6)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class6-8_English_Reading__Writing__an_6cc2dd3f",
+    "title": "English Reading, Writing, and Grammar",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Junior",
+    "grade_or_sem": "Class 6-8",
+    "complexity": "Basic",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Reading comprehension: factual passages, vocabulary expansion",
+      "Writing: formal/informal letters, paragraph writing, diary entries, short story composition",
+      "Grammar framework: tenses, basic sentence structure"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL English Reading Writing and Grammar vocabulary expansion",
+      "MIT OCW English Reading Writing and Grammar basic sentence structure"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Humanities",
+    "prerequisite_context": []
+  },
+  {
+    "id": "10_HSSM_class6-10_Geography__Contemporary_Ind_2be7cd92",
+    "title": "Geography: Contemporary India",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Junior",
+    "grade_or_sem": "Class 6-10",
+    "complexity": "Basic",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Physical features: mountains, plains, drainage systems",
+      "Monsoon mechanisms and climate determinants",
+      "Resource mapping: soils, minerals, agricultural patterns"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Geography Contemporary India drainage systems",
+      "MIT OCW Geography Contemporary India agricultural patterns"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Humanities",
+    "prerequisite_context": [
+      "English Reading, Writing, and Grammar (Junior, Class 6-8)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class6-10_History__India_and_the_Cont_22443dce",
+    "title": "History: India and the Contemporary World",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Junior",
+    "grade_or_sem": "Class 6-10",
+    "complexity": "Basic",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Ancient river valley civilizations, Maurya/Gupta empires",
+      "Industrial and French Revolutions, Russian Revolution",
+      "Nationalism in India: Satyagraha, Civil Disobedience, Quit India"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL History India Contemporary Ancient river valley civilizations",
+      "MIT OCW History India Contemporary Satyagraha"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Humanities",
+    "prerequisite_context": [
+      "English Reading, Writing, and Grammar (Junior, Class 6-8)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class6-10_Political_Science__Democrat_62577248",
+    "title": "Political Science: Democratic Politics",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Junior",
+    "grade_or_sem": "Class 6-10",
+    "complexity": "Basic",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Local government: Panchayati Raj, Municipalities",
+      "Democracy vs dictatorship, constitutional design",
+      "Electoral politics, federalism, political parties"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Political Science Democratic Politics Panchayati Raj",
+      "MIT OCW Political Science Democratic Politics Electoral politics"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Humanities",
+    "prerequisite_context": [
+      "English Reading, Writing, and Grammar (Junior, Class 6-8)"
+    ]
+  },
+  {
+    "id": "01_Math_class6-8_Statistics_and_Probability_0fe2489e",
+    "title": "Statistics and Probability",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Junior",
+    "grade_or_sem": "Class 6-8",
+    "complexity": "Basic",
+    "priority": 3,
+    "engine": "manim",
+    "core_subtopics": [
+      "Data handling: bar graphs, double bar graphs, pie charts",
+      "Introductory empirical probability"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Statistics and Probability bar graphs",
+      "MIT OCW Statistics and Probability Introductory empirical probability"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics",
+    "prerequisite_context": []
+  },
+  {
+    "id": "10_HSSM_class9-10_Economics__Understanding_Ec_c637e9df",
+    "title": "Economics: Understanding Economic Development",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Junior",
+    "grade_or_sem": "Class 9-10",
+    "complexity": "Basic",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Village development, production factors, people as a resource",
+      "Poverty as multi-dimensional challenge, food security",
+      "Sectors of Indian economy, money and credit, globalization"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Economics Understanding Economic Development people as a resource",
+      "MIT OCW Economics Understanding Economic Development Sectors of Indian economy"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Humanities",
+    "prerequisite_context": [
+      "English Reading, Writing, and Grammar (Junior, Class 6-8)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class9-10_English_Reading__Writing__a_107bd8ab",
+    "title": "English Reading, Writing, and Grammar",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Junior",
+    "grade_or_sem": "Class 9-10",
+    "complexity": "Basic",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Writing: descriptive paragraphs, formal letters (editor, complaint, inquiry), analytical paragraphs from data",
+      "Grammar framework: active/passive voice, reported speech, clauses, determiners, prepositions",
+      "Reading: discursive and case-based passages with statistical/visual data"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL English Reading Writing and Grammar analytical paragraphs from data (editor)",
+      "MIT OCW English Reading Writing and Grammar discursive and case-based passages with statistical/visual d"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Humanities",
+    "prerequisite_context": [
+      "English Reading, Writing, and Grammar (Junior, Class 6-8)"
+    ]
+  },
+  {
+    "id": "01_Math_class9-10_Statistics_and_Probability_f5301ba4",
+    "title": "Statistics and Probability",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Junior",
+    "grade_or_sem": "Class 9-10",
+    "complexity": "Basic",
+    "priority": 3,
+    "engine": "manim",
+    "core_subtopics": [
+      "Mean, median, mode of grouped data",
+      "Cumulative frequency curves (ogives)",
+      "Theoretical probability models"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Statistics and Probability mode of grouped data",
+      "MIT OCW Statistics and Probability Theoretical probability models"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics",
+    "prerequisite_context": [
+      "Number Systems and Algebra (Junior, Class 6-8)",
+      "Geometry and Mensuration (Junior, Class 6-8)",
+      "Statistics and Probability (Junior, Class 6-8)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_Ancient_India__Source_and_37e08b4d",
+    "title": "Ancient India (Source and Structural Reconstruction)",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Prehistoric eras and Indus Valley Civilization",
+      "Vedic period transition and heterodox sects",
+      "Mauryan and Gupta empires: Ashoka's Dhamma, temple architecture"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Ancient India Prehistoric eras and Indus Valley Civilization",
+      "MIT OCW Ancient India Ashoka's Dhamma"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "History (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class11-12_Biology_in_Huma_2db7c63d",
+    "title": "Biology in Human Welfare",
+    "subject": "Biology",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Human health and disease: pathogens, immunity, AIDS, cancer",
+      "Microbes in human welfare: food, industrial, sewage treatment, antibiotics",
+      "Biotechnology applications in health and agriculture"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Biology in Human Welfare AIDS",
+      "MIT OCW Biology in Human Welfare Biotechnology applications in health and agriculture"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Biology",
+    "prerequisite_context": [
+      "Biology Fundamentals (Junior, Class 9)",
+      "Biology Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_Constitutional_Philosophy_7eb6d63a",
+    "title": "Constitutional Philosophy and Fundamental Frameworks",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Drafting of constitution, Preamble, basic structure doctrine",
+      "Fundamental Rights (Articles 12-35), DPSP, Fundamental Duties"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Constitutional Philosophy and Fundamental Frameworks Drafting of constitution",
+      "MIT OCW Constitutional Philosophy and Fundamental Frameworks DPSP (Articles 12-35)"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Political Science (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class11-12_Ecology_and_Env_31386094",
+    "title": "Ecology and Environmental Biology",
+    "subject": "Biology",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Population attributes and growth curves",
+      "Ecosystem structure: energy flow, ecological pyramids",
+      "Biodiversity hotspots and climate mitigation"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Ecology and Environmental Biology Population attributes and growth curves",
+      "MIT OCW Ecology and Environmental Biology Biodiversity hotspots and climate mitigation"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Biology (NEET)",
+    "prerequisite_context": [
+      "Biology Fundamentals (Junior, Class 9)",
+      "Biology Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_English_Core_b6d345b6",
+    "title": "English Core",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Advanced reading: literary/factual/philosophical essay decoding",
+      "Creative writing: notices, formal letters, reports, articles",
+      "Literature: rhetorical devices, historical/sociological contextualization"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL English Core literary/factual/philosophical essay decoding",
+      "MIT OCW English Core historical/sociological contextualization"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "English Core",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_Federalism__Decentralizati_80a5fca1",
+    "title": "Federalism, Decentralization, and Local Governance",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Center-state relations, Seventh Schedule, Emergency provisions",
+      "73rd/74th Amendments, Panchayati Raj Institutions"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Federalism Decentralization and Local Governance Center-state relations",
+      "MIT OCW Federalism Decentralization and Local Governance 73rd/74th Amendments"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Political Science (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_Geomorphology_and_Climatol_3ef49f17",
+    "title": "Geomorphology and Climatology",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Plate tectonics, continental drift, rock cycles",
+      "Atmospheric systems: heat budget, cyclones",
+      "Oceanography: currents, salinity, tides"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Geomorphology and Climatology Plate tectonics",
+      "MIT OCW Geomorphology and Climatology currents"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Geography (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_Indian_Economic_Developmen_7e2c91b4",
+    "title": "Indian Economic Development",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Post-independence planning era and structural bottlenecks",
+      "1991 economic reforms: LPG framework",
+      "Current issues: Make in India, JAM trinity, SDGs"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Indian Economic Development Post-independence planning era and structural bottlenecks",
+      "MIT OCW Indian Economic Development JAM trinity"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Economics (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_Indian_Geography__Physical_7559d90d",
+    "title": "Indian Geography (Physical and Economic)",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Physiographic divisions: Himalayas, Indo-Gangetic Plains",
+      "Indian monsoon mechanics, river basin systems",
+      "Socio-economic geography: agriculture, industrial corridors"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Indian Geography Indo-Gangetic Plains",
+      "MIT OCW Indian Geography industrial corridors"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Geography (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class11-12_Inorganic_Chemi_49010646",
+    "title": "Inorganic Chemistry",
+    "subject": "Chemistry",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Periodic trends: ionization enthalpy, electronegativity, VSEPR theory",
+      "Coordination compounds: VBT, CFT, isomerism",
+      "Block chemistry: p-block, d-block, f-block reactivity trends"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Inorganic Chemistry VSEPR theory",
+      "MIT OCW Inorganic Chemistry f-block reactivity trends"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Chemistry (JEE & NEET)",
+    "prerequisite_context": [
+      "Chemistry Fundamentals (Junior, Class 9)",
+      "Chemistry Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_Introductory_Macroeconomic_435c14f6",
+    "title": "Introductory Macroeconomics",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "National income accounting: GDP, GNP, NDP, NNP",
+      "Monetary systems: RBI tools, banking architecture",
+      "Fiscal policy: budget components, deficit metrics, GST"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Introductory Macroeconomics GDP",
+      "MIT OCW Introductory Macroeconomics GST"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Economics (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_Medieval_India__Polity__Ec_db1f76e1",
+    "title": "Medieval India (Polity, Economy, and Culture)",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Regional kingdoms: Chola maritime networks",
+      "Delhi Sultanate and Mughal Empire: Iqta, Mansabdari systems",
+      "Bhakti and Sufi movements, Vijayanagar Empire"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Medieval India Chola maritime networks",
+      "MIT OCW Medieval India Bhakti and Sufi movements"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "History (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class11-12_Organic_Chemist_4400bdda",
+    "title": "Organic Chemistry",
+    "subject": "Chemistry",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Electronic effects: inductive, resonance, hyperconjugation",
+      "Hydrocarbons and functional groups: SN1/SN2 mechanisms",
+      "Biomolecules: carbohydrates, proteins, nucleic acids"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Organic Chemistry hyperconjugation",
+      "MIT OCW Organic Chemistry carbohydrates"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Chemistry (JEE & NEET)",
+    "prerequisite_context": [
+      "Chemistry Fundamentals (Junior, Class 9)",
+      "Chemistry Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "01_Math_class11-12_Statistics_and_Mathematica_840540b3",
+    "title": "Statistics and Mathematical Reasoning",
+    "subject": "Mathematics",
+    "subject_code": "",
+    "domain": "01_Math",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "manim",
+    "core_subtopics": [
+      "Measures of dispersion: mean deviation, variance, standard deviation",
+      "Mathematical reasoning: statements, logical connectives, validity"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Statistics and Mathematical Reasoning mean deviation",
+      "MIT OCW Statistics and Mathematical Reasoning statements"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Mathematics",
+    "prerequisite_context": [
+      "Statistics and Probability (Junior, Class 6-8)",
+      "Number Systems and Algebra (Junior, Class 9-10)",
+      "Geometry, Mensuration, and Trigonometry (Junior, Class 9-10)",
+      "Statistics and Probability (Junior, Class 9-10)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class11-12_Surface_Chemist_20f2228e",
+    "title": "Surface Chemistry and Environmental Chemistry",
+    "subject": "Chemistry",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Adsorption, colloids, and catalysis",
+      "Environmental pollution: atmospheric, water, soil pollution control"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Surface Chemistry and Environmental Chemistry Adsorption",
+      "MIT OCW Surface Chemistry and Environmental Chemistry soil pollution control"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Chemistry",
+    "prerequisite_context": [
+      "Chemistry Fundamentals (Junior, Class 9)",
+      "Chemistry Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_Union_and_State_Executives_a1c8fd35",
+    "title": "Union and State Executives, Legislatures, Judiciary",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "President, PM, Council of Ministers, parliamentary procedures",
+      "Governor, CM, state legislature machinery",
+      "Supreme Court, High Courts, collegium system, judicial review"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Union State Executives PM",
+      "MIT OCW Union State Executives Supreme Court"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Political Science (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "02_Physics_class11-12_Units__Measurements__an_b54e2eda",
+    "title": "Units, Measurements, and Experimental Physics",
+    "subject": "Physics",
+    "subject_code": "",
+    "domain": "02_Physics",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 3,
+    "engine": "manim",
+    "core_subtopics": [
+      "Dimensional analysis and error propagation",
+      "Significant figures and measurement precision",
+      "Experimental skills: vernier calipers, screw gauge, common lab errors"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Units Measurements and Experimental Physics Dimensional analysis and error propagation",
+      "MIT OCW Units Measurements and Experimental Physics vernier calipers"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Physics",
+    "prerequisite_context": [
+      "Physics Fundamentals (Junior, Class 9)",
+      "Physics Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "04_Electronics_sem1_Basics_of_Electrical_Engi_ba2be907",
+    "title": "Basics of Electrical Engineering",
+    "subject": "Electronics Engineering",
+    "subject_code": "25EE07TP0106",
+    "domain": "04_Electronics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 1",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "manim",
+    "core_subtopics": [
+      "DC circuits: R,L,C elements, KCL, KVL",
+      "AC circuits: sinusoidal waveforms, impedance, 3-phase systems",
+      "Power converters: AC-DC, DC-DC, DC-AC",
+      "Electrical machines: DC motors, transformers, induction motors, stepper motors",
+      "Electromechanical systems: actuators, motor sizing, control techniques"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Basics of Electrical Engineering KCL",
+      "MIT OCW Basics of Electrical Engineering motor sizing"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "02_Physics_sem1_Engineering_Mechanics_b3fa4d21",
+    "title": "Engineering Mechanics",
+    "subject": "Physics",
+    "subject_code": "25ES03TH0101",
+    "domain": "02_Physics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 1",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "manim",
+    "core_subtopics": [
+      "Force vectors, equilibrium, coplanar concurrent forces, FBDs, trusses",
+      "Centroids, moment of inertia, friction (ladder, wedge, rolling)",
+      "Particle dynamics: rectilinear/curvilinear kinematics, projectile motion",
+      "Work-energy and impulse-momentum principles",
+      "Rigid body dynamics: fixed-axis rotation, plane motion"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Engineering Mechanics coplanar concurrent forces",
+      "MIT OCW Engineering Mechanics fixed-axis rotation"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Magnetism, EMI, and Alternating Currents (Senior, Class 11-12)",
+      "Optics and Modern Physics (Senior, Class 11-12)",
+      "Oscillations, Waves, and Electrodynamics (Senior, Class 11-12)",
+      "Units, Measurements, and Experimental Physics (Senior, Class 11-12)"
+    ]
+  },
+  {
+    "id": "04_Electronics_sem2_Digital_Logic_Design_5e547889",
+    "title": "Digital Logic Design",
+    "subject": "Electronics Engineering",
+    "subject_code": "25ES03TP0203",
+    "domain": "04_Electronics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 2",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "manim",
+    "core_subtopics": [
+      "Number systems, Boolean algebra, K-map minimization",
+      "Combinational design: Mux, Demux, encoders, decoders, adders",
+      "Sequential design I: latches, flip-flops (D,T,JK,SR)",
+      "Sequential design II: counters, shift registers, LFSR",
+      "Synchronous state machines: Mealy/Moore models, ASM charts"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Digital Logic Design Number systems",
+      "MIT OCW Digital Logic Design ASM charts"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Basics of Electrical Engineering (Engineering, Sem 1)"
+    ]
+  },
+  {
+    "id": "13_MechanicalEngineering_sem2_Theory_of_Mecha_10438aa2",
+    "title": "Theory of Mechanisms and Elasticity",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES03TH0202",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 2",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Kinematic pairs, chains, mobility, degree of freedom, Kutzbach's criteria",
+      "Inversions: 4-bar, slider-crank, Geneva wheel, pawl-ratchet",
+      "Cams and followers: displacement diagrams, pressure angles",
+      "Simple stresses and strains: Hooke's law, elastic constants, thermal stresses",
+      "Compound stresses: principal stresses, Mohr's circle",
+      "Shear force and bending moment diagrams"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Theory of Mechanisms and Elasticity Kinematic pairs",
+      "MIT OCW Theory of Mechanisms and Elasticity Shear force and bending moment diagrams"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "13_MechanicalEngineering_sem3_Geometric_Dimen_cfe397b1",
+    "title": "Geometric Dimensioning and Tolerances",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES04HT0301",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "GD&T symbols and datum reference frames",
+      "Tolerance stack-up analysis"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Geometric Dimensioning and Tolerances GD&T symbols and datum reference frames",
+      "MIT OCW Geometric Dimensioning and Tolerances Tolerance stack-up analysis"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Track II: Product Design & CAM",
+    "prerequisite_context": [
+      "Theory of Mechanisms and Elasticity (Engineering, Sem 2)",
+      "Fabrication Practices (Engineering, Sem 2)"
+    ]
+  },
+  {
+    "id": "03_Programming_sem3_Introduction_to_Python_cffe720f",
+    "title": "Introduction to Python",
+    "subject": "Computer Science",
+    "subject_code": "25ES03TP0304",
+    "domain": "03_Programming",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Python basics and control structures",
+      "Functions and modular programming",
+      "Built-in data structures: lists, tuples, dicts, sets",
+      "File handling, exception management, NumPy/Pandas"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Introduction to Python Python basics and control structures",
+      "MIT OCW Introduction to Python exception management"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Programming for Problem Solving (Engineering, Sem 1)",
+      "Data Structure and OOPS (Engineering, Sem 2)"
+    ]
+  },
+  {
+    "id": "03_Programming_sem3_Introduction_to_Web_Devel_531373b0",
+    "title": "Introduction to Web Development",
+    "subject": "Computer Science",
+    "subject_code": "24CS01TH0305",
+    "domain": "03_Programming",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "HTML fundamentals: elements, forms, navigation, media tags",
+      "CSS: selectors, box model, positioning",
+      "Bootstrap: grid, components, flexbox, modals",
+      "JavaScript: variables, objects, functions, event handling",
+      "ES6 features: arrow functions, destructuring, async/await"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Introduction to Web Development navigation",
+      "MIT OCW Introduction to Web Development arrow functions"
+    ],
+    "source_files": [],
+    "source_docx": "cse mdm.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "MDM — Web Development Track",
+    "prerequisite_context": [
+      "Programming for Problem Solving (Engineering, Sem 1)",
+      "Data Structure and OOPS (Engineering, Sem 2)"
+    ]
+  },
+  {
+    "id": "13_MechanicalEngineering_sem4_Advanced_Solid_b753c3d0",
+    "title": "Advanced Solid Modelling and Assembly",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES04HT0401",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 4",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Parametric solid modeling techniques",
+      "Assembly constraints and motion simulation"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Advanced Solid Modelling and Assembly Parametric solid modeling techniques",
+      "MIT OCW Advanced Solid Modelling and Assembly Assembly constraints and motion simulation"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Track II: Product Design & CAM",
+    "prerequisite_context": [
+      "Theory of Mechanisms and Elasticity (Engineering, Sem 2)",
+      "Fabrication Practices (Engineering, Sem 2)",
+      "Geometric Dimensioning and Tolerances (Engineering, Sem 3)",
+      "Basics of Mechanical Engineering (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "03_Programming_sem4_Front_End_Development_fac6fae4",
+    "title": "Front End Development",
+    "subject": "Computer Science",
+    "subject_code": "24CS01TH0407",
+    "domain": "03_Programming",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 4",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "React fundamentals: JSX, element creation, fragments",
+      "React components: controlled, composable, conditional rendering",
+      "Props and state: read/setState, propTypes validation",
+      "Event handling and lifecycle methods",
+      "Routing with React Router"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Front End Development JSX",
+      "MIT OCW Front End Development Routing with React Router"
+    ],
+    "source_files": [],
+    "source_docx": "cse mdm.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "MDM — Web Development Track",
+    "prerequisite_context": [
+      "Programming for Problem Solving (Engineering, Sem 1)",
+      "Data Structure and OOPS (Engineering, Sem 2)",
+      "Introduction to Python (Engineering, Sem 3)",
+      "Introduction to Web Development (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "03_Programming_sem4_Indexing_and_Searching_Te_c0d26c0c",
+    "title": "Indexing and Searching Techniques in Databases",
+    "subject": "Computer Science",
+    "subject_code": "24CS01MT0401",
+    "domain": "03_Programming",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 4",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "SQL, ordered/hash indices, clustered/non-clustered indexes",
+      "B-trees, B+-trees, Quadtree, K-D-Tree, Tries",
+      "Disk-based structures: R-Tree, distance functions, Hamming distance",
+      "High-dimensional spaces: X-Tree, dimensionality reduction",
+      "Search strategies: boolean operators, wildcard, evaluation"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Indexing Searching Techniques clustered/non-clustered indexes",
+      "MIT OCW Indexing Searching Techniques boolean operators"
+    ],
+    "source_files": [],
+    "source_docx": "cse mdm.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "CSE Minor — Database Indexing",
+    "prerequisite_context": [
+      "Programming for Problem Solving (Engineering, Sem 1)",
+      "Data Structure and OOPS (Engineering, Sem 2)",
+      "Introduction to Python (Engineering, Sem 3)",
+      "Introduction to Web Development (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "13_MechanicalEngineering_sem4_Mechatronics_183276b1",
+    "title": "Mechatronics",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES03TP0404",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 4",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Components, process automation, case studies (ABS, pick-and-place)",
+      "Sensors and actuators: displacement, force, thermal, pneumatics",
+      "Signal conditioning and ADC/DAC converters",
+      "Microcontroller interfacing: PWM, timers, UART/SPI/I2C",
+      "PLCs and system integration: ladder logic, MATLAB/Simulink"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Mechatronics Components (ABS)",
+      "MIT OCW Mechatronics MATLAB/Simulink"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Theory of Mechanisms and Elasticity (Engineering, Sem 2)",
+      "Fabrication Practices (Engineering, Sem 2)",
+      "Geometric Dimensioning and Tolerances (Engineering, Sem 3)",
+      "Basics of Mechanical Engineering (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "13_MechanicalEngineering_sem5_Additive_Manufa_5e634b28",
+    "title": "Additive Manufacturing Techniques",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES04HT0501",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "FDM, SLA, SLS process fundamentals",
+      "Design for additive manufacturing constraints"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Additive Manufacturing Techniques SLS process fundamentals",
+      "MIT OCW Additive Manufacturing Techniques Design for additive manufacturing constraints"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Track II: Product Design & CAM",
+    "prerequisite_context": [
+      "Advanced Solid Modelling and Assembly (Engineering, Sem 4)",
+      "Mechatronics (Engineering, Sem 4)",
+      "Energy System and Technologies (Engineering, Sem 4)",
+      "Mechatronics and Automation (Minor Track) (Engineering, Sem 4)"
+    ]
+  },
+  {
+    "id": "06_AI_ML_sem5_Data_Mining_and_Predictive_Mode_450a3576",
+    "title": "Data Mining and Predictive Modelling",
+    "subject": "Artificial Intelligence",
+    "subject_code": "24CS01MT0501",
+    "domain": "06_AI_ML",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Data mining concepts, KDD process",
+      "Frequent patterns, association rules, Apriori algorithm",
+      "Data analytics fundamentals and lifecycle",
+      "Predictive modeling: decision trees, linear models",
+      "Applications: time-series, financial, intrusion detection"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Data Mining and Predictive Modelling KDD process",
+      "MIT OCW Data Mining and Predictive Modelling time-series"
+    ],
+    "source_files": [],
+    "source_docx": "cse mdm.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "CSE Minor — Data Mining",
+    "prerequisite_context": [
+      "Introduction to Artificial Intelligence (Engineering, Sem 2)",
+      "AI Programming with Python (Engineering, Sem 3)",
+      "Machine Learning (Engineering, Sem 4)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem5_Robot_Drives_and_Actuators_39eeb4fc",
+    "title": "Robot Drives and Actuators",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03TH0504-1",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "manim",
+    "core_subtopics": [
+      "Servo motors, stepper motors, hydraulic/pneumatic actuators",
+      "Drive selection criteria for robotic applications",
+      "Actuator control electronics"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Robot Drives and Actuators hydraulic/pneumatic actuators",
+      "MIT OCW Robot Drives and Actuators Actuator control electronics"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Program Specific Elective I",
+    "prerequisite_context": [
+      "Field and Service Robot (Engineering, Sem 3)",
+      "Introduction to Robotics (Minor Track) (Engineering, Sem 3)",
+      "Kinematics and Dynamics of Robot (Engineering, Sem 4)",
+      "Advanced sensors and Actuators (Engineering, Sem 4)"
+    ]
+  },
+  {
+    "id": "03_Programming_sem6_Cloud_Technologies_872a6a69",
+    "title": "Cloud Technologies",
+    "subject": "Computer Science",
+    "subject_code": "24CS01TH0605",
+    "domain": "03_Programming",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 6",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Cloud service models: IaaS, PaaS, SaaS",
+      "Virtualization and containerization: Docker, hypervisors",
+      "Cloud platforms: AWS, Azure, GCP components",
+      "Cloud security: IAM, compliance standards",
+      "DevOps CI/CD pipelines and auto-scaling"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Cloud Technologies IaaS",
+      "MIT OCW Cloud Technologies DevOps CI/CD pipelines and auto-scaling"
+    ],
+    "source_files": [],
+    "source_docx": "cse mdm.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "MDM — Web Development Track",
+    "prerequisite_context": [
+      "Introduction to Web Development (Engineering, Sem 3)",
+      "Front End Development (Engineering, Sem 4)",
+      "Indexing and Searching Techniques in Databases (Engineering, Sem 4)",
+      "Backend Technologies (Engineering, Sem 5)"
+    ]
+  },
+  {
+    "id": "13_MechanicalEngineering_sem6_Design_for_Manu_11929cff",
+    "title": "Design for Manufacturing",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES04HT0601",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 6",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "DFM/DFA principles",
+      "Manufacturing cost optimization through design"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Design for Manufacturing DFM/DFA principles",
+      "MIT OCW Design for Manufacturing Manufacturing cost optimization through design"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Track II: Product Design & CAM",
+    "prerequisite_context": [
+      "Mechatronics and Automation (Minor Track) (Engineering, Sem 4)",
+      "Additive Manufacturing Techniques (Engineering, Sem 5)",
+      "Automated Manufacturing Systems (Engineering, Sem 5)",
+      "Industrial Hydraulics and Pneumatics (Engineering, Sem 5)"
+    ]
+  },
+  {
+    "id": "06_AI_ML_sem6_Introduction_to_Natural_Languag_cc265713",
+    "title": "Introduction to Natural Language Processing",
+    "subject": "Artificial Intelligence",
+    "subject_code": "24CS01MT0602",
+    "domain": "06_AI_ML",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 6",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "NLP pipeline, morphological analysis, FSA/FST",
+      "POS tagging: Hidden Markov Model, Viterbi algorithm",
+      "Semantic analysis: WordNet, Word2Vec, Skip-Gram",
+      "N-gram language models and smoothing techniques",
+      "Major NLP applications: sentiment analysis, machine translation"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Introduction to Natural Language Processing NLP pipeline",
+      "MIT OCW Introduction to Natural Language Processing sentiment analysis"
+    ],
+    "source_files": [],
+    "source_docx": "cse mdm.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "CSE Minor — Elective Option B",
+    "prerequisite_context": [
+      "AI Programming with Python (Engineering, Sem 3)",
+      "Machine Learning (Engineering, Sem 4)",
+      "Deep Learning (Engineering, Sem 5)",
+      "Data Mining and Predictive Modelling (Engineering, Sem 5)"
+    ]
+  },
+  {
+    "id": "01_Math_sem7_Advanced_Optimization_Techniques_ba19544a",
+    "title": "Advanced Optimization Techniques",
+    "subject": "Mathematics",
+    "subject_code": "25ES03TH0702-1",
+    "domain": "01_Math",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "manim",
+    "core_subtopics": [
+      "Linear and nonlinear programming",
+      "Genetic algorithms and metaheuristics",
+      "Multi-objective optimization"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Advanced Optimization Techniques Linear and nonlinear programming",
+      "MIT OCW Advanced Optimization Techniques Multi-objective optimization"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Program Specific Elective III/IV",
+    "prerequisite_context": [
+      "Statistics and Mathematical Reasoning (Senior, Class 11-12)",
+      "Differential Calculus and Basics of Statistics (Engineering, Sem 1)",
+      "Linear Algebra and Integral Calculus (Engineering, Sem 2)",
+      "Probability and Statistics (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "06_AI_ML_sem7_Fuzzy_Logic_and_Neural_Network_51ade7ae",
+    "title": "Fuzzy Logic and Neural Network",
+    "subject": "Artificial Intelligence",
+    "subject_code": "25ES03TH0701-1",
+    "domain": "06_AI_ML",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "manim",
+    "core_subtopics": [
+      "Fuzzy set theory and membership functions",
+      "Fuzzy inference systems (Mamdani, Sugeno)",
+      "Neuro-fuzzy hybrid systems"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Fuzzy Logic and Neural Network Fuzzy set theory and membership functions",
+      "MIT OCW Fuzzy Logic and Neural Network Neuro-fuzzy hybrid systems"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Program Specific Elective III/IV",
+    "prerequisite_context": [
+      "Data Mining and Predictive Modelling (Engineering, Sem 5)",
+      "Reinforcement Learning (Engineering, Sem 6)",
+      "Introduction to Natural Language Processing (Engineering, Sem 6)",
+      "Topics in Social Network Analysis (Engineering, Sem 6)"
+    ]
+  },
+  {
+    "id": "03_Programming_sem7_Human_Machine_Interface_5d0cf3e9",
+    "title": "Human Machine Interface (HMI)",
+    "subject": "Computer Science",
+    "subject_code": "",
+    "domain": "03_Programming",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Cognitive user interface design principles",
+      "Ergonomics and usability testing",
+      "Goal-Directed design frameworks",
+      "Mobile web architectural considerations"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL HMI Cognitive user interface design principles",
+      "MIT OCW HMI Mobile web architectural considerations"
+    ],
+    "source_files": [],
+    "source_docx": "13. B. Tech. RAI Scheme Sem 1-8 and Syllabus.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Honors Core — Robotics & AI",
+    "prerequisite_context": [
+      "Front End Development (Engineering, Sem 4)",
+      "Indexing and Searching Techniques in Databases (Engineering, Sem 4)",
+      "Backend Technologies (Engineering, Sem 5)",
+      "Cloud Technologies (Engineering, Sem 6)"
+    ]
+  },
+  {
+    "id": "07_Control_sem7_Process_Instrumentation_and_C_7437e60f",
+    "title": "Process Instrumentation and Control",
+    "subject": "Control Systems",
+    "subject_code": "25ES03TH0701-3",
+    "domain": "07_Control",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "manim",
+    "core_subtopics": [
+      "Industrial sensors: temperature, pressure, flow",
+      "Process control loops and PID implementation"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Process Instrumentation and Control temperature",
+      "MIT OCW Process Instrumentation and Control Process control loops and PID implementation"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Program Specific Elective III/IV",
+    "prerequisite_context": [
+      "Control Systems for Robotics (Engineering, Sem 4)"
+    ]
+  },
+  {
+    "id": "11_Projects_sem8_Project_Management_f5732454",
+    "title": "Project Management",
+    "subject": "Projects & Research",
+    "subject_code": "25ES03TH0801",
+    "domain": "11_Projects",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 8",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Project scheduling: Gantt charts, PERT/CPM",
+      "Resource allocation and risk management",
+      "Agile and Scrum methodologies"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Project Management PERT/CPM",
+      "MIT OCW Project Management Agile and Scrum methodologies"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Product Innovation and Entrepreneurship Lab (Engineering, Sem 6)",
+      "Enterprise Resource Planning (Engineering, Sem 7)",
+      "Participative Learning (Engineering, Sem 7)"
+    ]
+  },
+  {
+    "id": "11_Projects_sem8_Research_Methodology_938db2ab",
+    "title": "Research Methodology",
+    "subject": "Projects & Research",
+    "subject_code": "25ES03TH0802",
+    "domain": "11_Projects",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 8",
+    "complexity": "Advanced",
+    "priority": 3,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Research design and literature review",
+      "Data collection and statistical analysis",
+      "Technical writing and publication ethics"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Research Methodology Research design and literature review",
+      "MIT OCW Research Methodology Technical writing and publication ethics"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Product Innovation and Entrepreneurship Lab (Engineering, Sem 6)",
+      "Enterprise Resource Planning (Engineering, Sem 7)",
+      "Participative Learning (Engineering, Sem 7)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class6-10_English_Literature_Themes_71cec039",
+    "title": "English Literature Themes",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Junior",
+    "grade_or_sem": "Class 6-10",
+    "complexity": "Basic",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Prose and poetry on global cultures and human resilience",
+      "Ethical dilemmas and environmental consciousness themes"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL English Literature Themes Prose and poetry on global cultures and human resilience",
+      "MIT OCW English Literature Themes Ethical dilemmas and environmental consciousness themes"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Humanities",
+    "prerequisite_context": [
+      "English Reading, Writing, and Grammar (Junior, Class 6-8)"
+    ]
+  },
+  {
+    "id": "12_NaturalSciences_class11-12_Chemistry_in_Ev_6fd4a518",
+    "title": "Chemistry in Everyday Life and Practical Chemistry",
+    "subject": "Chemistry",
+    "subject_code": "",
+    "domain": "12_NaturalSciences",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Drugs, polymers, and chemicals in food/cleansing agents",
+      "Qualitative salt analysis and detection of functional groups"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Chemistry Everyday Life and chemicals in food/cleansing agents",
+      "MIT OCW Chemistry Everyday Life Qualitative salt analysis and detection of functional groups"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Chemistry",
+    "prerequisite_context": [
+      "Chemistry Fundamentals (Junior, Class 9)",
+      "Chemistry Fundamentals (Junior, Class 10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_Constitutional_and_Statuto_10b9caa8",
+    "title": "Constitutional and Statutory Bodies",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Election Commission, UPSC, CAG, Finance Commission",
+      "NITI Aayog, NHRC, Lokpal/Lokayuktas"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Constitutional and Statutory Bodies UPSC",
+      "MIT OCW Constitutional and Statutory Bodies NITI Aayog"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Political Science (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_Human_and_Economic_Geograp_c5a7de65",
+    "title": "Human and Economic Geography",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Population distribution and demographic transition",
+      "Resource mapping and industry localization factors"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Human and Economic Geography Population distribution and demographic transition",
+      "MIT OCW Human and Economic Geography Resource mapping and industry localization factors"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Geography (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "10_HSSM_class11-12_World_History_Themes_f2c53220",
+    "title": "World History Themes",
+    "subject": "Humanities",
+    "subject_code": "",
+    "domain": "10_HSSM",
+    "tier": "Senior",
+    "grade_or_sem": "Class 11-12",
+    "complexity": "Intermediate",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Enlightenment, American and French Revolutions",
+      "Industrial Revolution and World Wars",
+      "Decolonization and Cold War frameworks"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL World History Themes American and French Revolutions",
+      "MIT OCW World History Themes Decolonization and Cold War frameworks"
+    ],
+    "source_files": [],
+    "source_docx": "class_11-12.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "History (UPSC Foundational)",
+    "prerequisite_context": [
+      "Political Science: Democratic Politics (Junior, Class 6-10)",
+      "Economics: Understanding Economic Development (Junior, Class 9-10)",
+      "English Reading, Writing, and Grammar (Junior, Class 9-10)",
+      "English Literature Themes (Junior, Class 6-10)"
+    ]
+  },
+  {
+    "id": "08_Design_sem1_Engineering_Graphics_e39f74ce",
+    "title": "Engineering Graphics",
+    "subject": "Engineering Design",
+    "subject_code": "25ES03TP0102",
+    "domain": "08_Design",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 1",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Conic sections, cycloids, involutes",
+      "Orthographic projections (1st & 3rd angle)",
+      "Projections of lines and planes (auxiliary plane method)",
+      "Sections of solids and surface development",
+      "Isometric scale, views, and projections"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Engineering Graphics Conic sections",
+      "MIT OCW Engineering Graphics Isometric scale"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "10_HSSM_sem1_English_for_Professional_Communi_d6b5ea98",
+    "title": "English for Professional Communication",
+    "subject": "Humanities",
+    "subject_code": "25HS02TP0101",
+    "domain": "10_HSSM",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 1",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Vocabulary building and listening comprehension",
+      "Functional grammar and usage",
+      "Writing skills: paragraphs, summaries, correspondence",
+      "Presentation skills and group discussions"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL English for Professional Communication Vocabulary building and listening comprehension",
+      "MIT OCW English for Professional Communication Presentation skills and group discussions"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Union and State Executives, Legislatures, Judiciary (Senior, Class 11-12)",
+      "Constitutional and Statutory Bodies (Senior, Class 11-12)",
+      "Human and Economic Geography (Senior, Class 11-12)",
+      "World History Themes (Senior, Class 11-12)"
+    ]
+  },
+  {
+    "id": "13_MechanicalEngineering_sem3_Basics_of_Mecha_13378d15",
+    "title": "Basics of Mechanical Engineering",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES04MT0301",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Engineering materials and properties",
+      "Manufacturing process fundamentals"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Basics of Mechanical Engineering Engineering materials and properties",
+      "MIT OCW Basics of Mechanical Engineering Manufacturing process fundamentals"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Minors Track II: Mechanical Engg",
+    "prerequisite_context": [
+      "Theory of Mechanisms and Elasticity (Engineering, Sem 2)",
+      "Fabrication Practices (Engineering, Sem 2)"
+    ]
+  },
+  {
+    "id": "08_Design_sem3_Design_Thinking_a439f58f",
+    "title": "Design Thinking",
+    "subject": "Engineering Design",
+    "subject_code": "25ES03TP0305",
+    "domain": "08_Design",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Creativity styles, pattern breaking (SCAMPER, lateral thinking)",
+      "Systematic inventive thinking (TRIZ, Six Hats)",
+      "Design for innovation",
+      "Intellectual property: patents, trademarks"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Design Thinking Creativity styles (SCAMPER)",
+      "MIT OCW Design Thinking trademarks"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Engineering Graphics (Engineering, Sem 1)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem3_Introduction_to_Robotics__Mi_b561e7f7",
+    "title": "Introduction to Robotics (Minor Track)",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03MT0301",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "manim",
+    "core_subtopics": [
+      "Robot classification and basic kinematics overview",
+      "Industrial robot applications introduction"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Introduction to Robotics Robot classification and basic kinematics overview",
+      "MIT OCW Introduction to Robotics Industrial robot applications introduction"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Minors Track I: Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "09_Defence_sem3_MDM-I__Defense_Platform_cc94403b",
+    "title": "MDM-I (Defense Platform)",
+    "subject": "Defence Studies",
+    "subject_code": "25ES03TH0307",
+    "domain": "09_Defence",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 3",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Defence platform classification and roles",
+      "Land, air, sea platform systems overview",
+      "Platform survivability and mobility design"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL MDM-I Defence platform classification and roles",
+      "MIT OCW MDM-I Platform survivability and mobility design"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "13_MechanicalEngineering_sem4_Energy_System_a_4ee23c69",
+    "title": "Energy System and Technologies",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES04MT0401",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 4",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Conventional and renewable energy systems",
+      "Energy conversion efficiency"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Energy System and Technologies Conventional and renewable energy systems",
+      "MIT OCW Energy System and Technologies Energy conversion efficiency"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Minors Track II: Mechanical Engg",
+    "prerequisite_context": [
+      "Theory of Mechanisms and Elasticity (Engineering, Sem 2)",
+      "Fabrication Practices (Engineering, Sem 2)",
+      "Geometric Dimensioning and Tolerances (Engineering, Sem 3)",
+      "Basics of Mechanical Engineering (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "09_Defence_sem4_MDM-II__Warfare_systems_ec49c1f7",
+    "title": "MDM-II (Warfare systems)",
+    "subject": "Defence Studies",
+    "subject_code": "25ES03TH0407",
+    "domain": "09_Defence",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 4",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Warfare systems classification",
+      "Weapon delivery and guidance overview",
+      "Modern battlefield technologies"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL MDM-II Warfare systems classification",
+      "MIT OCW MDM-II Modern battlefield technologies"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "MDM-I (Defense Platform) (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "13_MechanicalEngineering_sem4_Mechatronics_an_9fe55b5f",
+    "title": "Mechatronics and Automation (Minor Track)",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES03MT0401",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 4",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Automation system components and PLC basics",
+      "Sensor-actuator integration for automated systems"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Mechatronics and Automation Automation system components and PLC basics",
+      "MIT OCW Mechatronics and Automation Sensor-actuator integration for automated systems"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Minors Track I: Robotics & AI",
+    "prerequisite_context": [
+      "Theory of Mechanisms and Elasticity (Engineering, Sem 2)",
+      "Fabrication Practices (Engineering, Sem 2)",
+      "Geometric Dimensioning and Tolerances (Engineering, Sem 3)",
+      "Basics of Mechanical Engineering (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "13_MechanicalEngineering_sem5_Automated_Manuf_44f6a54a",
+    "title": "Automated Manufacturing Systems",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES03TH0504-2",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Flexible manufacturing system architecture",
+      "Automated material handling and storage",
+      "Computer-integrated manufacturing"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Automated Manufacturing Systems Flexible manufacturing system architecture",
+      "MIT OCW Automated Manufacturing Systems Computer-integrated manufacturing"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Program Specific Elective I",
+    "prerequisite_context": [
+      "Advanced Solid Modelling and Assembly (Engineering, Sem 4)",
+      "Mechatronics (Engineering, Sem 4)",
+      "Energy System and Technologies (Engineering, Sem 4)",
+      "Mechatronics and Automation (Minor Track) (Engineering, Sem 4)"
+    ]
+  },
+  {
+    "id": "13_MechanicalEngineering_sem5_Industrial_Hydr_29a32eed",
+    "title": "Industrial Hydraulics and Pneumatics",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES03TP0502",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Hydraulic system components: pumps, valves, actuators",
+      "Pneumatic circuit design and control",
+      "Hydraulic/pneumatic system maintenance and troubleshooting"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Industrial Hydraulics and Pneumatics pumps",
+      "MIT OCW Industrial Hydraulics and Pneumatics Hydraulic/pneumatic system maintenance and troubleshooting"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Advanced Solid Modelling and Assembly (Engineering, Sem 4)",
+      "Mechatronics (Engineering, Sem 4)",
+      "Energy System and Technologies (Engineering, Sem 4)",
+      "Mechatronics and Automation (Minor Track) (Engineering, Sem 4)"
+    ]
+  },
+  {
+    "id": "09_Defence_sem5_MDM-III__Weapon_Systems_1a369875",
+    "title": "MDM-III (Weapon Systems)",
+    "subject": "Defence Studies",
+    "subject_code": "25ES03TH0507",
+    "domain": "09_Defence",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Weapon system classification and guidance",
+      "Targeting and fire control systems"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL MDM-III Weapon system classification and guidance",
+      "MIT OCW MDM-III Targeting and fire control systems"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "MDM-I (Defense Platform) (Engineering, Sem 3)",
+      "MDM-II (Warfare systems) (Engineering, Sem 4)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem5_Modelling_and_Simulation_of_907aae37",
+    "title": "Modelling and Simulation of Robotic Systems",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03MT0501",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "manim",
+    "core_subtopics": [
+      "Robot system modeling using simulation software",
+      "Simulation-based validation of robotic workflows"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Modelling Simulation Robotic Robot system modeling using simulation software",
+      "MIT OCW Modelling Simulation Robotic Simulation-based validation of robotic workflows"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Minors Track I: Robotics & AI",
+    "prerequisite_context": [
+      "Field and Service Robot (Engineering, Sem 3)",
+      "Introduction to Robotics (Minor Track) (Engineering, Sem 3)",
+      "Kinematics and Dynamics of Robot (Engineering, Sem 4)",
+      "Advanced sensors and Actuators (Engineering, Sem 4)"
+    ]
+  },
+  {
+    "id": "04_Electronics_sem6_Automotive_Electronics_2faaa84c",
+    "title": "Automotive Electronics",
+    "subject": "Electronics Engineering",
+    "subject_code": "25ES03TH0604-1",
+    "domain": "04_Electronics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 6",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "manim",
+    "core_subtopics": [
+      "Engine control units and sensors",
+      "Vehicle communication protocols: CAN bus",
+      "ADAS systems overview"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Automotive Electronics Engine control units and sensors",
+      "MIT OCW Automotive Electronics ADAS systems overview"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Program Specific Elective II",
+    "prerequisite_context": [
+      "Basics of Electrical Engineering (Engineering, Sem 1)",
+      "Digital Logic Design (Engineering, Sem 2)",
+      "Microcontrollers and Interfacing (Engineering, Sem 3)",
+      "Industrial Internet of Things (IoT) (Engineering, Sem 5)"
+    ]
+  },
+  {
+    "id": "13_MechanicalEngineering_sem6_Flexible_Manufa_f9d7c1b3",
+    "title": "Flexible Manufacturing System",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES03TH0604-2",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 6",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "FMS layout and scheduling",
+      "Automated guided vehicles in manufacturing"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Flexible Manufacturing System FMS layout and scheduling",
+      "MIT OCW Flexible Manufacturing System Automated guided vehicles in manufacturing"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Program Specific Elective II",
+    "prerequisite_context": [
+      "Mechatronics and Automation (Minor Track) (Engineering, Sem 4)",
+      "Additive Manufacturing Techniques (Engineering, Sem 5)",
+      "Automated Manufacturing Systems (Engineering, Sem 5)",
+      "Industrial Hydraulics and Pneumatics (Engineering, Sem 5)"
+    ]
+  },
+  {
+    "id": "09_Defence_sem6_MDM-IV__Self-Defence_and_Prot_f03bad28",
+    "title": "MDM-IV (Self-Defence and Protection Systems)",
+    "subject": "Defence Studies",
+    "subject_code": "25ES03TH0607",
+    "domain": "09_Defence",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 6",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Personal protection equipment design",
+      "Defensive systems and countermeasures"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL MDM-IV Personal protection equipment design",
+      "MIT OCW MDM-IV Defensive systems and countermeasures"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "MDM-I (Defense Platform) (Engineering, Sem 3)",
+      "MDM-II (Warfare systems) (Engineering, Sem 4)",
+      "MDM-III (Weapon Systems) (Engineering, Sem 5)"
+    ]
+  },
+  {
+    "id": "11_Projects_sem6_Product_Innovation_and_Entre_c6ff1782",
+    "title": "Product Innovation and Entrepreneurship Lab",
+    "subject": "Projects & Research",
+    "subject_code": "25ES03PR0605",
+    "domain": "11_Projects",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 6",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Lean startup methodology and business model canvas",
+      "Ideation, prototyping, and pitch development"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Product Innovation and Entrepreneurship Lab Lean startup methodology and business model canvas",
+      "MIT OCW Product Innovation and Entrepreneurship Lab and pitch development"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "06_AI_ML_sem6_Topics_in_Social_Network_Analys_41eb97b7",
+    "title": "Topics in Social Network Analysis",
+    "subject": "Artificial Intelligence",
+    "subject_code": "24CS01MT0601",
+    "domain": "06_AI_ML",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 6",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Social network analysis fundamentals, graph visualization",
+      "Network growth models: random network, preferential attachment",
+      "Community detection methods, link prediction",
+      "Online social network mining and crawling"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Topics in Social Network Analysis Social network analysis fundamentals",
+      "MIT OCW Topics in Social Network Analysis Online social network mining and crawling"
+    ],
+    "source_files": [],
+    "source_docx": "cse mdm.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "CSE Minor — Elective Option A",
+    "prerequisite_context": [
+      "AI Programming with Python (Engineering, Sem 3)",
+      "Machine Learning (Engineering, Sem 4)",
+      "Deep Learning (Engineering, Sem 5)",
+      "Data Mining and Predictive Modelling (Engineering, Sem 5)"
+    ]
+  },
+  {
+    "id": "11_Projects_sem7_Enterprise_Resource_Planning_4c4911b8",
+    "title": "Enterprise Resource Planning",
+    "subject": "Projects & Research",
+    "subject_code": "25ES03TH0702-2",
+    "domain": "11_Projects",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "ERP architecture and modules: finance, HR, supply chain",
+      "ERP implementation lifecycle and case studies"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Enterprise Resource Planning HR",
+      "MIT OCW Enterprise Resource Planning ERP implementation lifecycle and case studies"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Program Specific Elective III/IV",
+    "prerequisite_context": [
+      "Product Innovation and Entrepreneurship Lab (Engineering, Sem 6)"
+    ]
+  },
+  {
+    "id": "08_Design_sem7_Product_Life_Cycle_Engineering_babd2da4",
+    "title": "Product Life Cycle Engineering",
+    "subject": "Engineering Design",
+    "subject_code": "25ES03TH0702-3",
+    "domain": "08_Design",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Product lifecycle stages: design, manufacturing, sustainment, retirement",
+      "PLM software tools and data management"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Product Life Cycle Engineering manufacturing",
+      "MIT OCW Product Life Cycle Engineering PLM software tools and data management"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Program Specific Elective III/IV",
+    "prerequisite_context": [
+      "Engineering Graphics (Engineering, Sem 1)",
+      "Design Thinking (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "08_Design_sem7_Rapid_Prototyping_e50ebeba",
+    "title": "Rapid Prototyping",
+    "subject": "Engineering Design",
+    "subject_code": "25ES03TH0701-2",
+    "domain": "08_Design",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Additive manufacturing technologies: FDM, SLA, SLS",
+      "Rapid tooling and prototyping workflows"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Rapid Prototyping FDM",
+      "MIT OCW Rapid Prototyping Rapid tooling and prototyping workflows"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "Program Specific Elective III/IV",
+    "prerequisite_context": [
+      "Engineering Graphics (Engineering, Sem 1)",
+      "Design Thinking (Engineering, Sem 3)"
+    ]
+  },
+  {
+    "id": "05_Robotics_sem7_Robot_Safety_and_Maintenance_0bb7271d",
+    "title": "Robot Safety and Maintenance",
+    "subject": "Robotics Engineering",
+    "subject_code": "25ES03TH0703",
+    "domain": "05_Robotics",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "manim",
+    "core_subtopics": [
+      "Risk assessment for robotic workcells",
+      "Safety standards: ISO 10218, collaborative robotics",
+      "Preventive maintenance scheduling"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Robot Safety and Maintenance Risk assessment for robotic workcells",
+      "MIT OCW Robot Safety and Maintenance Preventive maintenance scheduling"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Modelling and Simulation of Robotic Systems (Engineering, Sem 5)",
+      "Mobile Robotics (Engineering, Sem 6)",
+      "Robotic Vision System (Engineering, Sem 6)",
+      "Multi-Robot Systems and Swarm Intelligence (Engineering, Sem 6)"
+    ]
+  },
+  {
+    "id": "10_HSSM_sem8_Foundational_Literature_of_India_74bea99e",
+    "title": "Foundational Literature of Indian Civilization",
+    "subject": "Humanities",
+    "subject_code": "25HS02TH0205",
+    "domain": "10_HSSM",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 8",
+    "complexity": "Advanced",
+    "priority": 2,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Indian Knowledge Systems: philosophical traditions",
+      "Classical literature and scientific contributions of ancient India"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Foundational Literature of Indian Civilization philosophical traditions",
+      "MIT OCW Foundational Literature of Indian Civilization Classical literature and scientific contributions of ancient"
+    ],
+    "source_files": [],
+    "source_docx": "class_6-10.docx / class_11-12.docx / Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx (audit-expansion)",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "World History Themes (Senior, Class 11-12)",
+      "English for Professional Communication (Engineering, Sem 1)",
+      "Foundational Course in Universal Human Values (Engineering, Sem 1)",
+      "Business Communication (Engineering, Sem 5)"
+    ]
+  },
+  {
+    "id": "10_HSSM_sem1_Foundational_Course_in_Universal_d6c519a4",
+    "title": "Foundational Course in Universal Human Values",
+    "subject": "Humanities",
+    "subject_code": "25HS02TH0104",
+    "domain": "10_HSSM",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 1",
+    "complexity": "Advanced",
+    "priority": 1,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Self-management and harmony in human beings",
+      "Mental and physical health",
+      "Harmony in relationships: trust, respect, gratitude",
+      "Harmony in society and nature"
+    ],
+    "suggested_chapters": 2,
+    "web_queries": [
+      "NPTEL Foundational Course Universal Self-management and harmony in human beings",
+      "MIT OCW Foundational Course Universal Harmony in society and nature"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Union and State Executives, Legislatures, Judiciary (Senior, Class 11-12)",
+      "Constitutional and Statutory Bodies (Senior, Class 11-12)",
+      "Human and Economic Geography (Senior, Class 11-12)",
+      "World History Themes (Senior, Class 11-12)"
+    ]
+  },
+  {
+    "id": "13_MechanicalEngineering_sem2_Fabrication_Pra_57f24b63",
+    "title": "Fabrication Practices",
+    "subject": "Mechanical Engineering",
+    "subject_code": "25ES03TP0205",
+    "domain": "13_MechanicalEngineering",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 2",
+    "complexity": "Advanced",
+    "priority": 1,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Foundry and metal casting",
+      "Pattern making and carpentry",
+      "Metal cutting fundamentals (lathe)",
+      "Smithy, forging, fitting, sheet metal",
+      "Welding, soldering, brazing"
+    ],
+    "suggested_chapters": 3,
+    "web_queries": [
+      "NPTEL Fabrication Practices Foundry and metal casting",
+      "MIT OCW Fabrication Practices Welding"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "12_NaturalSciences_sem4_Environmental_Science_177ceb5f",
+    "title": "Environmental Science",
+    "subject": "Natural Sciences",
+    "subject_code": "25HS01TP0401",
+    "domain": "12_NaturalSciences",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 4",
+    "complexity": "Advanced",
+    "priority": 1,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Sustainability engineering: air/water pollution, solid waste, energy sources",
+      "E-waste management, green computing, green data servers"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Environmental Science air/water pollution",
+      "MIT OCW Environmental Science E-waste management"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": []
+  },
+  {
+    "id": "10_HSSM_sem5_Business_Communication_2c3659cd",
+    "title": "Business Communication",
+    "subject": "Humanities",
+    "subject_code": "25HS05TH0104",
+    "domain": "10_HSSM",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 5",
+    "complexity": "Advanced",
+    "priority": 1,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Professional report and email writing",
+      "Presentation and negotiation skills"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Business Communication Professional report and email writing",
+      "MIT OCW Business Communication Presentation and negotiation skills"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Human and Economic Geography (Senior, Class 11-12)",
+      "World History Themes (Senior, Class 11-12)",
+      "English for Professional Communication (Engineering, Sem 1)",
+      "Foundational Course in Universal Human Values (Engineering, Sem 1)"
+    ]
+  },
+  {
+    "id": "11_Projects_sem7_Participative_Learning_145aa157",
+    "title": "Participative Learning",
+    "subject": "Projects & Research",
+    "subject_code": "",
+    "domain": "11_Projects",
+    "tier": "Engineering",
+    "grade_or_sem": "Sem 7",
+    "complexity": "Advanced",
+    "priority": 1,
+    "engine": "remotion",
+    "core_subtopics": [
+      "Community engagement project design",
+      "Reflective practice and reporting"
+    ],
+    "suggested_chapters": 1,
+    "web_queries": [
+      "NPTEL Participative Learning Community engagement project design",
+      "MIT OCW Participative Learning Reflective practice and reporting"
+    ],
+    "source_files": [],
+    "source_docx": "Programme-Scheme-B-Tech-Robotics-AI-2025-26.docx",
+    "content": "",
+    "references": [],
+    "pyqs": [],
+    "track": "B.Tech Robotics & AI",
+    "prerequisite_context": [
+      "Product Innovation and Entrepreneurship Lab (Engineering, Sem 6)"
+    ]
+  }
+]

@@ -1,0 +1,140 @@
+# ============================================================
+# PRECISION VAULT ENGINE — generated / non-source data
+# ============================================================
+
+# Secrets
+.env
+.env.*
+credentials.json
+*credentials*.json
+*secret*
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+_logs/
+logs/
+*.log
+pipeline_log.jsonl
+pipeline_summary.json
+
+# Temporary/runtime state
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.lock
+
+# Generated caches
+cache/
+.cache/
+caches/
+
+# Generated artifacts
+artifacts/
+generated/
+outputs/
+output/
+
+# Notes / vault outputs
+vault/
+vaults/
+notes/
+generated_notes/
+
+# Audio
+audio/
+audios/
+generated_audio/
+*.mp3
+*.wav
+*.m4a
+
+# Video / rendered media
+video/
+videos/
+renders/
+rendered/
+*.mp4
+*.mov
+*.avi
+*.mkv
+
+# Large generated documents
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# Model/provider raw outputs
+raw_responses/
+provider_responses/
+llm_outputs/
+batch_results/
+
+# Large transient research/output data
+downloads/
+_downloads/
+scraped/
+transcripts/
+
+# Local databases / runtime state
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+
+# Do NOT ignore source manifests or configuration JSON globally.
+# Specific generated JSON/JSONL files should be excluded individually.
+
+# ============================================================
+# PVE project-specific generated / bulky directories
+# ============================================================
+
+_classroom_downloads/
+_handwriting_extracts/
+_migration_backups/
+_protected_credentials/
+_quarantine/
+_remotion_project/
+vault_staging/
+
+_batch_jsonl/
+_compiled/
+_raw_fallback/
+_assessment/
+_audio/
+_video_output/
+raw_notes/
+
+# Runtime/generated vault data
+vault/
+
+# Local token/auth artifacts
+token.pkl
+
+# Python environment
+venv/
