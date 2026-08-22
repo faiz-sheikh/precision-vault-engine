@@ -71,7 +71,7 @@ class BodyAwareProviderClassificationTests(unittest.TestCase):
                     max_requests_per_run=10,
                 )
                 controller = Controller(settings)
-                secret = "sk-secret-value-that-must-never-persist"
+                secret = "test-credential-that-must-never-persist"
                 body = json.dumps({"error": {"type": code, "message": f"{message} {secret}"}}).encode()
                 adapter: Adapter = adapter_type(
                     lambda request, payload=body, credential=secret: _post_json(

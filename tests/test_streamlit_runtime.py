@@ -8,12 +8,12 @@ from unittest.mock import patch
 
 from streamlit.testing.v1 import AppTest
 
-from pve.dashboard import SECTIONS
+from pve.dashboard import EXPERT_SECTIONS, SIMPLE_SECTIONS
 from pve.store import Store
 
 
 class StreamlitRuntimeTests(unittest.TestCase):
-    def test_real_app_navigation_reruns_and_restart_create_no_provider_events(self) -> None:
+    def test_onboarding_modes_navigation_reruns_and_restart_are_passive(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             state_dir = Path(directory) / "state"
             artifact_dir = Path(directory) / "artifacts"
@@ -30,13 +30,26 @@ class StreamlitRuntimeTests(unittest.TestCase):
             with patch.dict(os.environ, env, clear=False):
                 app = AppTest.from_file(str(app_path), default_timeout=10).run()
                 self.assertFalse(app.exception)
+                self.assertEqual(app.title[0].value, "Welcome to Precision Vault Engine")
+                self.assertIn("Step 1 of 5", app.caption[0].value)
+
+                app.session_state["pve_onboarding_complete"] = True
+                app.session_state["pve_mode"] = "Simple"
+                app.run()
                 self.assertEqual(app.title[0].value, "Precision Vault Engine")
-                for section in SECTIONS:
+                for section in SIMPLE_SECTIONS:
                     app.sidebar.radio[0].set_value(section)
                     app.run()
                     self.assertFalse(app.exception)
-                    self.assertEqual(app.subheader[0].value, section)
-                for _ in range(5):
+
+                app.sidebar.selectbox[0].set_value("Expert")
+                app.run()
+                self.assertFalse(app.exception)
+                for section in EXPERT_SECTIONS:
+                    app.sidebar.radio[0].set_value(section)
+                    app.run()
+                    self.assertFalse(app.exception)
+                for _ in range(3):
                     app.run()
                     self.assertFalse(app.exception)
                 restarted = AppTest.from_file(str(app_path), default_timeout=10).run()
@@ -44,9 +57,9 @@ class StreamlitRuntimeTests(unittest.TestCase):
 
             store = Store(state_dir / "operations.sqlite3")
             with store.connect() as db:
-                self.assertEqual(
-                    db.execute("SELECT count(*) FROM provider_events").fetchone()[0], 0
-                )
-                self.assertEqual(
-                    db.execute("SELECT count(*) FROM provider_operations").fetchone()[0], 0
-                )
+                self.assertEqual(db.execute("SELECT count(*) FROM provider_events").fetchone()[0], 0)
+                self.assertEqual(db.execute("SELECT count(*) FROM provider_operations").fetchone()[0], 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

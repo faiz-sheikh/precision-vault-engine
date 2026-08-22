@@ -1,0 +1,14 @@
+{
+  "pid control": {
+    "sources": [
+      "Bundled PVE control-systems primer",
+      "Deterministic PID worked-example fixture"
+    ],
+    "research": "# PID Control — Research Pack\n\nA PID controller combines proportional, integral, and derivative actions. Proportional action responds to present error, integral action accumulates past error, and derivative action anticipates the error trend. The three terms are tuned to balance response speed, steady-state accuracy, and stability.\n",
+    "notes": "# PID Control — Notes\n\n## Core equation\n\nu(t) = Kp e(t) + Ki ∫e(t)dt + Kd de(t)/dt\n\n- **P** reacts immediately to error.\n- **I** removes persistent steady-state error.\n- **D** adds damping by reacting to the rate of change.\n\nA practical design also considers actuator saturation, integral windup, sensor noise, and sampling time.\n",
+    "revision": "# PID Control — Revision Sheet\n\nP: present error → faster response.\nI: accumulated error → removes offset.\nD: error slope → reduces overshoot.\n\nRemember: derivative action is noise-sensitive; integral action needs anti-windup.\n",
+    "quiz": "# PID Control — Quiz\n\n1. Which term removes steady-state error?\n   A. Integral\n2. Why is derivative action often filtered?\n   A. It amplifies measurement noise.\n3. What is integral windup?\n   A. Excessive integral accumulation during actuator saturation.\n",
+    "viva": "# PID Control — Viva Practice\n\n**Q: What does proportional gain change?**\nA: It changes how strongly the controller reacts to current error.\n\n**Q: Why can high integral gain be risky?**\nA: It can increase overshoot and cause windup or oscillation.\n",
+    "flashcards": "# PID Control — Flashcards\n\n**Front:** Purpose of Ki?\n**Back:** Eliminate persistent steady-state error.\n\n**Front:** Main risk of Kd?\n**Back:** Amplification of high-frequency measurement noise.\n"
+  }
+}

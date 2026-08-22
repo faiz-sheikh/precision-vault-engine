@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .controller import Controller
 from .manifest import ManifestGovernance, migrate_legacy_candidate, validate_envelope
+from .product import WORKFLOWS, Depth, ProductError, ProductService
 from .settings import Settings
 
 
@@ -13,8 +14,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="pve")
     parser.add_argument("--root", type=Path, default=Path.cwd())
     sub = parser.add_subparsers(dest="command", required=True)
-    sub.add_parser("status")
-    sub.add_parser("doctor")
+    sub.add_parser("status", help="Show a safe summary of local PVE state")
+    sub.add_parser("doctor", help="Check database, storage, demo, manifest, and provider setup")
+    demo = sub.add_parser("demo", help="Build the bundled study pack without provider calls")
+    demo.add_argument("--module", default="PID Control")
+    study = sub.add_parser("study", help="Create a safe study-plan preview")
+    study.add_argument("module")
+    study.add_argument("--workflow", choices=tuple(WORKFLOWS), default="Generate Notes")
+    study.add_argument("--depth", choices=tuple(item.value for item in Depth), default=Depth.STANDARD.value)
+    study.add_argument("--demo", action="store_true", help="Use bundled deterministic output")
     sub.add_parser("providers")
     validate = sub.add_parser("validate")
     validate.add_argument("path", type=Path)
@@ -51,17 +59,47 @@ def main(argv: list[str] | None = None) -> int:
     settings = Settings.from_env(args.root)
     controller = Controller(settings)
     if args.command in ("status", "doctor"):
-        controller.store.integrity_check()
+        product = ProductService(settings, args.root)
+        health = product.doctor()
         print(
             json.dumps(
                 {
                     "database": "ok",
                     "live_providers": "disabled_by_default",
                     "config_hash": settings.config_hash,
+                    "health": health if args.command == "doctor" else None,
+                    "provider_calls": 0,
                 }
             )
         )
         return 0
+    if args.command in ("demo", "study"):
+        product = ProductService(settings, args.root)
+        try:
+            workflow = "Full Study Pack" if args.command == "demo" else args.workflow
+            is_demo = args.command == "demo" or args.demo
+            preview = product.create_preview(
+                module_id=args.module,
+                artifacts=WORKFLOWS[workflow],
+                depth=Depth.STANDARD if args.command == "demo" else Depth(args.depth),
+                intent=workflow,
+                demo=is_demo,
+            )
+            payload: dict[str, object] = {
+                "preview_id": preview.command.preview_id,
+                "module": preview.command.module_id,
+                "artifacts": preview.command.requested_artifacts,
+                "external_requests": [preview.estimated_requests_min, preview.estimated_requests_max],
+                "cost": preview.estimated_cost,
+                "provider_calls": 0,
+            }
+            if is_demo:
+                payload["result"] = product.execute_demo(preview.command.preview_id)
+            print(json.dumps(payload, sort_keys=True))
+            return 0
+        except ProductError as exc:
+            print(json.dumps({"error": str(exc), "provider_calls": 0}))
+            return 2
     if args.command == "providers":
         print(
             json.dumps(
