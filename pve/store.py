@@ -149,6 +149,12 @@ CREATE TABLE IF NOT EXISTS provider_reconciliations(
  id TEXT PRIMARY KEY, operation_id TEXT NOT NULL REFERENCES provider_operations(id),
  actor TEXT NOT NULL, decision TEXT NOT NULL, evidence_json TEXT NOT NULL, created_at TEXT NOT NULL
 );
+CREATE TRIGGER IF NOT EXISTS provider_reconciliations_no_update
+ BEFORE UPDATE ON provider_reconciliations BEGIN
+ SELECT RAISE(ABORT, 'provider reconciliations are append-only'); END;
+CREATE TRIGGER IF NOT EXISTS provider_reconciliations_no_delete
+ BEFORE DELETE ON provider_reconciliations BEGIN
+ SELECT RAISE(ABORT, 'provider reconciliations are append-only'); END;
 """
 
 

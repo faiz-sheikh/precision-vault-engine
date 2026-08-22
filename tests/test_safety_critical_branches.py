@@ -132,7 +132,7 @@ class SafetyCriticalBranchTests(unittest.TestCase):
     def test_http_error_and_timeout_classification(self) -> None:
         for status, expected in (
             (400, FailureClass.PERMANENT),
-            (429, FailureClass.TRANSIENT),
+            (429, FailureClass.RATE_LIMIT_TRANSIENT),
             (503, FailureClass.TRANSIENT),
         ):
             error = urllib.error.HTTPError("https://invalid", status, "error", {}, io.BytesIO(b""))

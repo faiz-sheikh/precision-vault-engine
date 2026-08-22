@@ -16,7 +16,13 @@ from .safety import Provider, require_live_provider
 
 
 class FailureClass(StrEnum):
-    PERMANENT = "PERMANENT"
+    PERMANENT_REQUEST = "PERMANENT_REQUEST"
+    PERMANENT = "PERMANENT_REQUEST"  # Compatibility alias.
+    ACCOUNT_OR_BILLING_BLOCKED = "ACCOUNT_OR_BILLING_BLOCKED"
+    AUTH_BLOCKED = "AUTH_BLOCKED"
+    ACCESS_BLOCKED = "ACCESS_BLOCKED"
+    MODEL_ACCESS_BLOCKED = "MODEL_ACCESS_BLOCKED"
+    RATE_LIMIT_TRANSIENT = "RATE_LIMIT_TRANSIENT"
     TRANSIENT = "TRANSIENT"
     AMBIGUOUS = "AMBIGUOUS"
     VALIDATION = "VALIDATION"
@@ -65,11 +71,91 @@ class ProviderResult:
 def classify_status(status: int | None, accepted_unknown: bool = False) -> FailureClass:
     if accepted_unknown:
         return FailureClass.AMBIGUOUS
-    if status in (408, 409, 425, 429) or (status is not None and status >= 500):
+    if status == 429:
+        return FailureClass.RATE_LIMIT_TRANSIENT
+    if status in (408, 409, 425) or (status is not None and status >= 500):
         return FailureClass.TRANSIENT
+    if status == 401:
+        return FailureClass.AUTH_BLOCKED
+    if status == 403:
+        return FailureClass.ACCESS_BLOCKED
     if status is not None and 400 <= status < 500:
-        return FailureClass.PERMANENT
+        return FailureClass.PERMANENT_REQUEST
     return FailureClass.LOCAL_PROCESSING
+
+
+_RATE_LIMIT_MARKERS = (
+    "rate_limit_exceeded",
+    "rate limit exceeded",
+    "rate-limit",
+    "requests per minute",
+    "requests_per_minute",
+    "tokens per minute",
+    "tokens_per_minute",
+    "requests per second",
+    "rpm",
+    "tpm",
+)
+_ACCOUNT_BILLING_MARKERS = (
+    "insufficient_quota",
+    "quota_exceeded",
+    "billing",
+    "payment required",
+    "payment_required",
+    "credit balance",
+    "credits exhausted",
+    "spend limit",
+    "current quota",
+    "check your plan",
+)
+_AUTH_MARKERS = (
+    "invalid_api_key",
+    "invalid api key",
+    "authentication_error",
+    "authentication failed",
+    "unauthenticated",
+    "invalid credential",
+    "invalid x-api-key",
+)
+_MODEL_MARKERS = (
+    "model_not_found",
+    "model not found",
+    "model_not_available",
+    "model is not available",
+    "does not have access to model",
+    "access to this model",
+    "unknown model",
+)
+
+
+def classify_http_error(provider: Provider, evidence: HTTPErrorEvidence) -> FailureClass:
+    """Classify sanitized provider evidence without weakening status-based safety."""
+    del provider  # Marker semantics are deliberately shared across provider adapters.
+    text = " ".join(
+        value
+        for value in (
+            evidence.provider_error_code,
+            evidence.provider_error_message,
+            evidence.body.decode("utf-8", errors="replace"),
+        )
+        if value
+    ).casefold()
+    if any(marker in text for marker in _AUTH_MARKERS) or evidence.status == 401:
+        return FailureClass.AUTH_BLOCKED
+    if any(marker in text for marker in _MODEL_MARKERS):
+        return FailureClass.MODEL_ACCESS_BLOCKED
+    # Explicit time-window/rate-unit evidence wins over generic quota wording.
+    if any(marker in text for marker in _RATE_LIMIT_MARKERS):
+        return FailureClass.RATE_LIMIT_TRANSIENT
+    if any(marker in text for marker in _ACCOUNT_BILLING_MARKERS):
+        return FailureClass.ACCOUNT_OR_BILLING_BLOCKED
+    if evidence.status == 429:
+        # Unknown 429 semantics remain bounded but retryable; known quota/billing
+        # bodies are caught above and never enter automatic retry.
+        return FailureClass.RATE_LIMIT_TRANSIENT
+    if evidence.status == 403:
+        return FailureClass.ACCESS_BLOCKED
+    return classify_status(evidence.status)
 
 
 class Adapter:
@@ -104,7 +190,7 @@ class Adapter:
                 on_http_error(exc.evidence)
             raise ProviderFailure(
                 str(exc),
-                classify_status(exc.evidence.status),
+                classify_http_error(self.provider, exc.evidence),
                 http_evidence=exc.evidence,
                 request_sent=True,
             ) from exc

@@ -36,6 +36,27 @@ class BudgetExceeded(OperationBlocked):
     pass
 
 
+_FAILURE_STATE = {
+    FailureClass.PERMANENT_REQUEST: "FAILED_PERMANENT",
+    FailureClass.ACCOUNT_OR_BILLING_BLOCKED: "BLOCKED_ACCOUNT_OR_BILLING",
+    FailureClass.AUTH_BLOCKED: "BLOCKED_AUTH",
+    FailureClass.ACCESS_BLOCKED: "BLOCKED_ACCESS",
+    FailureClass.MODEL_ACCESS_BLOCKED: "BLOCKED_MODEL_ACCESS",
+    FailureClass.RATE_LIMIT_TRANSIENT: "FAILED_TRANSIENT",
+    FailureClass.TRANSIENT: "FAILED_TRANSIENT",
+    FailureClass.AMBIGUOUS: "AMBIGUOUS",
+    FailureClass.VALIDATION: "FAILED_VALIDATION",
+    FailureClass.LOCAL_PROCESSING: "FAILED_LOCAL_PROCESSING",
+}
+_MANUAL_RETRY_STATES = {
+    "FAILED_TRANSIENT",
+    "BLOCKED_ACCOUNT_OR_BILLING",
+    "BLOCKED_AUTH",
+    "BLOCKED_ACCESS",
+    "BLOCKED_MODEL_ACCESS",
+}
+
+
 class Controller:
     def __init__(
         self,
@@ -47,6 +68,71 @@ class Controller:
         self.store = store or Store(settings.database_path)
         self.artifacts = artifacts or ArtifactRepository(settings.artifact_dir)
         self.store.initialize()
+
+    @staticmethod
+    def _effective_operation_state(db: sqlite3.Connection, operation: sqlite3.Row) -> str:
+        correction = db.execute(
+            "SELECT decision,evidence_json FROM provider_reconciliations WHERE operation_id=? "
+            "ORDER BY created_at DESC,rowid DESC LIMIT 1",
+            (operation["id"],),
+        ).fetchone()
+        if correction is None:
+            return str(operation["state"])
+        try:
+            evidence = json.loads(correction["evidence_json"])
+            if evidence.get("original_classification") != operation["state"]:
+                return str(operation["state"])
+            return _FAILURE_STATE[FailureClass(correction["decision"])]
+        except (json.JSONDecodeError, AttributeError, KeyError, ValueError) as exc:
+            raise OperationBlocked("provider reconciliation classification is invalid") from exc
+
+    def append_classification_correction(
+        self,
+        *,
+        operation_id: str,
+        original_classification: str,
+        corrected_classification: FailureClass,
+        reason: str,
+        evidence_sha256: str,
+        actor: str,
+        system_version: str,
+    ) -> str:
+        """Append semantic correction evidence without rewriting provider history."""
+        if not all(value.strip() for value in (reason, evidence_sha256, actor, system_version)):
+            raise OperationBlocked("classification correction evidence is incomplete")
+        correction_id = "rec_" + uuid.uuid4().hex
+        created_at = utcnow()
+        with self.store.transaction() as db:
+            operation = db.execute(
+                "SELECT * FROM provider_operations WHERE id=?", (operation_id,)
+            ).fetchone()
+            if operation is None or operation["state"] != original_classification:
+                raise OperationBlocked("historical provider classification does not match")
+            if operation["error_sha256"] != evidence_sha256:
+                raise OperationBlocked("classification correction evidence hash does not match")
+            evidence = {
+                "original_classification": original_classification,
+                "corrected_semantic_classification": corrected_classification.value,
+                "corrected_effective_state": _FAILURE_STATE[corrected_classification],
+                "reason": reason.strip(),
+                "evidence_sha256": evidence_sha256,
+                "actor": actor.strip(),
+                "system_version": system_version.strip(),
+                "timestamp": created_at,
+            }
+            db.execute(
+                "INSERT INTO provider_reconciliations VALUES(?,?,?,?,?,?)",
+                (
+                    correction_id,
+                    operation_id,
+                    actor.strip(),
+                    corrected_classification.value,
+                    json.dumps(evidence, sort_keys=True),
+                    created_at,
+                ),
+            )
+            self.store.event(db, operation_id, "CLASSIFICATION_CORRECTED", evidence)
+        return correction_id
 
     def preview(
         self,
@@ -141,11 +227,14 @@ class Controller:
                 raise OperationBlocked(
                     "manual retry approval does not match the operation fingerprint"
                 )
-            if operation["state"] != "FAILED_TRANSIENT":
+            effective_state = self._effective_operation_state(db, operation)
+            if effective_state not in _MANUAL_RETRY_STATES:
                 raise OperationBlocked(
-                    "only a known transient failure can receive manual retry approval"
+                    "operation state does not permit an approval-bound manual retry"
                 )
-            if int(operation["attempts"]) < self.settings.max_provider_attempts:
+            if effective_state == "FAILED_TRANSIENT" and (
+                int(operation["attempts"]) < self.settings.max_provider_attempts
+            ):
                 raise OperationBlocked("automatic retry allowance is not exhausted")
             route = self.settings.routes.get(operation["capability"])
             if (
@@ -234,7 +323,8 @@ class Controller:
                 "SELECT * FROM provider_operations WHERE fingerprint=?", (fingerprint,)
             ).fetchone()
             if existing:
-                if existing["state"] == "SUCCEEDED":
+                effective_state = self._effective_operation_state(db, existing)
+                if effective_state == "SUCCEEDED":
                     if manual_retry_approval_id is not None:
                         raise OperationBlocked(
                             "a succeeded operation cannot consume retry approval"
@@ -243,17 +333,22 @@ class Controller:
                     if hashlib.sha256(raw).hexdigest() != existing["raw_sha256"]:
                         raise OperationBlocked("raw checkpoint checksum mismatch")
                     return parse(raw), True
-                if existing["state"] in ("CALLING", "SUBMITTED", "RUNNING", "AMBIGUOUS"):
+                if effective_state in ("CALLING", "SUBMITTED", "RUNNING", "AMBIGUOUS"):
                     raise AmbiguousOperation(f"operation {operation_id} requires reconciliation")
-                if existing["state"] == "FAILED_PERMANENT":
+                if effective_state == "FAILED_PERMANENT":
                     raise OperationBlocked("unchanged permanently failed operation cannot retry")
-                if existing["state"] == "FAILED_TRANSIENT":
+                if effective_state in _MANUAL_RETRY_STATES:
                     automatic_exhausted = (
                         int(existing["attempts"]) >= self.settings.max_provider_attempts
                     )
-                    if manual_retry_approval_id is None and automatic_exhausted:
-                        raise OperationBlocked("bounded transient retry limit reached")
-                    if manual_retry_approval_id is not None and not automatic_exhausted:
+                    approval_required = effective_state != "FAILED_TRANSIENT" or automatic_exhausted
+                    if manual_retry_approval_id is None and approval_required:
+                        raise OperationBlocked("explicit manual retry approval is required")
+                    if (
+                        manual_retry_approval_id is not None
+                        and effective_state == "FAILED_TRANSIENT"
+                        and not automatic_exhausted
+                    ):
                         raise OperationBlocked(
                             "manual retry approval cannot replace remaining automatic allowance"
                         )
@@ -279,8 +374,10 @@ class Controller:
                 self.store.event(db, operation_id, "INTENT_CREATED", {"fingerprint": fingerprint})
             approval = None
             if manual_retry_approval_id is not None:
-                if existing is None or existing["state"] != "FAILED_TRANSIENT":
-                    raise OperationBlocked("manual retry requires an existing transient failure")
+                if existing is None or self._effective_operation_state(db, existing) not in (
+                    _MANUAL_RETRY_STATES
+                ):
+                    raise OperationBlocked("manual retry requires an eligible failed operation")
                 approval = db.execute(
                     "SELECT * FROM provider_retry_approvals WHERE approval_id=?",
                     (manual_retry_approval_id,),
@@ -455,10 +552,7 @@ class Controller:
                 {"model": route.model, **request}, on_http_error=checkpoint_http_error
             )
         except ProviderFailure as exc:
-            state = {
-                FailureClass.AMBIGUOUS: "AMBIGUOUS",
-                FailureClass.PERMANENT: "FAILED_PERMANENT",
-            }.get(exc.classification, "FAILED_TRANSIENT")
+            state = _FAILURE_STATE[exc.classification]
             if exc.classification is FailureClass.AMBIGUOUS:
                 reservation_status = "HELD_AMBIGUOUS"
             elif exc.request_sent is False:
@@ -518,6 +612,7 @@ class Controller:
                         "provider_error_message": (
                             exc.http_evidence.provider_error_message if exc.http_evidence else None
                         ),
+                        "semantic_classification": exc.classification.value,
                         "reservation_status": reservation_status,
                     },
                 )

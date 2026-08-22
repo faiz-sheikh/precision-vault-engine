@@ -12,13 +12,13 @@ class ProviderFailureMatrixTests(unittest.TestCase):
     def test_status_matrix(self):
         cases = {
             400: FailureClass.PERMANENT,
-            401: FailureClass.PERMANENT,
-            403: FailureClass.PERMANENT,
+            401: FailureClass.AUTH_BLOCKED,
+            403: FailureClass.ACCESS_BLOCKED,
             404: FailureClass.PERMANENT,
             408: FailureClass.TRANSIENT,
             409: FailureClass.TRANSIENT,
             425: FailureClass.TRANSIENT,
-            429: FailureClass.TRANSIENT,
+            429: FailureClass.RATE_LIMIT_TRANSIENT,
             500: FailureClass.TRANSIENT,
             502: FailureClass.TRANSIENT,
             503: FailureClass.TRANSIENT,
