@@ -15,6 +15,7 @@ from .providers import (
     google_live_adapter,
     openai_compatible_live_adapter,
     openai_responses_live_adapter,
+    parse_structured_message,
 )
 from .safety import Provider
 from .settings import Settings
@@ -40,6 +41,14 @@ CANARY_INPUTS = {
         "kick in PID control."
     ),
 }
+
+
+def parse_canary_response(capability: str, raw: bytes) -> Any:
+    if capability == "ROUTINE_GENERATION":
+        return parse_structured_message(raw, required_string_fields=("summary",))
+    if capability == "ENGINEERING_REASONING":
+        return parse_structured_message(raw, required_string_fields=("result",))
+    return json.loads(raw)
 
 
 def canonical_request(capability: str, text: str, max_output_tokens: int) -> dict[str, Any]:
@@ -236,7 +245,7 @@ def main(argv: list[str] | None = None) -> int:
         module_id=CANARY_MODULE,
         phase=phase,
         adapter=adapter_for(args.capability, settings),
-        parse=lambda raw: json.loads(raw),
+        parse=lambda raw: parse_canary_response(args.capability, raw),
         estimated_cost_usd=args.estimated_cost_usd,
         manual_retry_approval_id=args.manual_retry_approval_id or None,
     )

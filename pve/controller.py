@@ -15,7 +15,13 @@ from typing import Any
 
 from .artifacts import ArtifactRepository
 from .identity import provider_fingerprint, sha256_identity
-from .providers import Adapter, FailureClass, HTTPErrorEvidence, ProviderFailure, ProviderResult
+from .providers import (
+    Adapter,
+    FailureClass,
+    HTTPErrorEvidence,
+    ProviderFailure,
+    ProviderResult,
+)
 from .settings import Settings
 from .store import Store, utcnow
 
@@ -54,7 +60,15 @@ _MANUAL_RETRY_STATES = {
     "BLOCKED_AUTH",
     "BLOCKED_ACCESS",
     "BLOCKED_MODEL_ACCESS",
+    "FAILED_VALIDATION",
 }
+
+
+def _serialized_parsed(value: Any) -> str | None:
+    try:
+        return json.dumps(value, sort_keys=True)
+    except (TypeError, ValueError):
+        return None
 
 
 class Controller:
@@ -108,7 +122,8 @@ class Controller:
             ).fetchone()
             if operation is None or operation["state"] != original_classification:
                 raise OperationBlocked("historical provider classification does not match")
-            if operation["error_sha256"] != evidence_sha256:
+            durable_evidence_sha256 = operation["error_sha256"] or operation["raw_sha256"]
+            if durable_evidence_sha256 != evidence_sha256:
                 raise OperationBlocked("classification correction evidence hash does not match")
             evidence = {
                 "original_classification": original_classification,
@@ -337,6 +352,32 @@ class Controller:
                     raise AmbiguousOperation(f"operation {operation_id} requires reconciliation")
                 if effective_state == "FAILED_PERMANENT":
                     raise OperationBlocked("unchanged permanently failed operation cannot retry")
+                if (
+                    effective_state in ("FAILED_VALIDATION", "FAILED_LOCAL_PROCESSING")
+                    and manual_retry_approval_id is None
+                ):
+                    raw_path = existing["raw_path"]
+                    raw_sha256 = existing["raw_sha256"]
+                    if not raw_path or not raw_sha256:
+                        raise OperationBlocked("local failure is missing its raw checkpoint")
+                    raw = Path(raw_path).read_bytes()
+                    if hashlib.sha256(raw).hexdigest() != raw_sha256:
+                        raise OperationBlocked("raw checkpoint checksum mismatch")
+                    try:
+                        parsed = parse(raw)
+                    except ValueError:
+                        raise
+                    db.execute(
+                        "UPDATE provider_operations SET state='SUCCEEDED',parsed_json=?,updated_at=? WHERE id=?",
+                        (_serialized_parsed(parsed), utcnow(), operation_id),
+                    )
+                    self.store.event(
+                        db,
+                        operation_id,
+                        "LOCAL_REVALIDATION_SUCCEEDED",
+                        {"raw_sha256": raw_sha256},
+                    )
+                    return parsed, True
                 if effective_state in _MANUAL_RETRY_STATES:
                     automatic_exhausted = (
                         int(existing["attempts"]) >= self.settings.max_provider_attempts
@@ -693,15 +734,60 @@ class Controller:
             raise AmbiguousOperation(
                 "provider response received but raw checkpoint failed; resubmission blocked"
             ) from exc
+        billing_status = "CONSUMED" if result.usage is not None else "CONSUMED_BILLING_UNKNOWN"
+        try:
+            parsed = parse(result.raw)
+        except ValueError as exc:
+            with self.store.transaction() as db:
+                db.execute(
+                    "UPDATE provider_operations SET state='FAILED_VALIDATION',raw_path=?,raw_sha256=?,"
+                    "provider_id=?,updated_at=? WHERE id=?",
+                    (str(raw_path), raw_hash, result.provider_id, utcnow(), operation_id),
+                )
+                db.execute(
+                    "UPDATE provider_attempt_reservations SET status=?,billing_uncertain=?,"
+                    "updated_at=? WHERE reservation_id=?",
+                    (billing_status, int(result.usage is None), utcnow(), reservation_id),
+                )
+                if manual_retry_approval_id is None:
+                    db.execute(
+                        "UPDATE budget_reservations SET status=? WHERE operation_id=?",
+                        (billing_status, operation_id),
+                    )
+                db.execute(
+                    "UPDATE provider_attempts SET state='FAILED_VALIDATION',reservation_status=?,"
+                    "billing_uncertain=?,updated_at=? WHERE attempt_id=?",
+                    (billing_status, int(result.usage is None), utcnow(), attempt_id),
+                )
+                self.store.event(
+                    db,
+                    operation_id,
+                    "FAILED_VALIDATION",
+                    {
+                        "attempt_id": attempt_id,
+                        "raw_sha256": raw_hash,
+                        "error_type": type(exc).__name__,
+                        "reservation_status": billing_status,
+                        "usage": result.usage or {},
+                    },
+                )
+            raise
         with self.store.transaction() as db:
             db.execute(
-                "UPDATE provider_operations SET state='SUCCEEDED',raw_path=?,raw_sha256=?,provider_id=?,updated_at=? WHERE id=?",
-                (str(raw_path), raw_hash, result.provider_id, utcnow(), operation_id),
+                "UPDATE provider_operations SET state='SUCCEEDED',raw_path=?,raw_sha256=?,parsed_json=?,"
+                "provider_id=?,updated_at=? WHERE id=?",
+                (
+                    str(raw_path),
+                    raw_hash,
+                    _serialized_parsed(parsed),
+                    result.provider_id,
+                    utcnow(),
+                    operation_id,
+                ),
             )
             self.store.event(
                 db, operation_id, "SUCCEEDED", {"raw_sha256": raw_hash, "usage": result.usage or {}}
             )
-            billing_status = "CONSUMED" if result.usage is not None else "CONSUMED_BILLING_UNKNOWN"
             db.execute(
                 "UPDATE provider_attempt_reservations SET status=?,billing_uncertain=?,"
                 "updated_at=? WHERE reservation_id=?",
@@ -717,5 +803,4 @@ class Controller:
                 "billing_uncertain=?,updated_at=? WHERE attempt_id=?",
                 (billing_status, int(result.usage is None), utcnow(), attempt_id),
             )
-        # Parsing deliberately occurs after durable success. A parser crash reuses raw bytes.
-        return parse(result.raw), False
+        return parsed, False

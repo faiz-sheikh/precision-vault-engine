@@ -229,6 +229,65 @@ class LegacyAnthropicAdapter(Adapter):
         super().__init__(Provider.ANTHROPIC, transport, live=live)
 
 
+class ContentValidationError(ValueError):
+    """A successful transport produced content that cannot satisfy its contract."""
+
+
+def normalize_finish_reason(reason: object) -> str:
+    """Map provider stop reasons to a small fail-closed completion vocabulary."""
+    if not isinstance(reason, str) or not reason.strip():
+        return "UNKNOWN"
+    normalized = reason.strip().casefold().replace("-", "_").replace(" ", "_")
+    if normalized in {"stop", "stop_sequence", "end_turn", "completed", "complete"}:
+        return "COMPLETE"
+    if normalized in {"length", "max_tokens", "max_output_tokens", "token_limit"}:
+        return "TRUNCATED"
+    if normalized in {"content_filter", "safety", "blocked", "recitation"}:
+        return "SAFETY_STOP"
+    if normalized in {"tool_calls", "tool_call", "function_call"}:
+        return "TOOL_STOP"
+    return "UNKNOWN"
+
+
+def parse_structured_message(
+    raw: bytes, *, required_string_fields: tuple[str, ...]
+) -> dict[str, Any]:
+    """Extract and validate structured assistant content from a chat response envelope."""
+    try:
+        envelope = json.loads(raw)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ContentValidationError("provider response envelope is not valid JSON") from exc
+    if not isinstance(envelope, dict):
+        raise ContentValidationError("provider response envelope must be an object")
+    choices = envelope.get("choices")
+    if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict):
+        raise ContentValidationError("provider response must contain exactly one choice")
+    choice = choices[0]
+    completion = normalize_finish_reason(choice.get("finish_reason"))
+    if completion != "COMPLETE":
+        raise ContentValidationError(f"provider completion is not complete: {completion}")
+    message = choice.get("message")
+    content = message.get("content") if isinstance(message, dict) else None
+    if not isinstance(content, str) or not content.strip():
+        raise ContentValidationError("assistant message content is missing")
+    try:
+        parsed = json.loads(content)
+    except json.JSONDecodeError as exc:
+        raise ContentValidationError("assistant message content is not valid JSON") from exc
+    if not isinstance(parsed, dict):
+        raise ContentValidationError("assistant structured content must be an object")
+    missing = [
+        field
+        for field in required_string_fields
+        if not isinstance(parsed.get(field), str) or not parsed[field].strip()
+    ]
+    if missing:
+        raise ContentValidationError(
+            "assistant structured content has invalid required fields: " + ", ".join(missing)
+        )
+    return parsed
+
+
 def _credential(name: str) -> str:
     value = os.getenv(name, "")
     if not value:
