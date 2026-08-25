@@ -154,14 +154,21 @@ class BodyAwareProviderClassificationTests(unittest.TestCase):
             with controller.store.connect() as db:
                 operation = db.execute("SELECT * FROM provider_operations").fetchone()
                 attempt = db.execute("SELECT * FROM provider_attempts").fetchone()
-                db.execute("UPDATE provider_operations SET error_sha256='evidence-hash' WHERE id=?", (operation["id"],))
                 operation_id, fingerprint, attempt_id = operation["id"], operation["fingerprint"], attempt["attempt_id"]
+            error_path, evidence_hash = controller.artifacts.checkpoint_error(
+                "m", "p", attempt_id, {"sanitized": "insufficient_quota"}
+            )
+            with controller.store.connect() as db:
+                db.execute("UPDATE provider_attempts SET error_path=?,error_sha256=? WHERE attempt_id=?", (str(error_path), evidence_hash, attempt_id))
+                db.execute("UPDATE provider_operations SET error_path=?,error_sha256=? WHERE id=?", (str(error_path), evidence_hash, operation_id))
             correction_id = controller.append_classification_correction(
                 operation_id=operation_id,
+                attempt_id=attempt_id,
+                evidence_type="ERROR",
                 original_classification="FAILED_TRANSIENT",
                 corrected_classification=FailureClass.ACCOUNT_OR_BILLING_BLOCKED,
                 reason="sanitized insufficient_quota evidence",
-                evidence_sha256="evidence-hash",
+                evidence_sha256=evidence_hash,
                 actor="test-system",
                 system_version="test-version",
             )

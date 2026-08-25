@@ -104,6 +104,8 @@ class Controller:
         self,
         *,
         operation_id: str,
+        attempt_id: str,
+        evidence_type: str,
         original_classification: str,
         corrected_classification: FailureClass,
         reason: str,
@@ -122,21 +124,58 @@ class Controller:
             ).fetchone()
             if operation is None or operation["state"] != original_classification:
                 raise OperationBlocked("historical provider classification does not match")
-            durable_evidence_sha256 = operation["error_sha256"] or operation["raw_sha256"]
+            attempt = db.execute(
+                "SELECT * FROM provider_attempts WHERE attempt_id=? AND operation_id=?",
+                (attempt_id, operation_id),
+            ).fetchone()
+            if attempt is None:
+                raise OperationBlocked("target reconciliation attempt does not exist")
+            normalized_evidence_type = evidence_type.strip().upper()
+            if normalized_evidence_type == "ERROR":
+                durable_evidence_sha256 = attempt["error_sha256"]
+                evidence_path = attempt["error_path"]
+            elif normalized_evidence_type == "RAW":
+                latest_attempt = db.execute(
+                    "SELECT attempt_id FROM provider_attempts WHERE operation_id=? "
+                    "ORDER BY attempt_number DESC LIMIT 1",
+                    (operation_id,),
+                ).fetchone()
+                if latest_attempt is None or latest_attempt["attempt_id"] != attempt_id:
+                    raise OperationBlocked("raw projection evidence must target the latest attempt")
+                durable_evidence_sha256 = operation["raw_sha256"]
+                evidence_path = operation["raw_path"]
+            else:
+                raise OperationBlocked("unsupported reconciliation evidence type")
+            if not durable_evidence_sha256 or not evidence_path:
+                raise OperationBlocked("target attempt evidence is absent")
+            path = Path(evidence_path)
+            if (
+                not path.is_file()
+                or hashlib.sha256(path.read_bytes()).hexdigest() != evidence_sha256
+            ):
+                raise OperationBlocked(
+                    "target attempt evidence checkpoint is unavailable or corrupt"
+                )
             if durable_evidence_sha256 != evidence_sha256:
                 raise OperationBlocked("classification correction evidence hash does not match")
             evidence = {
+                "operation_id": operation_id,
+                "fingerprint": operation["fingerprint"],
+                "attempt_id": attempt_id,
+                "evidence_type": normalized_evidence_type,
                 "original_classification": original_classification,
                 "corrected_semantic_classification": corrected_classification.value,
                 "corrected_effective_state": _FAILURE_STATE[corrected_classification],
                 "reason": reason.strip(),
                 "evidence_sha256": evidence_sha256,
                 "actor": actor.strip(),
-                "system_version": system_version.strip(),
+                "validator_version": system_version.strip(),
                 "timestamp": created_at,
             }
             db.execute(
-                "INSERT INTO provider_reconciliations VALUES(?,?,?,?,?,?)",
+                "INSERT INTO provider_reconciliations("
+                "id,operation_id,actor,decision,evidence_json,created_at,attempt_id,"
+                "evidence_type,evidence_sha256) VALUES(?,?,?,?,?,?,?,?,?)",
                 (
                     correction_id,
                     operation_id,
@@ -144,10 +183,168 @@ class Controller:
                     corrected_classification.value,
                     json.dumps(evidence, sort_keys=True),
                     created_at,
+                    attempt_id,
+                    normalized_evidence_type,
+                    evidence_sha256,
                 ),
             )
             self.store.event(db, operation_id, "CLASSIFICATION_CORRECTED", evidence)
         return correction_id
+
+    def approve_superseding_operation(
+        self,
+        *,
+        approval_id: str,
+        parent_operation_id: str,
+        request: dict[str, Any],
+        prompt_hash: str,
+        parameters: dict[str, Any],
+        schema: dict[str, Any],
+        upstream_hashes: list[str],
+        max_output_tokens: int,
+        max_cost_usd: float | None,
+        actor: str,
+        reason: str,
+        expires_at: str,
+    ) -> tuple[str, str, bool]:
+        if not approval_id or not actor.strip() or not reason.strip() or max_output_tokens < 1:
+            raise OperationBlocked("supersession approval fields are incomplete")
+        expiry = datetime.fromisoformat(expires_at)
+        if expiry.tzinfo is None or expiry <= datetime.now(UTC):
+            raise OperationBlocked("supersession approval is expired or lacks a timezone")
+        now = utcnow()
+        with self.store.transaction() as db:
+            parent = db.execute(
+                "SELECT * FROM provider_operations WHERE id=?", (parent_operation_id,)
+            ).fetchone()
+            if parent is None or self._effective_operation_state(db, parent) != "FAILED_VALIDATION":
+                raise OperationBlocked("supersession parent must project FAILED_VALIDATION")
+            route = self.settings.routes.get(parent["capability"])
+            if route is None or (route.provider, route.model) != (
+                parent["provider"],
+                parent["model"],
+            ):
+                raise OperationBlocked("supersession provider route changed")
+            target_fingerprint = provider_fingerprint(
+                provider=route.provider,
+                model=route.model,
+                request=request,
+                prompt_hash=prompt_hash,
+                parameters=parameters,
+                schema=schema,
+                run_config_hash=self.settings.config_hash,
+                upstream_hashes=upstream_hashes,
+            )
+            if target_fingerprint == parent["fingerprint"]:
+                raise OperationBlocked("supersession must materially change the fingerprint")
+            child_operation_id = "op_" + target_fingerprint.split(":", 1)[1]
+            old_request = json.loads(parent["request_json"])
+            old_limit = old_request.get("max_tokens") or old_request.get(
+                "generationConfig", {}
+            ).get("maxOutputTokens")
+            config_diff = {"max_output_tokens": {"old": old_limit, "new": max_output_tokens}}
+            binding = (
+                parent_operation_id,
+                parent["fingerprint"],
+                child_operation_id,
+                target_fingerprint,
+                route.provider,
+                route.model,
+                parent["capability"],
+                json.dumps(request, sort_keys=True),
+                prompt_hash,
+                json.dumps(parameters, sort_keys=True),
+                json.dumps(schema, sort_keys=True),
+                json.dumps(upstream_hashes, sort_keys=True),
+                json.dumps(config_diff, sort_keys=True),
+                max_output_tokens,
+                1,
+                max_cost_usd,
+                actor.strip(),
+                reason.strip(),
+                expiry.isoformat(),
+                self.settings.config_hash,
+            )
+            existing = db.execute(
+                "SELECT * FROM provider_supersession_approvals WHERE approval_id=?",
+                (approval_id,),
+            ).fetchone()
+            if existing:
+                columns = (
+                    "parent_operation_id",
+                    "parent_fingerprint",
+                    "child_operation_id",
+                    "target_fingerprint",
+                    "provider",
+                    "model",
+                    "capability",
+                    "request_json",
+                    "prompt_hash",
+                    "parameters_json",
+                    "schema_json",
+                    "upstream_hashes_json",
+                    "config_diff_json",
+                    "max_output_tokens",
+                    "max_requests",
+                    "max_cost_usd",
+                    "actor",
+                    "reason",
+                    "expires_at",
+                    "config_hash",
+                )
+                if tuple(existing[name] for name in columns) != binding:
+                    raise OperationBlocked("supersession approval ID binding mismatch")
+                return child_operation_id, target_fingerprint, True
+            if db.execute(
+                "SELECT 1 FROM provider_operations WHERE fingerprint=?", (target_fingerprint,)
+            ).fetchone():
+                raise OperationBlocked("target superseding operation already exists")
+            db.execute(
+                "INSERT INTO provider_operations("
+                "id,fingerprint,provider,model,capability,state,request_json,estimated_cost_usd,"
+                "created_at,updated_at) VALUES(?,?,?,?,?,'APPROVED',?,?,?,?)",
+                (
+                    child_operation_id,
+                    target_fingerprint,
+                    route.provider,
+                    route.model,
+                    parent["capability"],
+                    json.dumps(request, sort_keys=True),
+                    max_cost_usd,
+                    now,
+                    now,
+                ),
+            )
+            db.execute(
+                "INSERT INTO provider_supersession_approvals VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                (approval_id, *binding, now),
+            )
+            db.execute(
+                "INSERT INTO provider_operation_lineage VALUES(?,?,?,?,?)",
+                (child_operation_id, parent_operation_id, approval_id, reason.strip(), now),
+            )
+            self.store.event(
+                db,
+                parent_operation_id,
+                "SUPERSESSION_APPROVED",
+                {
+                    "approval_id": approval_id,
+                    "child_operation_id": child_operation_id,
+                    "target_fingerprint": target_fingerprint,
+                    "config_diff": config_diff,
+                },
+            )
+            self.store.event(
+                db,
+                child_operation_id,
+                "INTENT_APPROVED",
+                {
+                    "approval_id": approval_id,
+                    "parent_operation_id": parent_operation_id,
+                    "fingerprint": target_fingerprint,
+                },
+            )
+            return child_operation_id, target_fingerprint, False
 
     def preview(
         self,
@@ -316,6 +513,7 @@ class Controller:
         parse: Callable[[bytes], Any],
         estimated_cost_usd: float | None = None,
         manual_retry_approval_id: str | None = None,
+        supersession_approval_id: str | None = None,
     ) -> tuple[Any, bool]:
         route = self.settings.routes[capability]
         if adapter.provider.value != route.provider:
@@ -337,8 +535,60 @@ class Controller:
             existing = db.execute(
                 "SELECT * FROM provider_operations WHERE fingerprint=?", (fingerprint,)
             ).fetchone()
+            if supersession_approval_id is not None and existing is None:
+                raise OperationBlocked(
+                    "supersession approval does not match an approved target operation"
+                )
             if existing:
                 effective_state = self._effective_operation_state(db, existing)
+                if effective_state == "APPROVED":
+                    if supersession_approval_id is None:
+                        raise OperationBlocked(
+                            "approved superseding operation requires its approval"
+                        )
+                    supersession = db.execute(
+                        "SELECT * FROM provider_supersession_approvals WHERE approval_id=?",
+                        (supersession_approval_id,),
+                    ).fetchone()
+                    supersession_expected = (
+                        operation_id,
+                        fingerprint,
+                        route.provider,
+                        route.model,
+                        capability,
+                        json.dumps(request, sort_keys=True),
+                        prompt_hash,
+                        json.dumps(parameters, sort_keys=True),
+                        json.dumps(schema, sort_keys=True),
+                        json.dumps(upstream_hashes, sort_keys=True),
+                        self.settings.config_hash,
+                    )
+                    supersession_actual = (
+                        None
+                        if supersession is None
+                        else (
+                            supersession["child_operation_id"],
+                            supersession["target_fingerprint"],
+                            supersession["provider"],
+                            supersession["model"],
+                            supersession["capability"],
+                            supersession["request_json"],
+                            supersession["prompt_hash"],
+                            supersession["parameters_json"],
+                            supersession["schema_json"],
+                            supersession["upstream_hashes_json"],
+                            supersession["config_hash"],
+                        )
+                    )
+                    if supersession_actual != supersession_expected:
+                        raise OperationBlocked("supersession approval binding mismatch")
+                    if datetime.fromisoformat(supersession["expires_at"]) <= datetime.now(UTC):
+                        raise OperationBlocked("supersession approval expired")
+                    if db.execute(
+                        "SELECT 1 FROM provider_supersession_consumptions WHERE approval_id=?",
+                        (supersession_approval_id,),
+                    ).fetchone():
+                        raise OperationBlocked("supersession approval already consumed")
                 if effective_state == "SUCCEEDED":
                     if manual_retry_approval_id is not None:
                         raise OperationBlocked(
@@ -537,6 +787,22 @@ class Controller:
                         "attempt_id": attempt_id,
                         "previous_attempt_id": previous_attempt_id,
                     },
+                )
+            if supersession_approval_id is not None:
+                try:
+                    db.execute(
+                        "INSERT INTO provider_supersession_consumptions VALUES(?,?,?)",
+                        (supersession_approval_id, attempt_id, now),
+                    )
+                except sqlite3.IntegrityError as exc:
+                    raise OperationBlocked(
+                        "supersession approval was concurrently consumed"
+                    ) from exc
+                self.store.event(
+                    db,
+                    operation_id,
+                    "SUPERSESSION_APPROVAL_CONSUMED",
+                    {"approval_id": supersession_approval_id, "attempt_id": attempt_id},
                 )
             if manual_retry_approval_id is None:
                 db.execute(

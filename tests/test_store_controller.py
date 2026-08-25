@@ -131,7 +131,7 @@ class StoreControllerTests(unittest.TestCase):
             self.assertEqual(db.execute("PRAGMA foreign_keys").fetchone()[0], 1)
             self.assertEqual(db.execute("PRAGMA journal_mode").fetchone()[0].lower(), "wal")
             self.assertEqual(
-                db.execute("SELECT max(version) FROM schema_migrations").fetchone()[0], 3
+                db.execute("SELECT max(version) FROM schema_migrations").fetchone()[0], 4
             )
 
     def test_migrations_are_idempotent_and_foreign_keys_reject_orphans(self) -> None:
@@ -184,7 +184,7 @@ class StoreControllerTests(unittest.TestCase):
                     row[0]
                     for row in db.execute("SELECT version FROM schema_migrations ORDER BY version")
                 ],
-                [1, 3],
+                [1, 4],
             )
             attempt = db.execute("SELECT * FROM provider_attempts").fetchone()
             self.assertEqual(attempt["attempt_number"], 1)

@@ -170,10 +170,13 @@ class StructuredProviderValidationTests(unittest.TestCase):
         )
         with self.controller.store.connect() as db:
             operation = db.execute("SELECT * FROM provider_operations").fetchone()
+            attempt = db.execute("SELECT * FROM provider_attempts").fetchone()
             operation_id = operation["id"]
             raw_sha256 = operation["raw_sha256"]
         self.controller.append_classification_correction(
             operation_id=operation_id,
+            attempt_id=attempt["attempt_id"],
+            evidence_type="RAW",
             original_classification="SUCCEEDED",
             corrected_classification=FailureClass.VALIDATION,
             reason="offline re-evaluation found invalid inner content",

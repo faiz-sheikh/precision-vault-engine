@@ -14,7 +14,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 
 
 def utcnow() -> str:
@@ -147,7 +147,8 @@ CREATE TABLE IF NOT EXISTS provider_identifiers(
 );
 CREATE TABLE IF NOT EXISTS provider_reconciliations(
  id TEXT PRIMARY KEY, operation_id TEXT NOT NULL REFERENCES provider_operations(id),
- actor TEXT NOT NULL, decision TEXT NOT NULL, evidence_json TEXT NOT NULL, created_at TEXT NOT NULL
+ actor TEXT NOT NULL, decision TEXT NOT NULL, evidence_json TEXT NOT NULL, created_at TEXT NOT NULL,
+ attempt_id TEXT REFERENCES provider_attempts(attempt_id), evidence_type TEXT, evidence_sha256 TEXT
 );
 CREATE TRIGGER IF NOT EXISTS provider_reconciliations_no_update
  BEFORE UPDATE ON provider_reconciliations BEGIN
@@ -155,6 +156,40 @@ CREATE TRIGGER IF NOT EXISTS provider_reconciliations_no_update
 CREATE TRIGGER IF NOT EXISTS provider_reconciliations_no_delete
  BEFORE DELETE ON provider_reconciliations BEGIN
  SELECT RAISE(ABORT, 'provider reconciliations are append-only'); END;
+CREATE TABLE IF NOT EXISTS provider_supersession_approvals(
+ approval_id TEXT PRIMARY KEY,
+ parent_operation_id TEXT NOT NULL REFERENCES provider_operations(id),
+ parent_fingerprint TEXT NOT NULL, child_operation_id TEXT NOT NULL UNIQUE,
+ target_fingerprint TEXT NOT NULL UNIQUE, provider TEXT NOT NULL, model TEXT NOT NULL,
+ capability TEXT NOT NULL, request_json TEXT NOT NULL, prompt_hash TEXT NOT NULL,
+ parameters_json TEXT NOT NULL, schema_json TEXT NOT NULL, upstream_hashes_json TEXT NOT NULL,
+ config_diff_json TEXT NOT NULL, max_output_tokens INTEGER NOT NULL CHECK(max_output_tokens > 0),
+ max_requests INTEGER NOT NULL CHECK(max_requests=1), max_cost_usd REAL,
+ actor TEXT NOT NULL, reason TEXT NOT NULL, expires_at TEXT NOT NULL,
+ config_hash TEXT NOT NULL, created_at TEXT NOT NULL
+);
+CREATE TRIGGER IF NOT EXISTS provider_supersession_approvals_no_update
+ BEFORE UPDATE ON provider_supersession_approvals BEGIN
+ SELECT RAISE(ABORT, 'provider supersession approvals are immutable'); END;
+CREATE TRIGGER IF NOT EXISTS provider_supersession_approvals_no_delete
+ BEFORE DELETE ON provider_supersession_approvals BEGIN
+ SELECT RAISE(ABORT, 'provider supersession approvals are immutable'); END;
+CREATE TABLE IF NOT EXISTS provider_operation_lineage(
+ child_operation_id TEXT PRIMARY KEY REFERENCES provider_operations(id),
+ parent_operation_id TEXT NOT NULL REFERENCES provider_operations(id),
+ approval_id TEXT NOT NULL UNIQUE REFERENCES provider_supersession_approvals(approval_id),
+ reason TEXT NOT NULL, created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS provider_supersession_consumptions(
+ approval_id TEXT PRIMARY KEY REFERENCES provider_supersession_approvals(approval_id),
+ attempt_id TEXT NOT NULL UNIQUE REFERENCES provider_attempts(attempt_id), consumed_at TEXT NOT NULL
+);
+CREATE TRIGGER IF NOT EXISTS provider_supersession_consumptions_no_update
+ BEFORE UPDATE ON provider_supersession_consumptions BEGIN
+ SELECT RAISE(ABORT, 'provider supersession consumptions are append-only'); END;
+CREATE TRIGGER IF NOT EXISTS provider_supersession_consumptions_no_delete
+ BEFORE DELETE ON provider_supersession_consumptions BEGIN
+ SELECT RAISE(ABORT, 'provider supersession consumptions are append-only'); END;
 """
 
 
@@ -193,6 +228,18 @@ class Store:
                 )
             if "reservation_id" not in attempt_columns:
                 db.execute("ALTER TABLE provider_attempts ADD COLUMN reservation_id TEXT")
+            reconciliation_columns = {
+                row[1] for row in db.execute("PRAGMA table_info(provider_reconciliations)")
+            }
+            for name, definition in (
+                ("attempt_id", "TEXT REFERENCES provider_attempts(attempt_id)"),
+                ("evidence_type", "TEXT"),
+                ("evidence_sha256", "TEXT"),
+            ):
+                if name not in reconciliation_columns:
+                    db.execute(
+                        f"ALTER TABLE provider_reconciliations ADD COLUMN {name} {definition}"
+                    )
             self._backfill_historical_attempts(db)
             db.execute(
                 "INSERT OR IGNORE INTO schema_migrations VALUES (?, ?)", (SCHEMA_VERSION, utcnow())
