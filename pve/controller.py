@@ -532,6 +532,7 @@ class Controller:
         now = utcnow()
         attempt_id = ""
         with self.store.transaction() as db:
+            supersession_approval = None
             existing = db.execute(
                 "SELECT * FROM provider_operations WHERE fingerprint=?", (fingerprint,)
             ).fetchone()
@@ -546,7 +547,7 @@ class Controller:
                         raise OperationBlocked(
                             "approved superseding operation requires its approval"
                         )
-                    supersession = db.execute(
+                    supersession_approval = db.execute(
                         "SELECT * FROM provider_supersession_approvals WHERE approval_id=?",
                         (supersession_approval_id,),
                     ).fetchone()
@@ -565,30 +566,38 @@ class Controller:
                     )
                     supersession_actual = (
                         None
-                        if supersession is None
+                        if supersession_approval is None
                         else (
-                            supersession["child_operation_id"],
-                            supersession["target_fingerprint"],
-                            supersession["provider"],
-                            supersession["model"],
-                            supersession["capability"],
-                            supersession["request_json"],
-                            supersession["prompt_hash"],
-                            supersession["parameters_json"],
-                            supersession["schema_json"],
-                            supersession["upstream_hashes_json"],
-                            supersession["config_hash"],
+                            supersession_approval["child_operation_id"],
+                            supersession_approval["target_fingerprint"],
+                            supersession_approval["provider"],
+                            supersession_approval["model"],
+                            supersession_approval["capability"],
+                            supersession_approval["request_json"],
+                            supersession_approval["prompt_hash"],
+                            supersession_approval["parameters_json"],
+                            supersession_approval["schema_json"],
+                            supersession_approval["upstream_hashes_json"],
+                            supersession_approval["config_hash"],
                         )
                     )
                     if supersession_actual != supersession_expected:
                         raise OperationBlocked("supersession approval binding mismatch")
-                    if datetime.fromisoformat(supersession["expires_at"]) <= datetime.now(UTC):
+                    if datetime.fromisoformat(
+                        supersession_approval["expires_at"]
+                    ) <= datetime.now(UTC):
                         raise OperationBlocked("supersession approval expired")
                     if db.execute(
                         "SELECT 1 FROM provider_supersession_consumptions WHERE approval_id=?",
                         (supersession_approval_id,),
                     ).fetchone():
                         raise OperationBlocked("supersession approval already consumed")
+                    child_attempts_used = int(existing["attempts"])
+                    child_attempt_limit = int(supersession_approval["max_requests"])
+                    if child_attempts_used >= child_attempt_limit:
+                        raise OperationBlocked(
+                            "superseding operation initial attempt allowance exhausted"
+                        )
                 if effective_state == "SUCCEEDED":
                     if manual_retry_approval_id is not None:
                         raise OperationBlocked(
@@ -709,10 +718,28 @@ class Controller:
                     or estimated_cost_usd > approval["max_additional_cost_usd"]
                 ):
                     raise BudgetExceeded("manual retry estimate exceeds approved additional budget")
-            attempt_count = db.execute(
+            if (
+                supersession_approval is not None
+                and supersession_approval["max_cost_usd"] is not None
+                and (
+                    estimated_cost_usd is None
+                    or estimated_cost_usd > supersession_approval["max_cost_usd"]
+                )
+            ):
+                raise BudgetExceeded("superseding request estimate exceeds approved budget")
+            run_requests_used = db.execute(
                 "SELECT COALESCE(SUM(attempts),0) FROM provider_operations"
             ).fetchone()[0]
-            if attempt_count >= self.settings.max_requests_per_run and approval is None:
+            has_independent_one_shot_request_allowance = (
+                approval is not None or supersession_approval is not None
+            )
+            # Manual retries and superseding children carry their own immutable,
+            # one-shot request allowance.  This request-count gate is distinct
+            # from the global monetary budget below, which no approval bypasses.
+            if (
+                run_requests_used >= self.settings.max_requests_per_run
+                and not has_independent_one_shot_request_allowance
+            ):
                 raise BudgetExceeded("request budget exhausted")
             if self.settings.max_cost_usd is not None:
                 if estimated_cost_usd is None:

@@ -6,8 +6,9 @@ import threading
 import unittest
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from unittest.mock import patch
 
-from pve.controller import Controller, OperationBlocked
+from pve.controller import AmbiguousOperation, BudgetExceeded, Controller, OperationBlocked
 from pve.identity import provider_fingerprint
 from pve.providers import (
     FailureClass,
@@ -17,6 +18,7 @@ from pve.providers import (
     ProviderResult,
     parse_structured_message,
 )
+from pve.safety import PaidExecutionBlocked
 from pve.settings import ProviderRoute, Settings
 
 
@@ -25,7 +27,10 @@ class ReconciliationSupersessionTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         root = Path(self.temp.name)
         self.settings = Settings(
-            state_dir=root / "state", artifact_dir=root / "artifacts", max_provider_attempts=1
+            state_dir=root / "state",
+            artifact_dir=root / "artifacts",
+            max_provider_attempts=1,
+            max_requests_per_run=1,
         )
         self.controller = Controller(self.settings)
         self.request128 = {
@@ -377,6 +382,279 @@ class ReconciliationSupersessionTests(unittest.TestCase):
             )
         self.assertTrue(any(row[0] == child and row[1] == "CONSUMED" for row in reservations))
         self.assertTrue(any(row[0] == parent and row[1] == "CONSUMED" for row in reservations))
+
+    def test_child_attempt_limit_is_independent_of_parent_attempts(self) -> None:
+        parent, child, _, _, _, _ = self.approve_supersession()
+        with self.controller.store.connect() as db:
+            self.assertEqual(
+                db.execute(
+                    "SELECT attempts FROM provider_operations WHERE id=?", (parent,)
+                ).fetchone()[0],
+                2,
+            )
+            self.assertEqual(
+                db.execute(
+                    "SELECT attempts FROM provider_operations WHERE id=?", (child,)
+                ).fetchone()[0],
+                0,
+            )
+        calls: list[str] = []
+        result = self.execute(
+            NvidiaAdapter(
+                lambda request: (
+                    calls.append("transport")
+                    or ProviderResult(self.valid_raw(), usage={"total_tokens": 30})
+                )
+            ),
+            request=self.request256,
+            parameters=self.parameters256,
+            supersession="supersession-1",
+        )
+        self.assertEqual(result, ({"result": "complete"}, False))
+        self.assertEqual(calls, ["transport"])
+
+    def test_child_exhausted_allowance_blocks_without_consuming_approval(self) -> None:
+        _, child, _, _, _, _ = self.approve_supersession()
+        with self.controller.store.transaction() as db:
+            db.execute(
+                "UPDATE provider_operations SET attempts=1 WHERE id=?",
+                (child,),
+            )
+        calls: list[str] = []
+        with self.assertRaisesRegex(OperationBlocked, "initial attempt allowance exhausted"):
+            self.execute(
+                NvidiaAdapter(lambda request: calls.append("transport")),
+                request=self.request256,
+                parameters=self.parameters256,
+                supersession="supersession-1",
+            )
+        with self.controller.store.connect() as db:
+            consumptions = db.execute(
+                "SELECT count(*) FROM provider_supersession_consumptions"
+            ).fetchone()[0]
+            reservations = db.execute(
+                "SELECT count(*) FROM provider_attempt_reservations WHERE operation_id=?",
+                (child,),
+            ).fetchone()[0]
+        self.assertEqual((calls, consumptions, reservations), ([], 0, 0))
+
+    def test_global_cost_budget_still_blocks_superseding_child(self) -> None:
+        cost_root = self.settings.state_dir.parent / "cost-capped"
+        self.settings = Settings(
+            state_dir=cost_root / "state",
+            artifact_dir=cost_root / "artifacts",
+            max_provider_attempts=1,
+            max_requests_per_run=1,
+            max_cost_usd=0.02,
+        )
+        self.controller = Controller(self.settings)
+        _, child, _, _, _, _ = self.approve_supersession()
+        calls: list[str] = []
+        with self.assertRaisesRegex(BudgetExceeded, "cost budget exhausted"):
+            self.execute(
+                NvidiaAdapter(lambda request: calls.append("transport")),
+                request=self.request256,
+                parameters=self.parameters256,
+                supersession="supersession-1",
+            )
+        with self.controller.store.connect() as db:
+            consumptions = db.execute(
+                "SELECT count(*) FROM provider_supersession_consumptions"
+            ).fetchone()[0]
+            attempts = db.execute(
+                "SELECT attempts FROM provider_operations WHERE id=?", (child,)
+            ).fetchone()[0]
+        self.assertEqual((calls, consumptions, attempts), ([], 0, 0))
+
+    def test_wrong_expired_drifted_and_consumed_approvals_never_transport(self) -> None:
+        _, child, _, _, _, _ = self.approve_supersession()
+        calls: list[str] = []
+        adapter = NvidiaAdapter(lambda request: calls.append("transport"))
+
+        with self.assertRaisesRegex(OperationBlocked, "binding mismatch"):
+            self.execute(
+                adapter,
+                request=self.request256,
+                parameters=self.parameters256,
+                supersession="missing-or-wrong-approval",
+            )
+
+        changed = Settings(
+            state_dir=self.settings.state_dir,
+            artifact_dir=self.settings.artifact_dir,
+            max_provider_attempts=1,
+            max_requests_per_run=1,
+            routes={
+                **self.settings.routes,
+                "ENGINEERING_REASONING": ProviderRoute(
+                    "nvidia", "drifted-model", "https://invalid"
+                ),
+            },
+        )
+        drifted = Controller(changed)
+        with self.assertRaisesRegex(OperationBlocked, "approved target operation"):
+            drifted.execute_provider(
+                capability="ENGINEERING_REASONING",
+                request=self.request256,
+                prompt_hash="pre-canary-v1",
+                parameters=self.parameters256,
+                schema=self.schema,
+                upstream_hashes=[],
+                module_id="mod_canary",
+                phase="engineering_reasoning",
+                adapter=adapter,
+                parse=json.loads,
+                estimated_cost_usd=0.01,
+                supersession_approval_id="supersession-1",
+            )
+
+        class FutureDateTime(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return datetime.now(UTC) + timedelta(hours=1)
+
+        with patch("pve.controller.datetime", FutureDateTime), self.assertRaisesRegex(
+            OperationBlocked, "expired"
+        ):
+            self.execute(
+                adapter,
+                request=self.request256,
+                parameters=self.parameters256,
+                supersession="supersession-1",
+            )
+
+        result = self.execute(
+            NvidiaAdapter(lambda request: ProviderResult(self.valid_raw())),
+            request=self.request256,
+            parameters=self.parameters256,
+            supersession="supersession-1",
+        )
+        self.assertEqual(result, ({"result": "complete"}, False))
+        self.assertEqual(
+            self.execute(
+                adapter,
+                request=self.request256,
+                parameters=self.parameters256,
+                supersession="supersession-1",
+            ),
+            ({"result": "complete"}, True),
+        )
+        with self.controller.store.connect() as db:
+            self.assertEqual(
+                db.execute(
+                    "SELECT count(*) FROM provider_supersession_consumptions"
+                ).fetchone()[0],
+                1,
+            )
+            self.assertEqual(
+                db.execute(
+                    "SELECT count(*) FROM provider_attempts WHERE operation_id=?", (child,)
+                ).fetchone()[0],
+                1,
+            )
+        self.assertEqual(calls, [])
+
+    def test_disabled_live_circuit_blocks_before_child_reservation_or_consumption(self) -> None:
+        _, child, _, _, _, _ = self.approve_supersession()
+        calls: list[str] = []
+        with patch.dict("os.environ", {}, clear=True), self.assertRaises(PaidExecutionBlocked):
+            self.execute(
+                NvidiaAdapter(lambda request: calls.append("transport"), live=True),
+                request=self.request256,
+                parameters=self.parameters256,
+                supersession="supersession-1",
+            )
+        with self.controller.store.connect() as db:
+            attempts = db.execute(
+                "SELECT attempts FROM provider_operations WHERE id=?", (child,)
+            ).fetchone()[0]
+            reservations = db.execute(
+                "SELECT count(*) FROM provider_attempt_reservations WHERE operation_id=?", (child,)
+            ).fetchone()[0]
+            consumptions = db.execute(
+                "SELECT count(*) FROM provider_supersession_consumptions"
+            ).fetchone()[0]
+        self.assertEqual((calls, attempts, reservations, consumptions), ([], 0, 0, 0))
+
+    def test_parent_reservations_are_immutable_during_child_execution(self) -> None:
+        parent, child, _, _, _, _ = self.approve_supersession()
+        with self.controller.store.connect() as db:
+            before = [
+                tuple(row)
+                for row in db.execute(
+                    "SELECT * FROM provider_attempt_reservations WHERE operation_id=? "
+                    "ORDER BY reservation_id",
+                    (parent,),
+                )
+            ]
+        self.execute(
+            NvidiaAdapter(lambda request: ProviderResult(self.valid_raw())),
+            request=self.request256,
+            parameters=self.parameters256,
+            supersession="supersession-1",
+        )
+        with self.controller.store.connect() as db:
+            after = [
+                tuple(row)
+                for row in db.execute(
+                    "SELECT * FROM provider_attempt_reservations WHERE operation_id=? "
+                    "ORDER BY reservation_id",
+                    (parent,),
+                )
+            ]
+            child_reservations = db.execute(
+                "SELECT count(*) FROM provider_attempt_reservations WHERE operation_id=?", (child,)
+            ).fetchone()[0]
+        self.assertEqual(after, before)
+        self.assertEqual(child_reservations, 1)
+
+    def test_concurrent_child_execution_consumes_one_shot_once(self) -> None:
+        _, child, _, _, _, _ = self.approve_supersession()
+        entered = threading.Event()
+        release = threading.Event()
+        calls: list[str] = []
+        outcomes: list[str] = []
+
+        def transport(request: dict[str, object]) -> ProviderResult:
+            calls.append("transport")
+            entered.set()
+            release.wait(timeout=5)
+            return ProviderResult(self.valid_raw(), usage={"total_tokens": 30})
+
+        def execute() -> None:
+            try:
+                self.execute(
+                    NvidiaAdapter(transport),
+                    request=self.request256,
+                    parameters=self.parameters256,
+                    supersession="supersession-1",
+                )
+                outcomes.append("success")
+            except (AmbiguousOperation, OperationBlocked):
+                outcomes.append("blocked")
+
+        first = threading.Thread(target=execute)
+        first.start()
+        self.assertTrue(entered.wait(timeout=5))
+        second = threading.Thread(target=execute)
+        second.start()
+        second.join(timeout=5)
+        release.set()
+        first.join(timeout=5)
+        with self.controller.store.connect() as db:
+            attempts = db.execute(
+                "SELECT count(*) FROM provider_attempts WHERE operation_id=?", (child,)
+            ).fetchone()[0]
+            reservations = db.execute(
+                "SELECT count(*) FROM provider_attempt_reservations WHERE operation_id=?",
+                (child,),
+            ).fetchone()[0]
+            consumptions = db.execute(
+                "SELECT count(*) FROM provider_supersession_consumptions"
+            ).fetchone()[0]
+        self.assertEqual(calls, ["transport"])
+        self.assertEqual(sorted(outcomes), ["blocked", "success"])
+        self.assertEqual((attempts, reservations, consumptions), (1, 1, 1))
 
     def test_concurrent_duplicate_creation_produces_one_child(self) -> None:
         operation_id, *_ = self.reconcile()
