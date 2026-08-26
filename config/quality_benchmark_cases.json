@@ -1,0 +1,110 @@
+[
+  {
+    "benchmark_id": "routine-control-study-plan", "capability": "ROUTINE_GENERATION", "provider": "nvidia", "model": "nvidia/nemotron-3-super-120b-a12b", "output_token_ceiling": 768, "estimated_calls": 1,
+    "prompt": "Create a three-step study routine for learning PID control from first principles. Return JSON with title and exactly three steps.",
+    "required_constraints": ["exactly three steps", "beginner appropriate", "JSON only"], "expected_structure": {"title": "string", "steps": "array"},
+    "deterministic_checks": [{"type": "array_length", "field": "steps", "value": 3}, {"type": "required_terms", "terms": ["pid", "feedback"]}, {"type": "max_words", "value": 220}],
+    "reference_facts": ["PID combines proportional, integral, and derivative action", "feedback fundamentals should precede tuning"],
+    "rubric_dimensions": ["instruction_adherence", "factual_correctness", "completeness", "educational_clarity", "concise_structure", "format_adherence", "terminology_accuracy", "unsupported_claim_avoidance", "appropriate_difficulty", "verbosity_control"],
+    "hard_fail_criteria": ["malformed_required_structure", "materially_false_engineering_statement", "unsafe_technical_recommendation", "task_not_answered", "supplied_constraint_contradicted"]
+  },
+  {
+    "benchmark_id": "routine-sampling-practice", "capability": "ROUTINE_GENERATION", "provider": "nvidia", "model": "nvidia/nemotron-3-super-120b-a12b", "output_token_ceiling": 768, "estimated_calls": 1,
+    "prompt": "Design exactly three short practice activities for aliasing and the sampling theorem. Return JSON with title and steps.",
+    "required_constraints": ["exactly three activities", "include one numeric exercise", "JSON only"], "expected_structure": {"title": "string", "steps": "array"},
+    "deterministic_checks": [{"type": "array_length", "field": "steps", "value": 3}, {"type": "required_terms", "terms": ["sampling", "alias"]}, {"type": "max_words", "value": 220}],
+    "reference_facts": ["a bandlimited signal requires sampling above twice its highest frequency", "aliasing maps distinct frequencies to the same samples"],
+    "rubric_dimensions": ["instruction_adherence", "factual_correctness", "completeness", "educational_clarity", "concise_structure", "format_adherence", "terminology_accuracy", "unsupported_claim_avoidance", "appropriate_difficulty", "verbosity_control"],
+    "hard_fail_criteria": ["malformed_required_structure", "materially_false_engineering_statement", "task_not_answered", "mathematically_invalid_required_result"]
+  },
+  {
+    "benchmark_id": "routine-state-space-bridge", "capability": "ROUTINE_GENERATION", "provider": "nvidia", "model": "nvidia/nemotron-3-super-120b-a12b", "output_token_ceiling": 768, "estimated_calls": 1,
+    "prompt": "Create exactly three learning steps connecting transfer functions to state-space models. Return JSON with title and steps.",
+    "required_constraints": ["exactly three steps", "include assumptions", "JSON only"], "expected_structure": {"title": "string", "steps": "array"},
+    "deterministic_checks": [{"type": "array_length", "field": "steps", "value": 3}, {"type": "required_terms", "terms": ["state", "transfer"]}, {"type": "max_words", "value": 240}],
+    "reference_facts": ["realizations are not unique", "transfer functions assume zero initial conditions for the usual input-output relation"],
+    "rubric_dimensions": ["instruction_adherence", "factual_correctness", "completeness", "educational_clarity", "concise_structure", "format_adherence", "terminology_accuracy", "unsupported_claim_avoidance", "appropriate_difficulty", "verbosity_control"],
+    "hard_fail_criteria": ["malformed_required_structure", "materially_false_engineering_statement", "task_not_answered", "supplied_constraint_contradicted"]
+  },
+  {
+    "benchmark_id": "quality-review-control-errors", "capability": "QUALITY_REVIEW", "provider": "nvidia", "model": "nvidia/nemotron-3-super-120b-a12b", "output_token_ceiling": 768, "estimated_calls": 1,
+    "prompt": "Review this note: 'Integral action always stabilizes a feedback loop. Derivative action removes steady-state error to a constant disturbance. We write the controller gain as Kp, although k_p would also be acceptable.' Return JSON arrays defects and preserved, separating factual defects from the harmless notation preference and ranking severity.",
+    "required_constraints": ["separate factual and stylistic issues", "preserve correct claims", "rank severity"], "expected_structure": {"defects": "array", "preserved": "array"},
+    "deterministic_checks": [{"type": "required_terms", "terms": ["severity", "factual"]}, {"type": "prohibited_terms", "terms": ["rewrite everything"]}],
+    "reference_facts": ["integral action does not universally guarantee stability", "derivative action does not remove constant steady-state error", "notation preference is stylistic"],
+    "rubric_dimensions": ["defect_detection_recall", "false_positive_control", "criticism_specificity", "fix_usefulness", "factual_vs_stylistic_distinction", "correct_content_preservation", "severity_calibration"],
+    "hard_fail_criteria": ["malformed_required_structure", "materially_false_engineering_statement", "task_not_answered", "supplied_constraint_contradicted"]
+  },
+  {
+    "benchmark_id": "quality-review-sampling", "capability": "QUALITY_REVIEW", "provider": "nvidia", "model": "nvidia/nemotron-3-super-120b-a12b", "output_token_ceiling": 768, "estimated_calls": 1,
+    "prompt": "Review this solution: 'The highest frequency is 3 kHz, which is 3000 Hz. Therefore the Nyquist rate is 3 ksample/s.' Return JSON arrays defects and preserved; identify the wrong sampling rate while preserving the correct unit conversion.",
+    "required_constraints": ["identify the numeric defect", "preserve correct work", "suggest a correction"], "expected_structure": {"defects": "array", "preserved": "array"},
+    "deterministic_checks": [{"type": "required_terms", "terms": ["nyquist", "preserved"]}],
+    "reference_facts": ["minimum ideal sampling rate is greater than twice the highest signal frequency", "correct unit conversion should not be criticized"],
+    "rubric_dimensions": ["defect_detection_recall", "false_positive_control", "criticism_specificity", "fix_usefulness", "factual_vs_stylistic_distinction", "correct_content_preservation", "severity_calibration"],
+    "hard_fail_criteria": ["malformed_required_structure", "materially_false_engineering_statement", "mathematically_invalid_required_result", "task_not_answered"]
+  },
+  {
+    "benchmark_id": "quality-review-clean-note", "capability": "QUALITY_REVIEW", "provider": "nvidia", "model": "nvidia/nemotron-3-super-120b-a12b", "output_token_ceiling": 640, "estimated_calls": 1,
+    "prompt": "Review this note: 'For a stable unity-feedback type-1 system, the steady-state error to a step reference is zero. Calling the response instantaneous would be imprecise because a transient remains.' Return JSON arrays defects and preserved; treat only the wording risk as minor and do not invent technical defects.",
+    "required_constraints": ["avoid false positives", "preserve correct content", "calibrate severity"], "expected_structure": {"defects": "array", "preserved": "array"},
+    "deterministic_checks": [{"type": "prohibited_terms", "terms": ["critical safety failure", "fundamentally wrong"]}, {"type": "required_terms", "terms": ["preserved"]}],
+    "reference_facts": ["the supplied technical statements are correct", "only the identified wording issue warrants criticism"],
+    "rubric_dimensions": ["defect_detection_recall", "false_positive_control", "criticism_specificity", "fix_usefulness", "factual_vs_stylistic_distinction", "correct_content_preservation", "severity_calibration"],
+    "hard_fail_criteria": ["malformed_required_structure", "materially_false_engineering_statement", "task_not_answered"]
+  },
+  {
+    "benchmark_id": "reasoning-steady-state-error", "capability": "ENGINEERING_REASONING", "provider": "nvidia", "model": "nvidia/nemotron-3-ultra-550b-a55b", "output_token_ceiling": 768, "estimated_calls": 1,
+    "prompt": "Explain under explicit stability assumptions why integral action rejects a constant input disturbance. Return JSON with result.",
+    "required_constraints": ["state stability assumptions", "distinguish disturbance location", "JSON only"], "expected_structure": {"result": "string"},
+    "deterministic_checks": [{"type": "required_terms", "terms": ["integral", "steady-state", "stability"]}, {"type": "max_words", "value": 260}],
+    "reference_facts": ["an internal-model integrator supplies infinite DC loop gain when the closed loop is stable", "disturbance location affects the transfer relation"],
+    "rubric_dimensions": ["technical_correctness", "reasoning_coherence", "assumption_quality", "engineering_consistency", "constraint_handling", "completeness", "final_answer_correctness", "format_adherence", "reasoning_efficiency", "unsupported_inference_control"],
+    "hard_fail_criteria": ["malformed_required_structure", "materially_false_engineering_statement", "unsafe_technical_recommendation", "task_not_answered", "supplied_constraint_contradicted", "mathematically_invalid_required_result"]
+  },
+  {
+    "benchmark_id": "reasoning-rc-transient", "capability": "ENGINEERING_REASONING", "provider": "nvidia", "model": "nvidia/nemotron-3-ultra-550b-a55b", "output_token_ceiling": 768, "estimated_calls": 1,
+    "prompt": "For a 10 kohm, 100 microfarad RC circuit initially uncharged, compute the capacitor voltage after one time constant for a 5 V step. Return JSON with result.",
+    "required_constraints": ["show the time constant", "give volts", "JSON only"], "expected_structure": {"result": "string"},
+    "deterministic_checks": [{"type": "required_terms", "terms": ["1000", "3.16", "volt"]}, {"type": "max_words", "value": 220}],
+    "reference_facts": ["tau equals RC equals 1000 seconds", "at one time constant voltage is 5(1-e^-1), approximately 3.16 V"],
+    "rubric_dimensions": ["technical_correctness", "reasoning_coherence", "assumption_quality", "engineering_consistency", "constraint_handling", "completeness", "final_answer_correctness", "format_adherence", "reasoning_efficiency", "unsupported_inference_control"],
+    "hard_fail_criteria": ["malformed_required_structure", "materially_false_engineering_statement", "task_not_answered", "mathematically_invalid_required_result"]
+  },
+  {
+    "benchmark_id": "reasoning-sampling-alias", "capability": "ENGINEERING_REASONING", "provider": "nvidia", "model": "nvidia/nemotron-3-ultra-550b-a55b", "output_token_ceiling": 768, "estimated_calls": 1,
+    "prompt": "A 900 Hz sinusoid is sampled at 1000 Hz. Determine the baseband alias frequency and explain the equivalence. Return JSON with result.",
+    "required_constraints": ["calculate alias frequency", "explain equivalence", "JSON only"], "expected_structure": {"result": "string"},
+    "deterministic_checks": [{"type": "required_terms", "terms": ["100 hz", "alias", "1000"]}, {"type": "max_words", "value": 220}],
+    "reference_facts": ["900 Hz aliases to 100 Hz at a 1000 Hz sampling rate", "sampled sinusoids separated by integer multiples of the sampling rate are equivalent"],
+    "rubric_dimensions": ["technical_correctness", "reasoning_coherence", "assumption_quality", "engineering_consistency", "constraint_handling", "completeness", "final_answer_correctness", "format_adherence", "reasoning_efficiency", "unsupported_inference_control"],
+    "hard_fail_criteria": ["malformed_required_structure", "materially_false_engineering_statement", "task_not_answered", "mathematically_invalid_required_result"]
+  },
+  {
+    "benchmark_id": "engineering-review-unstable-controller", "capability": "ENGINEERING_REVIEW", "provider": "nvidia", "model": "nvidia/nemotron-3-ultra-550b-a55b", "output_token_ceiling": 768, "estimated_calls": 1,
+    "prompt": "Review this proposal: 'Set integral gain to its maximum allowed value; this guarantees zero error and cannot harm stability. Actuator limits can be ignored because the integrator will compensate.' Return JSON arrays defects and corrections, rank severity, and propose bounded corrections.",
+    "required_constraints": ["rank severity", "identify assumptions", "propose bounded corrections"], "expected_structure": {"defects": "array", "corrections": "array"},
+    "deterministic_checks": [{"type": "required_terms", "terms": ["stability", "saturation", "anti-windup"]}],
+    "reference_facts": ["increased integral gain can reduce stability margins", "actuator saturation can cause integral windup", "anti-windup does not replace stability analysis"],
+    "rubric_dimensions": ["technical_error_detection", "edge_case_recognition", "safety_correctness_sensitivity", "invalid_assumption_detection", "severity_ranking", "correction_quality", "unnecessary_criticism_control"],
+    "hard_fail_criteria": ["malformed_required_structure", "materially_false_engineering_statement", "unsafe_technical_recommendation", "task_not_answered"]
+  },
+  {
+    "benchmark_id": "engineering-review-sensor-range", "capability": "ENGINEERING_REVIEW", "provider": "nvidia", "model": "nvidia/nemotron-3-ultra-550b-a55b", "output_token_ceiling": 768, "estimated_calls": 1,
+    "prompt": "Review this design: 'Connect a 0-5 V sensor output directly to a 0-3.3 V ADC input. No divider, clamp, or other protection is needed.' Return JSON arrays defects and corrections, rank severity, and preserve any valid design intent.",
+    "required_constraints": ["identify electrical risk", "rank severity", "preserve valid design choices"], "expected_structure": {"defects": "array", "corrections": "array"},
+    "deterministic_checks": [{"type": "required_terms", "terms": ["3.3", "5", "protection"]}],
+    "reference_facts": ["5 V exceeds a 3.3 V ADC input range", "a divider or suitable conditioning/protection may be required", "input impedance and tolerances must be checked"],
+    "rubric_dimensions": ["technical_error_detection", "edge_case_recognition", "safety_correctness_sensitivity", "invalid_assumption_detection", "severity_ranking", "correction_quality", "unnecessary_criticism_control"],
+    "hard_fail_criteria": ["malformed_required_structure", "materially_false_engineering_statement", "unsafe_technical_recommendation", "task_not_answered"]
+  },
+  {
+    "benchmark_id": "engineering-review-clean-calculation", "capability": "ENGINEERING_REVIEW", "provider": "nvidia", "model": "nvidia/nemotron-3-ultra-550b-a55b", "output_token_ceiling": 640, "estimated_calls": 1,
+    "prompt": "Review this calculation: 'For R=10 kohm and C=10 microfarad, tau=RC=0.1 s. Using the stated rough 3-tau approximation, settling is about 0.3 s.' Return JSON arrays defects and corrections; recognize the declared approximation and avoid invented errors.",
+    "required_constraints": ["recognize valid approximation", "avoid false positives", "rank any real issue"], "expected_structure": {"defects": "array", "corrections": "array"},
+    "deterministic_checks": [{"type": "prohibited_terms", "terms": ["fundamentally invalid", "unsafe design"]}],
+    "reference_facts": ["the supplied calculation is correct", "the stated approximation is within its declared tolerance"],
+    "rubric_dimensions": ["technical_error_detection", "edge_case_recognition", "safety_correctness_sensitivity", "invalid_assumption_detection", "severity_ranking", "correction_quality", "unnecessary_criticism_control"],
+    "hard_fail_criteria": ["malformed_required_structure", "materially_false_engineering_statement", "task_not_answered"]
+  }
+]
