@@ -405,6 +405,155 @@ class Controller:
             )
         return command_id, False
 
+    def approve_initial_benchmark_operation(
+        self,
+        *,
+        approval_id: str,
+        benchmark_version: str,
+        case_id: str,
+        capability: str,
+        request: dict[str, Any],
+        prompt_hash: str,
+        parameters: dict[str, Any],
+        schema: dict[str, Any],
+        upstream_hashes: list[str],
+        max_output_tokens: int,
+        request_budget: int,
+        token_budget: int,
+        max_cost_usd: float | None,
+        actor: str,
+        purpose: str,
+        reason: str,
+        expires_at: str,
+    ) -> tuple[str, str, bool]:
+        """Create one immutable approval for the first call of one exact benchmark case."""
+        if not all(
+            value.strip()
+            for value in (approval_id, benchmark_version, case_id, actor, purpose, reason)
+        ):
+            raise OperationBlocked("benchmark approval fields are incomplete")
+        if request_budget != 1 or token_budget != max_output_tokens or max_output_tokens < 1:
+            raise OperationBlocked("benchmark approval must bind one exact request/token budget")
+        if max_cost_usd is not None and max_cost_usd < 0:
+            raise OperationBlocked("benchmark approval cost ceiling cannot be negative")
+        try:
+            expiry = datetime.fromisoformat(expires_at)
+        except ValueError as exc:
+            raise OperationBlocked("benchmark approval expiry must be ISO-8601") from exc
+        if expiry.tzinfo is None or expiry <= datetime.now(UTC):
+            raise OperationBlocked("benchmark approval is expired or lacks a timezone")
+        route = self.settings.routes.get(capability)
+        if route is None:
+            raise OperationBlocked("benchmark capability has no configured route")
+        fingerprint = provider_fingerprint(
+            provider=route.provider,
+            model=route.model,
+            request=request,
+            prompt_hash=prompt_hash,
+            parameters=parameters,
+            schema=schema,
+            run_config_hash=self.settings.config_hash,
+            upstream_hashes=upstream_hashes,
+        )
+        operation_id = "op_" + fingerprint.split(":", 1)[1]
+        binding = (
+            benchmark_version,
+            case_id,
+            operation_id,
+            fingerprint,
+            capability,
+            route.provider,
+            route.model,
+            json.dumps(request, sort_keys=True),
+            prompt_hash,
+            json.dumps(schema, sort_keys=True),
+            json.dumps(parameters, sort_keys=True),
+            json.dumps(upstream_hashes, sort_keys=True),
+            self.settings.config_hash,
+            max_output_tokens,
+            1,
+            request_budget,
+            token_budget,
+            max_cost_usd,
+            actor.strip(),
+            purpose.strip(),
+            reason.strip(),
+            expiry.isoformat(),
+        )
+        now = utcnow()
+        with self.store.transaction() as db:
+            existing_approval = db.execute(
+                "SELECT * FROM benchmark_initial_approvals WHERE approval_id=?", (approval_id,)
+            ).fetchone()
+            columns = (
+                "benchmark_version",
+                "case_id",
+                "operation_id",
+                "fingerprint",
+                "capability",
+                "provider",
+                "model",
+                "request_json",
+                "prompt_hash",
+                "schema_json",
+                "parameters_json",
+                "upstream_hashes_json",
+                "runtime_config_hash",
+                "max_output_tokens",
+                "max_requests",
+                "request_budget",
+                "token_budget",
+                "max_cost_usd",
+                "actor",
+                "purpose",
+                "reason",
+                "expires_at",
+            )
+            if existing_approval is not None:
+                if tuple(existing_approval[name] for name in columns) != binding:
+                    raise OperationBlocked("benchmark approval ID binding mismatch")
+                return operation_id, fingerprint, True
+            existing_operation = db.execute(
+                "SELECT state FROM provider_operations WHERE fingerprint=?", (fingerprint,)
+            ).fetchone()
+            if existing_operation is not None:
+                raise OperationBlocked("benchmark operation already exists without this approval")
+            db.execute(
+                "INSERT INTO provider_operations("
+                "id,fingerprint,provider,model,capability,state,request_json,estimated_cost_usd,"
+                "created_at,updated_at) VALUES(?,?,?,?,?,'APPROVED',?,?,?,?)",
+                (
+                    operation_id,
+                    fingerprint,
+                    route.provider,
+                    route.model,
+                    capability,
+                    json.dumps(request, sort_keys=True),
+                    max_cost_usd,
+                    now,
+                    now,
+                ),
+            )
+            db.execute(
+                "INSERT INTO benchmark_initial_approvals VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                (approval_id, *binding, now),
+            )
+            db.execute(
+                "INSERT INTO benchmark_case_operations VALUES(?,?,?,?,?,?)",
+                (benchmark_version, case_id, fingerprint, operation_id, approval_id, now),
+            )
+            self.store.event(
+                db,
+                operation_id,
+                "BENCHMARK_INITIAL_APPROVED",
+                {
+                    "approval_id": approval_id,
+                    "benchmark_version": benchmark_version,
+                    "case_id": case_id,
+                },
+            )
+        return operation_id, fingerprint, False
+
     def approve_manual_provider_retry(
         self,
         *,
@@ -512,6 +661,7 @@ class Controller:
         adapter: Adapter,
         parse: Callable[[bytes], Any],
         estimated_cost_usd: float | None = None,
+        initial_benchmark_approval_id: str | None = None,
         manual_retry_approval_id: str | None = None,
         supersession_approval_id: str | None = None,
     ) -> tuple[Any, bool]:
@@ -533,6 +683,7 @@ class Controller:
         attempt_id = ""
         with self.store.transaction() as db:
             supersession_approval = None
+            initial_benchmark_approval = None
             existing = db.execute(
                 "SELECT * FROM provider_operations WHERE fingerprint=?", (fingerprint,)
             ).fetchone()
@@ -540,17 +691,70 @@ class Controller:
                 raise OperationBlocked(
                     "supersession approval does not match an approved target operation"
                 )
+            if initial_benchmark_approval_id is not None and existing is None:
+                raise OperationBlocked(
+                    "benchmark approval does not match an approved exact operation"
+                )
             if existing:
                 effective_state = self._effective_operation_state(db, existing)
                 if effective_state == "APPROVED":
-                    if supersession_approval_id is None:
+                    if (supersession_approval_id is None) == (
+                        initial_benchmark_approval_id is None
+                    ):
                         raise OperationBlocked(
-                            "approved superseding operation requires its approval"
+                            "approved operation requires exactly one matching approval"
                         )
-                    supersession_approval = db.execute(
-                        "SELECT * FROM provider_supersession_approvals WHERE approval_id=?",
-                        (supersession_approval_id,),
-                    ).fetchone()
+                    if initial_benchmark_approval_id is not None:
+                        initial_benchmark_approval = db.execute(
+                            "SELECT * FROM benchmark_initial_approvals WHERE approval_id=?",
+                            (initial_benchmark_approval_id,),
+                        ).fetchone()
+                        benchmark_expected = (
+                            operation_id,
+                            fingerprint,
+                            route.provider,
+                            route.model,
+                            capability,
+                            json.dumps(request, sort_keys=True),
+                            prompt_hash,
+                            json.dumps(schema, sort_keys=True),
+                            json.dumps(parameters, sort_keys=True),
+                            json.dumps(upstream_hashes, sort_keys=True),
+                            self.settings.config_hash,
+                        )
+                        benchmark_actual = (
+                            None
+                            if initial_benchmark_approval is None
+                            else (
+                                initial_benchmark_approval["operation_id"],
+                                initial_benchmark_approval["fingerprint"],
+                                initial_benchmark_approval["provider"],
+                                initial_benchmark_approval["model"],
+                                initial_benchmark_approval["capability"],
+                                initial_benchmark_approval["request_json"],
+                                initial_benchmark_approval["prompt_hash"],
+                                initial_benchmark_approval["schema_json"],
+                                initial_benchmark_approval["parameters_json"],
+                                initial_benchmark_approval["upstream_hashes_json"],
+                                initial_benchmark_approval["runtime_config_hash"],
+                            )
+                        )
+                        if benchmark_actual != benchmark_expected:
+                            raise OperationBlocked("benchmark approval binding mismatch")
+                        if datetime.fromisoformat(
+                            initial_benchmark_approval["expires_at"]
+                        ) <= datetime.now(UTC):
+                            raise OperationBlocked("benchmark approval expired")
+                        if db.execute(
+                            "SELECT 1 FROM benchmark_initial_approval_consumptions WHERE approval_id=?",
+                            (initial_benchmark_approval_id,),
+                        ).fetchone():
+                            raise OperationBlocked("benchmark approval already consumed")
+                    else:
+                        supersession_approval = db.execute(
+                            "SELECT * FROM provider_supersession_approvals WHERE approval_id=?",
+                            (supersession_approval_id,),
+                        ).fetchone()
                     supersession_expected = (
                         operation_id,
                         fingerprint,
@@ -581,22 +785,27 @@ class Controller:
                             supersession_approval["config_hash"],
                         )
                     )
-                    if supersession_actual != supersession_expected:
-                        raise OperationBlocked("supersession approval binding mismatch")
-                    if datetime.fromisoformat(
-                        supersession_approval["expires_at"]
-                    ) <= datetime.now(UTC):
-                        raise OperationBlocked("supersession approval expired")
-                    if db.execute(
-                        "SELECT 1 FROM provider_supersession_consumptions WHERE approval_id=?",
-                        (supersession_approval_id,),
-                    ).fetchone():
-                        raise OperationBlocked("supersession approval already consumed")
-                    child_attempts_used = int(existing["attempts"])
-                    child_attempt_limit = int(supersession_approval["max_requests"])
-                    if child_attempts_used >= child_attempt_limit:
+                    if supersession_approval_id is not None:
+                        if supersession_approval is None:
+                            raise OperationBlocked("supersession approval binding mismatch")
+                        if supersession_actual != supersession_expected:
+                            raise OperationBlocked("supersession approval binding mismatch")
+                        if datetime.fromisoformat(
+                            supersession_approval["expires_at"]
+                        ) <= datetime.now(UTC):
+                            raise OperationBlocked("supersession approval expired")
+                        if db.execute(
+                            "SELECT 1 FROM provider_supersession_consumptions WHERE approval_id=?",
+                            (supersession_approval_id,),
+                        ).fetchone():
+                            raise OperationBlocked("supersession approval already consumed")
+                    approved_binding = initial_benchmark_approval or supersession_approval
+                    if approved_binding is None:
+                        raise OperationBlocked("approved operation binding is unavailable")
+                    attempt_limit = int(approved_binding["max_requests"])
+                    if int(existing["attempts"]) >= attempt_limit:
                         raise OperationBlocked(
-                            "superseding operation initial attempt allowance exhausted"
+                            "approved operation initial attempt allowance exhausted"
                         )
                 if effective_state == "SUCCEEDED":
                     if manual_retry_approval_id is not None:
@@ -727,11 +936,22 @@ class Controller:
                 )
             ):
                 raise BudgetExceeded("superseding request estimate exceeds approved budget")
+            if (
+                initial_benchmark_approval is not None
+                and initial_benchmark_approval["max_cost_usd"] is not None
+                and (
+                    estimated_cost_usd is None
+                    or estimated_cost_usd > initial_benchmark_approval["max_cost_usd"]
+                )
+            ):
+                raise BudgetExceeded("benchmark request estimate exceeds approved budget")
             run_requests_used = db.execute(
                 "SELECT COALESCE(SUM(attempts),0) FROM provider_operations"
             ).fetchone()[0]
             has_independent_one_shot_request_allowance = (
-                approval is not None or supersession_approval is not None
+                approval is not None
+                or supersession_approval is not None
+                or initial_benchmark_approval is not None
             )
             # Manual retries and superseding children carry their own immutable,
             # one-shot request allowance.  This request-count gate is distinct
@@ -830,6 +1050,20 @@ class Controller:
                     operation_id,
                     "SUPERSESSION_APPROVAL_CONSUMED",
                     {"approval_id": supersession_approval_id, "attempt_id": attempt_id},
+                )
+            if initial_benchmark_approval_id is not None:
+                try:
+                    db.execute(
+                        "INSERT INTO benchmark_initial_approval_consumptions VALUES(?,?,?)",
+                        (initial_benchmark_approval_id, attempt_id, now),
+                    )
+                except sqlite3.IntegrityError as exc:
+                    raise OperationBlocked("benchmark approval was concurrently consumed") from exc
+                self.store.event(
+                    db,
+                    operation_id,
+                    "BENCHMARK_INITIAL_APPROVAL_CONSUMED",
+                    {"approval_id": initial_benchmark_approval_id, "attempt_id": attempt_id},
                 )
             if manual_retry_approval_id is None:
                 db.execute(

@@ -34,7 +34,9 @@ class QualityBenchmarkTests(unittest.TestCase):
         self.assertEqual({case.capability for case in self.cases}, set(ROUTE_MODELS))
         plan = call_budget(self.cases)
         self.assertEqual(plan["by_route"], {route: 3 for route in ROUTE_MODELS})
-        self.assertEqual((plan["total"], plan["automatic_retries"], plan["provider_calls_now"]), (12, 0, 0))
+        self.assertEqual(
+            (plan["total"], plan["automatic_retries"], plan["provider_calls_now"]), (12, 0, 0)
+        )
 
     def test_malformed_case_and_missing_reference_are_rejected(self) -> None:
         payload = json.loads(CASE_PATH.read_text())[0]
@@ -99,22 +101,22 @@ class QualityBenchmarkTests(unittest.TestCase):
         self.assertEqual(form["hard_failures"], [])
 
     def test_duplicate_benchmark_plan_has_zero_call_reuse_semantics(self) -> None:
-        completed = {case.benchmark_id for case in self.cases}
-        plan = call_budget(self.cases, completed)
-        self.assertEqual(plan["total"], 0)
-        self.assertEqual(plan["provider_calls_now"], 0)
+        with self.assertRaises(TypeError):
+            call_budget(self.cases, {case.benchmark_id for case in self.cases})  # type: ignore[call-arg]
 
     def test_preserved_checkpoints_score_offline_without_provider_calls(self) -> None:
         fixtures = (
             (
                 ROOT / ".pve/canary/ROUTINE_GENERATION/operations.sqlite3",
-                ROOT / "artifacts/canary/ROUTINE_GENERATION/mod_canary/routine_generation/op_e7a1cabf522414486bcb5a2437ae6a31dfecd4d86d2c405c82274c6e3b1233bf/raw/response.bin",
+                ROOT
+                / "artifacts/canary/ROUTINE_GENERATION/mod_canary/routine_generation/op_e7a1cabf522414486bcb5a2437ae6a31dfecd4d86d2c405c82274c6e3b1233bf/raw/response.bin",
                 "e3f32d9af36e473ccdda86031b57d5523d0faaacfcf9b65d579b0fbb6bce9171",
                 "summary",
             ),
             (
                 ROOT / ".pve/canary/ENGINEERING_REASONING/operations.sqlite3",
-                ROOT / "artifacts/canary/ENGINEERING_REASONING/mod_canary/engineering_reasoning/op_32a4a44f4d862086605f0a274e744a5be6e18d9b01c003fc209665a7417f6bb4/raw/response.bin",
+                ROOT
+                / "artifacts/canary/ENGINEERING_REASONING/mod_canary/engineering_reasoning/op_32a4a44f4d862086605f0a274e744a5be6e18d9b01c003fc209665a7417f6bb4/raw/response.bin",
                 "66319144a7bc0c1d78ea93f212383da9a4e5cab4f9f52e3a748b913cea94448f",
                 "result",
             ),

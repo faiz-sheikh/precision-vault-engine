@@ -11,6 +11,8 @@ for `ROUTINE_GENERATION`, `QUALITY_REVIEW`, `ENGINEERING_REASONING`, and `ENGINE
 Super serves the first two routes; Ultra serves the latter two. Cases cover correct, defective, and
 false-positive-control examples rather than only easy prompts. Every future execution must use the
 normal PVE fingerprint, approval, reservation, checkpoint, and reuse flow.
+`pve.quality_benchmark.canonical_benchmark_operation` is the sole benchmark request definition;
+the canary CLI is not an identity authority.
 
 The canonical case data is in `config/quality_benchmark_cases.json`. Reference facts are compact
 concepts and calculations, not preferred prose. They establish correctness without rewarding
@@ -47,11 +49,24 @@ excellent response.
 
 ## Reproducibility and API bleed
 
-Store the exact case version, canonical request fingerprint, raw checkpoint hash, deterministic
-evidence, and independent review form with every score. Re-evaluating the same checkpoint is a
-zero-call operation. A completed identical fingerprint must be reused by the controller; the call
-planner reports zero remaining calls when all case IDs are complete. Any retry or changed request
-requires a separate approval and a new fingerprint.
+The benchmark version is the `sha256:` digest of the exact case-file bytes. Prompt identity uses
+the namespace `pve-benchmark-prompt-v1` over benchmark version, case ID, and exact ordered messages;
+it never includes time, execution order, or random identifiers. The provider-operation fingerprint
+binds provider/model, exact request and messages, response format, temperature, top-p, output
+ceiling, required JSON schema, validation-contract version, reference/constraint/check hashes, and
+runtime configuration hash.
+
+Planning reads `provider_operations` by that fingerprint. Only an unambiguous `SUCCEEDED`
+projection with a present SHA-256-valid raw checkpoint is reusable. Failed operations require a new
+planned call under the applicable failure policy; ambiguous or corrupt evidence blocks for
+reconciliation. A caller-provided list of completed case IDs is never benchmark completion
+authority.
+
+The initial execution approval is immutable and binds the benchmark version, case, complete
+canonical contract, one request, exact token budget, optional cost ceiling, accountable actor,
+purpose, reason, and timezone-aware expiry. Approval creation and preview perform no provider I/O.
+Consumption, attempt creation, and reservation happen atomically, so duplicate workers can produce
+at most one transport. Re-evaluating the same valid checkpoint is a zero-call operation.
 
 The preserved Super and Ultra canaries validate only the harness: both pass envelope, completion,
 JSON-object, and required-field checks offline. Their simple prompts do not cover the route rubrics,

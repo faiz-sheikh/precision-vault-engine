@@ -138,7 +138,7 @@ class StoreControllerTests(unittest.TestCase):
         self.controller.store.initialize()
         self.controller.store.initialize()
         with self.controller.store.connect() as db:
-            self.assertEqual(db.execute("SELECT count(*) FROM schema_migrations").fetchone()[0], 1)
+            self.assertEqual(db.execute("SELECT count(*) FROM schema_migrations").fetchone()[0], 4)
             with self.assertRaises(sqlite3.IntegrityError):
                 db.execute(
                     "INSERT INTO provider_events(operation_id,event_type,payload_json,created_at) "
@@ -184,7 +184,7 @@ class StoreControllerTests(unittest.TestCase):
                     row[0]
                     for row in db.execute("SELECT version FROM schema_migrations ORDER BY version")
                 ],
-                [1, 4],
+                [1, 2, 3, 4],
             )
             attempt = db.execute("SELECT * FROM provider_attempts").fetchone()
             self.assertEqual(attempt["attempt_number"], 1)

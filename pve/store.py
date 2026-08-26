@@ -190,6 +190,41 @@ CREATE TRIGGER IF NOT EXISTS provider_supersession_consumptions_no_update
 CREATE TRIGGER IF NOT EXISTS provider_supersession_consumptions_no_delete
  BEFORE DELETE ON provider_supersession_consumptions BEGIN
  SELECT RAISE(ABORT, 'provider supersession consumptions are append-only'); END;
+CREATE TABLE IF NOT EXISTS benchmark_initial_approvals(
+ approval_id TEXT PRIMARY KEY, benchmark_version TEXT NOT NULL, case_id TEXT NOT NULL,
+ operation_id TEXT NOT NULL UNIQUE REFERENCES provider_operations(id), fingerprint TEXT NOT NULL UNIQUE,
+ capability TEXT NOT NULL, provider TEXT NOT NULL, model TEXT NOT NULL,
+ request_json TEXT NOT NULL, prompt_hash TEXT NOT NULL, schema_json TEXT NOT NULL,
+ parameters_json TEXT NOT NULL, upstream_hashes_json TEXT NOT NULL, runtime_config_hash TEXT NOT NULL,
+ max_output_tokens INTEGER NOT NULL CHECK(max_output_tokens > 0),
+ max_requests INTEGER NOT NULL CHECK(max_requests=1), request_budget INTEGER NOT NULL CHECK(request_budget=1),
+ token_budget INTEGER NOT NULL CHECK(token_budget > 0), max_cost_usd REAL,
+ actor TEXT NOT NULL, purpose TEXT NOT NULL, reason TEXT NOT NULL,
+ expires_at TEXT NOT NULL, created_at TEXT NOT NULL,
+ UNIQUE(benchmark_version,case_id,fingerprint)
+);
+CREATE TRIGGER IF NOT EXISTS benchmark_initial_approvals_no_update
+ BEFORE UPDATE ON benchmark_initial_approvals BEGIN
+ SELECT RAISE(ABORT, 'benchmark initial approvals are immutable'); END;
+CREATE TRIGGER IF NOT EXISTS benchmark_initial_approvals_no_delete
+ BEFORE DELETE ON benchmark_initial_approvals BEGIN
+ SELECT RAISE(ABORT, 'benchmark initial approvals are immutable'); END;
+CREATE TABLE IF NOT EXISTS benchmark_initial_approval_consumptions(
+ approval_id TEXT PRIMARY KEY REFERENCES benchmark_initial_approvals(approval_id),
+ attempt_id TEXT NOT NULL UNIQUE REFERENCES provider_attempts(attempt_id), consumed_at TEXT NOT NULL
+);
+CREATE TRIGGER IF NOT EXISTS benchmark_initial_consumptions_no_update
+ BEFORE UPDATE ON benchmark_initial_approval_consumptions BEGIN
+ SELECT RAISE(ABORT, 'benchmark initial approval consumptions are append-only'); END;
+CREATE TRIGGER IF NOT EXISTS benchmark_initial_consumptions_no_delete
+ BEFORE DELETE ON benchmark_initial_approval_consumptions BEGIN
+ SELECT RAISE(ABORT, 'benchmark initial approval consumptions are append-only'); END;
+CREATE TABLE IF NOT EXISTS benchmark_case_operations(
+ benchmark_version TEXT NOT NULL, case_id TEXT NOT NULL, fingerprint TEXT NOT NULL,
+ operation_id TEXT NOT NULL REFERENCES provider_operations(id), approval_id TEXT NOT NULL UNIQUE
+ REFERENCES benchmark_initial_approvals(approval_id), created_at TEXT NOT NULL,
+ PRIMARY KEY(benchmark_version,case_id,fingerprint), UNIQUE(operation_id)
+);
 """
 
 
@@ -241,9 +276,10 @@ class Store:
                         f"ALTER TABLE provider_reconciliations ADD COLUMN {name} {definition}"
                     )
             self._backfill_historical_attempts(db)
-            db.execute(
-                "INSERT OR IGNORE INTO schema_migrations VALUES (?, ?)", (SCHEMA_VERSION, utcnow())
-            )
+            for version in range(1, SCHEMA_VERSION + 1):
+                db.execute(
+                    "INSERT OR IGNORE INTO schema_migrations VALUES (?, ?)", (version, utcnow())
+                )
         os.chmod(self.path, 0o600)
         self.integrity_check()
 
