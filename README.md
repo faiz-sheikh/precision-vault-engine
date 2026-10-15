@@ -97,7 +97,7 @@ Move the legacy scripts behind the controller, persist actual cost and usage, co
 
 ## Development history
 
-Before the curriculum-removal documentation commit, the rewritten history contained 18 commits from 2026-08-21T21:10:24+05:30 to 2026-10-15T23:54:58+05:30. This repository was published to GitHub on [FILL: date] with the existing history preserved.
+Including this README statistics update, the rewritten history contains 20 commits from 2026-08-21T21:10:24+05:30 to 2026-10-16T00:08:21+05:30. This repository was published to GitHub on [FILL: date] with the existing history preserved.
 
 ## How this was built
 
