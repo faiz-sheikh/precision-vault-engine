@@ -138,3 +138,10 @@ token.pkl
 
 # Python environment
 venv/
+
+*.sqlite3-shm
+*.sqlite3-wal
+.pve/
+_protected_credentials/
+.venv/
+.env
