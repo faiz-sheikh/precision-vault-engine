@@ -74,6 +74,10 @@ PYTHONPATH=. PVE_ALLOW_LIVE_PROVIDERS=0 pytest -q
 - `docs/` design and deployment notes
 - Legacy scripts at the repository root (curriculum mapping, synthesis, assessment, audio, etc.) predate the controller and are being migrated
 
+## Curriculum source documents
+
+The university's programme scheme and syllabus files are not redistributed in this repository. Download them from the university website ([FILL]) and place them in `config/curriculum/` when they are needed locally.
+
 ## Known limitations
 
 These are open issues found in a code audit, listed so the project is not oversold:
@@ -93,7 +97,7 @@ Move the legacy scripts behind the controller, persist actual cost and usage, co
 
 ## Development history
 
-2026-08-21T21:10:24+05:30 to 2026-08-26T20:05:52+05:30. 16 commits were made locally before publishing; this repository was published to GitHub on [FILL: date] with the existing history preserved.
+Before the curriculum-removal documentation commit, the rewritten history contained 18 commits from 2026-08-21T21:10:24+05:30 to 2026-10-15T23:54:58+05:30. This repository was published to GitHub on [FILL: date] with the existing history preserved.
 
 ## How this was built
 
