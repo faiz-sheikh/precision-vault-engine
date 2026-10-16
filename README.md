@@ -76,7 +76,7 @@ PYTHONPATH=. PVE_ALLOW_LIVE_PROVIDERS=0 pytest -q
 
 ## Curriculum source documents
 
-The university's programme scheme and syllabus files are not redistributed in this repository. Download them from the university website ([FILL]) and place them in `config/curriculum/` when they are needed locally.
+The university's programme scheme and syllabus files are not redistributed in this repository. Download them from the Ramdeobaba University website (B.Tech Robotics & AI programme scheme and syllabus) and place them in `config/curriculum/` when they are needed locally.
 
 ## Known limitations
 
@@ -90,6 +90,7 @@ These are open issues found in a code audit, listed so the project is not overso
 6. Worker leases have no heartbeat; duplicate execution during a long provider call is not tested.
 7. Manifest promotion writes a file and updates SQLite in separate steps, with no crash recovery.
 8. Legacy scripts still make direct provider calls outside the controller ledger.
+9. Registry files under `config/` were generated on the author's machine and contain local absolute paths.
 
 ## Roadmap
 
@@ -97,8 +98,8 @@ Move the legacy scripts behind the controller, persist actual cost and usage, co
 
 ## Development history
 
-Including this README statistics update, the rewritten history contains 20 commits from 2026-08-21T21:10:24+05:30 to 2026-10-16T00:08:21+05:30. This repository was published to GitHub on [FILL: date] with the existing history preserved.
+The rewritten history contains 20+ commits, first commit 2026-08-21. This repository was published on 2026-10-16 with the existing history preserved.
 
 ## How this was built
 
-[FILL, and keep it true. Example: "Designed and specified by me; implemented with AI coding assistance; I reviewed and tested the code."]
+Designed and specified by me; implemented with AI coding assistants (Codex and Claude); I review the code, run the tests and direct the roadmap.
